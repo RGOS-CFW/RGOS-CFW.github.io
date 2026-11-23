@@ -7,6 +7,12 @@
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <title>RG OS</title>
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
     <style>
       :root {
         --bg: #0a0a0b;
@@ -970,8 +976,14 @@
       document.getElementById("th").onclick = (e) => {
         e.preventDefault();
         const r = document.documentElement,
-          d = getComputedStyle(r).getPropertyValue("--bg").trim() == "#0a0a0b";
-        r.dataset.theme = d ? "light" : "dark";
+          cur =
+            r.dataset.theme ||
+            (matchMedia("(prefers-color-scheme:light)").matches ? "light" : "dark"),
+          n = cur === "dark" ? "light" : "dark";
+        r.dataset.theme = n;
+        try {
+          localStorage.setItem("rgos-theme", n);
+        } catch (err) {}
       };
     </script>
   </body>
