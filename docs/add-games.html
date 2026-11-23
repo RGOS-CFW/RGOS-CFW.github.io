@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Add games · RG OS Docs</title>
+    <meta
+      name="description"
+      content="How to add ROMs and disc images to RG OS: folders, file types, copying methods, BIOS files and what to check when a game does not show up."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="install-guide.html">Install guide</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="add-games.html" class="on" aria-current="page">Add games</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html">RG Rotate</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="hdmi.html">Mini-HDMI output</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="changelog.html">Changelog</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="add-games">Add games</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#quick-start">Quick start</a><a href="#where-games-go">Where games go</a><a href="#folders-and-file-types">Folders and file types</a><a href="#ways-to-copy-games">Ways to copy</a><a href="#disc-based-games">Disc games</a><a href="#bios-files">BIOS</a><a href="#a-game-does-not-show-up">Not showing up</a>
+          </nav>
+          <p class="lead">
+            RG OS does not come with games. You add your own ROMs and disc
+            images by copying them into one folder per system on the ROMS
+            partition, then rescanning in the launcher.
+          </p>
+          <blockquote>
+            RG OS does not provide games or BIOS files. Only copy games and
+            BIOS files you are legally allowed to use.
+          </blockquote>
+
+          <h2 id="quick-start">Quick start</h2>
+          <ol>
+            <li>Put the card in your PC and open the large <strong>ROMS</strong> partition (not the small <code>RGOS</code> one).</li>
+            <li>Open the <code>roms</code> folder and copy each game into the folder for its system, for example <code>roms/gba/</code> or <code>roms/psx/</code>.</li>
+            <li>Eject the card, put it back in the console and power on.</li>
+            <li>In the launcher press <strong>X</strong> to rescan. Your games appear under their systems.</li>
+          </ol>
+
+          <h2 id="where-games-go">Where games go</h2>
+          <p>
+            The ROMS partition (<code>/media/roms</code> on the device) holds
+            everything you own. Games go under <code>roms/</code>, with one
+            folder per system:
+          </p>
+          <pre><code>ROMS/
+  roms/
+    gba/        Game Boy Advance games
+    snes/       SNES games
+    psx/        PlayStation discs
+    ports/      native ports and PortMaster
+    ...
+  bios/         BIOS files (see below)
+  saves/        in-game saves, created on first launch
+  states/       save states, created on first launch
+  artwork/      cover art
+</code></pre>
+          <p>
+            <code>saves/</code>, <code>states/</code>, <code>bios/</code> and
+            <code>screenshots/</code> are created when a game is first launched,
+            so you do not need to make them. The whole layout is in
+            <a href="sd-card-layout.html">SD card layout</a>.
+          </p>
+          <blockquote>
+            <strong>Use the exact folder names from the table below.</strong>
+            A game in a folder the launcher does not know about is never
+            listed.
+          </blockquote>
+
+          <h2 id="folders-and-file-types">Folders and file types</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr><th>System</th><th>Folder</th><th>Default core</th><th>File types</th><th>BIOS</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Game Boy Advance</td><td><code style="white-space: nowrap">gba</code></td><td>mgba</td><td><code>.gba</code></td><td>only for the gpsp core</td></tr>
+                <tr><td>Game Boy</td><td><code style="white-space: nowrap">gb</code></td><td>gambatte</td><td><code>.gb</code></td><td>optional boot ROM</td></tr>
+                <tr><td>Game Boy Color</td><td><code style="white-space: nowrap">gbc</code></td><td>gambatte</td><td><code>.gbc</code></td><td>optional boot ROM</td></tr>
+                <tr><td>NES / Famicom</td><td><code style="white-space: nowrap">nes</code></td><td>nestopia</td><td><code>.nes</code> <code>.unf</code> <code>.unif</code></td><td>only for .fds disk games</td></tr>
+                <tr><td>SNES</td><td><code style="white-space: nowrap">snes</code></td><td>snes9x</td><td><code>.sfc</code> <code>.smc</code> <code>.swc</code> <code>.fig</code> <code>.bs</code></td><td>no</td></tr>
+                <tr><td>Mega Drive / Genesis</td><td><code style="white-space: nowrap">genesis</code></td><td>genesis_plus_gx</td><td><code>.md</code> <code>.gen</code> <code>.smd</code> <code>.bin</code></td><td>no</td></tr>
+                <tr><td>Master System</td><td><code style="white-space: nowrap">mastersystem</code></td><td>genesis_plus_gx</td><td><code>.sms</code></td><td>optional</td></tr>
+                <tr><td>Game Gear</td><td><code style="white-space: nowrap">gamegear</code></td><td>genesis_plus_gx</td><td><code>.gg</code></td><td>optional</td></tr>
+                <tr><td>SG-1000 / SC-3000</td><td><code style="white-space: nowrap">sg1000</code></td><td>genesis_plus_gx</td><td><code>.sg</code> <code>.sc</code> <code>.sf</code></td><td>no</td></tr>
+                <tr><td>Sega CD / Mega-CD</td><td><code style="white-space: nowrap">segacd</code></td><td>genesis_plus_gx</td><td><code>.cue</code> <code>.chd</code> <code>.iso</code> <code>.m3u</code> <code>.ccd</code></td><td><strong>required</strong></td></tr>
+                <tr><td>Sega 32X</td><td><code style="white-space: nowrap">sega32x</code></td><td>genesis_plus_gx</td><td><code>.32x</code> <code>.md</code> <code>.gen</code> <code>.smd</code> <code>.bin</code></td><td>no</td></tr>
+                <tr><td>Sega Pico</td><td><code style="white-space: nowrap">segapico</code></td><td>genesis_plus_gx</td><td><code>.pico</code> <code>.bin</code></td><td>no</td></tr>
+                <tr><td>Nintendo 64</td><td><code style="white-space: nowrap">n64</code></td><td>mupen64plus_next</td><td><code>.z64</code> <code>.n64</code> <code>.v64</code> <code>.u64</code> <code>.ndd</code></td><td>no</td></tr>
+                <tr><td>Sega Dreamcast</td><td><code style="white-space: nowrap">dreamcast</code></td><td>flycast</td><td><code>.cdi</code> <code>.gdi</code> <code>.chd</code> <code>.cue</code> <code>.m3u</code></td><td>optional</td></tr>
+                <tr><td>Sega Saturn</td><td><code style="white-space: nowrap">saturn</code></td><td>yabasanshiro</td><td><code>.cue</code> <code>.chd</code> <code>.iso</code> <code>.m3u</code> <code>.ccd</code> <code>.mds</code></td><td>optional (Beetle Saturn needs one)</td></tr>
+                <tr><td>Atari 2600</td><td><code style="white-space: nowrap">atari2600</code></td><td>stella2014</td><td><code>.a26</code> <code>.bin</code></td><td>no</td></tr>
+                <tr><td>Atari 5200</td><td><code style="white-space: nowrap">atari5200</code></td><td>atari800</td><td><code>.a52</code> <code>.bin</code> <code>.car</code></td><td><strong>required</strong></td></tr>
+                <tr><td>Atari 7800</td><td><code style="white-space: nowrap">atari7800</code></td><td>prosystem</td><td><code>.a78</code> <code>.bin</code></td><td>optional</td></tr>
+                <tr><td>Neo Geo Pocket</td><td><code style="white-space: nowrap">ngp</code></td><td>mednafen_ngp</td><td><code>.ngp</code> <code>.ngc</code> <code>.ngpc</code></td><td>no</td></tr>
+                <tr><td>Neo Geo Pocket Color</td><td><code style="white-space: nowrap">ngpc</code></td><td>mednafen_ngp</td><td><code>.ngc</code> <code>.ngpc</code> <code>.ngp</code></td><td>no</td></tr>
+                <tr><td>WonderSwan</td><td><code style="white-space: nowrap">ws</code></td><td>mednafen_wswan</td><td><code>.ws</code> <code>.wsc</code> <code>.pc2</code></td><td>no</td></tr>
+                <tr><td>WonderSwan Color</td><td><code style="white-space: nowrap">wsc</code></td><td>mednafen_wswan</td><td><code>.wsc</code> <code>.ws</code> <code>.pc2</code></td><td>no</td></tr>
+                <tr><td>PlayStation</td><td><code style="white-space: nowrap">psx</code></td><td>pcsx_rearmed</td><td><code>.cue</code> <code>.chd</code> <code>.pbp</code> <code>.m3u</code> <code>.iso</code> <code>.img</code> <code>.ccd</code></td><td>depends on the core</td></tr>
+                <tr><td>GameCube (RG Rotate only)</td><td><code style="white-space: nowrap">gc</code></td><td>dolphin</td><td><code>.gcm</code> <code>.iso</code> <code>.gcz</code> <code>.rvz</code> <code>.ciso</code> <code>.m3u</code> <code>.dol</code> <code>.elf</code></td><td>optional (boot logo)</td></tr>
+                <tr><td>Arcade (FinalBurn Neo)</td><td><code style="white-space: nowrap">arcade</code></td><td>fbneo</td><td><code>.zip</code> <code>.7z</code></td><td>see BIOS files</td></tr>
+                <tr><td>Neo Geo</td><td><code style="white-space: nowrap">neogeo</code></td><td>fbneo</td><td><code>.zip</code> <code>.7z</code></td><td><strong>required</strong> (<code>neogeo.zip</code>)</td></tr>
+                <tr><td>PICO-8</td><td><code style="white-space: nowrap">pico8</code></td><td>fake08</td><td><code>.p8</code> <code>.p8.png</code></td><td>no</td></tr>
+                <tr><td>Ports</td><td><code style="white-space: nowrap">ports</code></td><td>native</td><td><code>.sh</code></td><td>no</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Files whose names start with a <code>.</code> are ignored, which
+            covers the hidden <code>._</code> files macOS leaves on some cards.
+            The BIOS column is a summary; the exact file names are in
+            <a href="bios.html">BIOS files</a>. The full system notes are in
+            <a href="systems.html">Supported systems</a>.
+          </p>
+
+          <h2 id="ways-to-copy-games">Ways to copy games</h2>
+          <div class="tw">
+            <table>
+              <thead><tr><th>Method</th><th>Good for</th><th>How</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Card reader on a PC</strong></td>
+                  <td>Big libraries, first setup</td>
+                  <td>Copy into <code>roms/&lt;system&gt;/</code> on the ROMS partition. Eject cleanly afterwards.</td>
+                </tr>
+                <tr>
+                  <td><strong>SFTP over Wi-Fi</strong></td>
+                  <td>Adding games without taking the card out</td>
+                  <td>Set up Wi-Fi, turn on <strong>Settings &gt; SSH / file transfer</strong>, then connect with any SFTP client (WinSCP, FileZilla, <code>sftp</code>) and copy into <code>/media/roms/roms/&lt;system&gt;/</code>. See <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>.</td>
+                </tr>
+                <tr>
+                  <td><strong>File Manager on the console</strong></td>
+                  <td>Small jobs: moving or renaming a few files</td>
+                  <td><strong>Tools &gt; File Manager</strong> can browse, copy, cut, paste, rename and delete. For bulk copying use a PC or SFTP.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <blockquote>
+            The default SFTP password is <code>rgos</code>. Change it, and turn
+            SSH off again when you are done, because anyone on your network can
+            use it while it is on.
+          </blockquote>
+
+          <h2 id="rescan">Rescan</h2>
+          <p>
+            Press <strong>X</strong> in a game list or on the home screens to
+            rescan after adding or removing games. A system with no games and no
+            installed core is hidden; a system with a core installed still
+            shows up with no games in it.
+          </p>
+
+          <h2 id="disc-based-games">Disc-based games</h2>
+          <ul>
+            <li>
+              <strong>Prefer <code>.chd</code></strong> over a pile of
+              <code>.bin</code> and <code>.cue</code> files; it is one file per
+              disc.
+            </li>
+            <li>
+              <strong><code>.cue</code> plus <code>.bin</code>:</strong> keep
+              the <code>.bin</code> track files next to the <code>.cue</code>.
+              Only the disc file is listed, not the tracks.
+            </li>
+            <li>
+              <strong>Multi-disc games:</strong> use an <code>.m3u</code>
+              playlist for PlayStation, Sega CD and GameCube, and keep the
+              playlist next to the disc images. Saturn and Dreamcast also take
+              <code>.m3u</code> for multi-disc games.
+            </li>
+            <li>
+              <strong>Dreamcast:</strong> one folder per game is fine. Keep a
+              <code>.gdi</code> file's track files next to it.
+            </li>
+            <li>
+              <strong>Neo Geo:</strong> leave ROM sets zipped
+              (<code>.zip</code> or <code>.7z</code>), and put
+              <code>neogeo.zip</code> in <code>bios/</code>, also zipped.
+            </li>
+          </ul>
+
+          <h2 id="things-that-trip-people-up">Things that trip people up</h2>
+          <ul>
+            <li>
+              <code>.bin</code> is shared by Genesis, 32X, Pico and the Atari
+              systems. Keep each system's files in its own folder.
+            </li>
+            <li>
+              <code>.iso</code> is shared by Sega CD, PlayStation and GameCube.
+              Wii is not supported; keep Wii dumps out of <code>roms/gc</code>.
+            </li>
+            <li>
+              <strong>GameCube is RG Rotate only.</strong> The system is hidden
+              on every other device. See <a href="gamecube.html">GameCube</a>.
+            </li>
+            <li>
+              <strong>Arcade and Neo Geo</strong> only appear once a FinalBurn
+              Neo core is present; RG OS does not ship one. You can add it with
+              <strong>Tools &gt; Core Installer</strong> or by putting an
+              aarch64 <code>fbneo_libretro.so</code> in <code>cores/</code>.
+            </li>
+            <li>
+              <strong>PICO-8</strong> carts are <code>.p8</code> or
+              <code>.p8.png</code> files; a plain cover <code>.png</code> is not
+              a cartridge.
+            </li>
+            <li>
+              <strong>Heavy systems</strong> (N64, Saturn, Dreamcast) will not
+              run every game at full speed on the H700 consoles. Many N64 games
+              need the right stick; on a console without sticks, turn on
+              <strong>DPAD to joystick</strong>.
+            </li>
+          </ul>
+
+          <h2 id="bios-files">BIOS files</h2>
+          <p>
+            Some systems need BIOS files, which RG OS does not ship. Put yours
+            in <code>bios/</code> on the ROMS partition. Then open
+            <strong>Settings &gt; Missing BIOS check</strong>: it lists what is
+            missing, where each file goes, and warns when a checksum differs
+            from the expected one. See <a href="bios.html">BIOS files</a>.
+          </p>
+
+          <h2 id="after-adding-games">After adding games</h2>
+          <ul>
+            <li><strong>Favourites:</strong> press <strong>Y</strong> on a game to add or remove it (<a href="launchers-and-themes.html#favorites-and-recents">Launchers, themes, splash and music</a>).</li>
+            <li><strong>Cover art:</strong> <strong>Settings &gt; Game artwork</strong> downloads missing covers from SteamGridDB (<a href="artwork.html">Game artwork</a>).</li>
+            <li><strong>A different core:</strong> <strong>Settings &gt; Emulators</strong> lists the installed cores compatible with each system, and <strong>Tools &gt; Core Installer</strong> downloads more (<a href="core-installer.html">Core Installer</a>).</li>
+            <li><strong>Controls in game:</strong> <a href="controls.html">Controls and hotkeys</a>.</li>
+          </ul>
+
+          <h2 id="a-game-does-not-show-up">A game does not show up</h2>
+          <div class="tw">
+            <table>
+              <thead><tr><th>Check</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td>Did you press <strong>X</strong> to rescan?</td><td>The launcher does not pick up new files until it rescans.</td></tr>
+                <tr><td>Is the folder name exactly as in the table?</td><td>For example <code>genesis</code>, not <code>megadrive</code>, and <code>psx</code>, not <code>ps1</code>.</td></tr>
+                <tr><td>Is the file type listed for that system?</td><td>Other extensions are not offered as games.</td></tr>
+                <tr><td>Is the game on the ROMS partition, inside <code>roms/</code>?</td><td>The small <code>RGOS</code> boot partition is not scanned for games.</td></tr>
+                <tr><td>Does the name start with a <code>.</code>?</td><td>Those files are ignored.</td></tr>
+                <tr><td>Is a core installed for the system?</td><td>Systems without a compatible core are hidden. Check <strong>Settings &gt; Emulators</strong> or <strong>Tools &gt; Core Installer</strong>.</td></tr>
+                <tr><td>Is it a GameCube game on a console other than the RG Rotate?</td><td>GameCube is hidden on every other device.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            If a game is listed but will not start, see
+            <a href="troubleshooting.html">Troubleshooting</a> and
+            <a href="logs.html">Logs and diagnostic files</a>.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="installer.html"
+            ><small>Previous</small>First-boot installer</a
+          ><a class="r" href="devices.html"
+            ><small>Next</small>Supported devices</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
+</html>
