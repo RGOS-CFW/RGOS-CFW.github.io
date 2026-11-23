@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>HDMI output · RG OS Docs</title>
+    <meta name="description" content="Mini-HDMI setup, resolution modes, audio, and troubleshooting for supported RG OS H700 handhelds." />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="hdmi.html" class="on" aria-current="page">Mini-HDMI output</a>
+        <a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="mini-hdmi-output-h700">Mini-HDMI output (H700)</h1>
+          <p class="lead">RG OS supports mini-HDMI output on the Anbernic RG34XXSP, RG35XX H and RG35XX SP, all based on the Allwinner H700.</p>
+          <p>The implementation uses the kernel DRM connector (<code>HDMI-A-1</code>) and the existing framebuffer. It does not require a desktop compositor.</p>
+
+          <h2 id="connect-and-boot">Connect and boot</h2>
+          <ol>
+            <li>Power the handheld off.</li>
+            <li>Connect it to the TV or monitor with a mini-HDMI cable before powering on.</li>
+            <li>Select the correct HDMI input on the TV, then power on the handheld.</li>
+          </ol>
+          <p>When HDMI is detected during boot, the kernel configures the framebuffer for the external display and the RG OS menu scales to it. RetroArch uses the HDMI display's current mode and HDMI audio while the HDMI connector is active.</p>
+          <p>If no HDMI cable is connected at boot, RG OS uses the built-in screen as usual.</p>
+          <blockquote><strong>Important:</strong> HDMI is selected at boot. Inserting or removing the cable after startup does not live-switch displays. Power off before connecting or disconnecting, then boot again.</blockquote>
+
+          <h2 id="resolution-modes">Resolution modes</h2>
+          <p>The default resolution cap is <strong>720p</strong>, which avoids the additional CPU cost of drawing the menu at 1080p. The saved setting is <code>/var/lib/rgos/display.json</code>:</p>
+          <pre><code>{"hdmi": "720p"}</code></pre>
+          <div class="tw">
+            <table>
+              <thead><tr><th>Mode</th><th>Output mode</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td><code>720p</code></td><td>1280 × 720 at 60 Hz</td><td>Default; recommended</td></tr>
+                <tr><td><code>1080p</code></td><td>1920 × 1080 at 60 Hz</td><td>Higher load for the H700's CPU-drawn menu</td></tr>
+                <tr><td><code>480p</code></td><td>720 × 480 at 60 Hz</td><td>Lower-resolution fallback</td></tr>
+                <tr><td><code>auto</code></td><td>TV preferred mode</td><td>Removes the RG OS resolution cap</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2 id="change-the-mode-over-ssh">Change the mode over SSH</h2>
+          <p>Connect to the handheld over SSH as root and inspect the current HDMI status:</p>
+          <pre><code>python3 /opt/rgos/hdmictl.py status</code></pre>
+          <p>Set a mode with:</p>
+          <pre><code>python3 /opt/rgos/hdmictl.py set 720p</code></pre>
+          <p>Replace <code>720p</code> with <code>480p</code>, <code>1080p</code> or <code>auto</code>. A successful change to the boot configuration requires a restart, with the TV connected before powering on.</p>
+          <p>The tool updates the <code>APPEND</code> lines in <code>/boot/extlinux/extlinux.conf</code>, creates a one-time backup named <code>extlinux.conf.pre-hdmi</code>, and stores the selected mode in <code>/var/lib/rgos/display.json</code>. The saved choice is reapplied during startup if an OS update replaces the boot configuration.</p>
+          <p>Inspect the status or reapply the saved setting with:</p>
+          <pre><code>python3 /opt/rgos/hdmictl.py status
+python3 /opt/rgos/hdmictl.py boot</code></pre>
+
+          <h2 id="audio-and-retroarch">Audio and RetroArch</h2>
+          <p>When the kernel reports HDMI as connected and enabled, RG OS selects the HDMI ALSA playback device for RetroArch. Otherwise, RetroArch uses the handheld's built-in audio device.</p>
+          <p>While HDMI is active, RetroArch is directed to the HDMI connector and uses its current display mode rather than forcing the handheld panel's fixed dimensions.</p>
+
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <ul>
+            <li><strong>TV says no signal:</strong> Power off, connect the cable firmly at both ends, select the TV's correct HDMI input, then power on the handheld.</li>
+            <li><strong>No HDMI connector is detected:</strong> Run <code>python3 /opt/rgos/hdmictl.py status</code>. The kernel must expose an HDMI connector under <code>/sys/class/drm</code>.</li>
+            <li><strong>Black screen or unsupported mode:</strong> With the handheld display connected as usual, SSH in and run <code>python3 /opt/rgos/hdmictl.py set 720p</code>. Reboot with the TV connected. If needed, try <code>480p</code>.</li>
+            <li><strong>No sound over HDMI:</strong> Connect the TV before boot and inspect <code>python3 /opt/rgos/hdmictl.py status</code> for the HDMI audio device.</li>
+            <li><strong>Built-in screen works but TV does not:</strong> Confirm that the device is one of the supported H700 handhelds and that the TV and cable accept the selected mode.</li>
+          </ul>
+          <p><strong>Device limitation:</strong> The RG Rotate (T618) is not included in this H700 mini-HDMI implementation.</p>
+        </article>
+        <div class="pn">
+          <a href="settings.html"><small>Previous</small>Settings reference</a>
+          <a class="r" href="launchers-and-themes.html"><small>Next</small>Launchers, themes, splash and music</a>
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div>
+        <div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div>
+        <p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
+</html>
