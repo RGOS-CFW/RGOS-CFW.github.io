@@ -50,6 +50,12 @@ a.card h3{margin:0 0 4px;font-size:1.02rem;color:var(--ac)}a.card p{margin:0;col
 .pn a{display:block;padding:12px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--tx)}
 .pn a:hover{border-color:var(--ac);text-decoration:none}.pn a.r{text-align:right}.pn small{display:block;color:var(--mut);font-size:12px}
 #bd{display:none}
+.sf{border-top:1px solid var(--line);margin-top:20px;padding:28px 20px calc(28px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--card) 60%,transparent);color:var(--mut);font-size:14px}
+.sfi{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:14px 30px;align-items:start}
+.sfb b{color:var(--tx);font-size:18px}.sfb b i{color:var(--ac);font-style:normal}.sfb p{margin:4px 0 0}
+.sfl{display:flex;flex-wrap:wrap;gap:6px 20px}.sfl a{color:var(--tx)}.sfl a:hover{color:var(--ac);text-decoration:none}
+.sfn{grid-column:1/-1;margin:0;padding-top:14px;border-top:1px solid var(--line);font-size:13px}
+@media (max-width:700px){.sfi{grid-template-columns:1fr}}
 @media (max-width:900px){
  #mb{display:inline-block}
  .wrap{display:block;padding:0 16px}
