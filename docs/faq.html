@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FAQ · RG OS Docs</title>
+<meta name="description" content="Short answers to common questions.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html" class="on" aria-current="page">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="faq">FAQ</h1>
+<p><strong>Which devices are supported?</strong> RG34XXSP, RG35XX H, RG35XX SP and RG Rotate (<a href="devices.html">DEVICES.md</a>).</p>
+<p><strong>Black screen on an H700 console.</strong> Almost always the wrong RAM type (DDR4 vs DDR3) or panel revision. See <a href="troubleshooting.html">TROUBLESHOOTING.md</a>.</p>
+<p><strong>Where do my ROMs go?</strong> <code>&lt;ROMS&gt;/roms/&lt;system&gt;/</code>. See <a href="systems.html">SYSTEMS.md</a>.</p>
+<p><strong>A system is missing from the menu.</strong> Its core is not installed in the image, or the build of that core failed. See <a href="systems.html">SYSTEMS.md</a>.</p>
+<p><strong>A game starts then closes.</strong> Read <code>rgos-retroarch.txt</code> (or <code>rgos-native.txt</code> for ports) on the boot partition. A missing BIOS is a common cause (<a href="bios.html">BIOS.md</a>).</p>
+<p><strong>Buttons are wrong.</strong> <em>Settings &gt; Swap A / B buttons</em>, or <em>Map buttons</em>.</p>
+<p><strong>Does it support Wii?</strong> No. GameCube only, and only on the RG Rotate (<a href="gamecube.html">GAMECUBE.md</a>).</p>
+<p><strong>Can I update without reflashing?</strong> Yes. Build an update <code>.tar</code> and put it in <code>update/</code> on the ROMS partition (<a href="updates.html">UPDATES.md</a>).</p>
+<p><strong>Does an update change my games and saves?</strong> No. Updates only replace files on the boot partition.</p>
+<p><strong>Do I need to flash anything special on the RG Rotate?</strong> Yes, the SPL, once (<a href="rg-rotate-spl.html">RG-ROTATE-SPL.md</a>).</p>
+<p><strong>How do I get covers?</strong> <a href="artwork.html">ARTWORK.md</a>.</p>
+<p><strong>How do I run Linux ports?</strong> Use PortMaster from Tools, or drop <code>.sh</code> launchers in <code>roms/ports/</code> (<a href="ports.html">PORTS.md</a>).</p>
+<p><strong>Is the SSH password safe?</strong> The default is <code>rgos</code>; change it or switch SSH off (<a href="networking.html">NETWORKING.md</a>).</p>
+<p><strong>Licensing.</strong> RG OS code is MIT licensed; third-party components keep their own licenses (<code>THIRD-PARTY-NOTICES.md</code>). RG OS does not provide games or BIOS files.</p></article><div class="pn"><a href="logs.html"><small>Previous</small>Logs and diagnostic files</a><a class="r" href="rg-rotate-spl.html"><small>Next</small>RG Rotate: flashing the SPL</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

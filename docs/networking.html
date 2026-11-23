@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wi-Fi, Bluetooth and SSH · RG OS Docs</title>
+<meta name="description" content="Wi-Fi, Bluetooth and SSH / SFTP.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html" class="on" aria-current="page">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="wi-fi-bluetooth-and-ssh">Wi-Fi, Bluetooth and SSH</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#wi-fi">Wi-Fi</a><a href="#bluetooth">Bluetooth</a><a href="#ssh-and-file-transfer">SSH and file transfer</a><a href="#copying-games-over-the-network">Copying games over the network</a></nav>
+<h2 id="wi-fi">Wi-Fi</h2>
+<ol>
+<li><em>Settings &gt; Wi-Fi</em>, pick a network from the scan list (or add a hidden network) and enter the password with the on-screen keyboard.</li>
+<li>Once connected, the Wi-Fi row shows the status and the SSH row shows the address.</li>
+<li>DNS is set up from the DHCP lease automatically (<code>/run/rgos/resolv.conf</code>).</li>
+</ol>
+<p>Set the regulatory country in <code>/etc/rgos/wifi.json</code> if your region needs it.</p>
+<p>Many handhelds have no battery-backed clock. HTTPS downloads (artwork, PortMaster) can fail with a certificate error until the clock is roughly right; see <a href="artwork.html">ARTWORK.md</a>.</p>
+<h2 id="bluetooth">Bluetooth</h2>
+<p><em>Settings &gt; Bluetooth</em> turns the adapter on or off and opens the device list, where you can pair controllers, keyboards and headsets. If it says no adapter was found, check <code>rgos-logs.txt</code> (<a href="logs.html">LOGS.md</a>).</p>
+<h2 id="ssh-and-file-transfer">SSH and file transfer</h2>
+<p>Turn it on in <em>Settings &gt; SSH / file transfer</em>. Connect from a PC on the same network:</p>
+<pre><code>ssh root@&lt;ip address&gt;
+sftp root@&lt;ip address&gt;
+</code></pre>
+<p>The ROMS card is at <code>/media/roms</code>.</p>
+<ul>
+<li><strong>Default password:</strong> <code>rgos</code>. Change it, because anyone on your network can use it while SSH is on.</li>
+<li><strong>Custom password:</strong> put the new password on one line in <code>ssh-password.txt</code> on the boot partition. It is ignored if empty, too long, or if it contains <code>:</code>.</li>
+<li><strong>Key login:</strong> put your public key in <code>authorized_keys</code> (or <code>authorized_keys.txt</code>) on the boot partition; it is installed for root at start.</li>
+<li>The server is Dropbear on port 22. Turn it off again in the same menu when you are done.</li>
+</ul>
+<h2 id="copying-games-over-the-network">Copying games over the network</h2>
+<p>Use any SFTP client (WinSCP, FileZilla, <code>sftp</code>) and copy into <code>/media/roms/roms/&lt;system&gt;/</code>, then press X in the launcher to rescan.</p></article><div class="pn"><a href="launchers-and-themes.html"><small>Previous</small>Launchers, themes, splash and music</a><a class="r" href="artwork.html"><small>Next</small>Game artwork (SteamGridDB)</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

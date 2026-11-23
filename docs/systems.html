@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supported systems · RG OS Docs</title>
+<meta name="description" content="Supported systems, file types, default cores and notes per system.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html" class="on" aria-current="page">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="supported-systems">Supported systems</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#which-cores-ship-in-the-image">Which cores ship in the image</a><a href="#nintendo-64">Nintendo 64</a><a href="#saturn">Saturn</a><a href="#dreamcast">Dreamcast</a><a href="#choosing-another-core">Choosing another core</a><a href="#multi-disc-games">Multi-disc games</a><a href="#notes">Notes</a></nav>
+<p>Put games in <code>&lt;ROMS&gt;/roms/&lt;folder&gt;/</code>. Systems whose core is not installed are hidden, and so is GameCube on every device except the RG Rotate. A system with no games still shows up if its core is installed.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>System</th>
+<th>Folder</th>
+<th>Default core</th>
+<th>File types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Game Boy Advance</td>
+<td><code>gba</code></td>
+<td>mgba</td>
+<td><code>.gba</code></td>
+</tr>
+<tr>
+<td>Game Boy</td>
+<td><code>gb</code></td>
+<td>gambatte</td>
+<td><code>.gb</code></td>
+</tr>
+<tr>
+<td>Game Boy Color</td>
+<td><code>gbc</code></td>
+<td>gambatte</td>
+<td><code>.gbc</code></td>
+</tr>
+<tr>
+<td>NES / Famicom</td>
+<td><code>nes</code></td>
+<td>nestopia</td>
+<td><code>.nes</code> <code>.unf</code> <code>.unif</code></td>
+</tr>
+<tr>
+<td>SNES</td>
+<td><code>snes</code></td>
+<td>snes9x</td>
+<td><code>.sfc</code> <code>.smc</code> <code>.swc</code> <code>.fig</code> <code>.bs</code></td>
+</tr>
+<tr>
+<td>Mega Drive / Genesis</td>
+<td><code>genesis</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.md</code> <code>.gen</code> <code>.smd</code> <code>.bin</code></td>
+</tr>
+<tr>
+<td>Master System</td>
+<td><code>mastersystem</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.sms</code></td>
+</tr>
+<tr>
+<td>Game Gear</td>
+<td><code>gamegear</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.gg</code></td>
+</tr>
+<tr>
+<td>SG-1000 / SC-3000</td>
+<td><code>sg1000</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.sg</code> <code>.sc</code> <code>.sf</code></td>
+</tr>
+<tr>
+<td>Sega CD / Mega-CD</td>
+<td><code>segacd</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.cue</code> <code>.chd</code> <code>.iso</code> <code>.m3u</code> <code>.ccd</code></td>
+</tr>
+<tr>
+<td>Sega 32X</td>
+<td><code>sega32x</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.32x</code> <code>.md</code> <code>.gen</code> <code>.smd</code> <code>.bin</code></td>
+</tr>
+<tr>
+<td>Sega Pico</td>
+<td><code>segapico</code></td>
+<td>genesis_plus_gx</td>
+<td><code>.pico</code> <code>.bin</code></td>
+</tr>
+<tr>
+<td>Nintendo 64</td>
+<td><code>n64</code></td>
+<td>mupen64plus_next</td>
+<td><code>.z64</code> <code>.n64</code> <code>.v64</code> <code>.u64</code> <code>.ndd</code></td>
+</tr>
+<tr>
+<td>Sega Dreamcast</td>
+<td><code>dreamcast</code></td>
+<td>flycast</td>
+<td><code>.cdi</code> <code>.gdi</code> <code>.chd</code> <code>.cue</code> <code>.m3u</code></td>
+</tr>
+<tr>
+<td>Sega Saturn</td>
+<td><code>saturn</code></td>
+<td>yabasanshiro</td>
+<td><code>.cue</code> <code>.chd</code> <code>.iso</code> <code>.m3u</code> <code>.ccd</code> <code>.mds</code></td>
+</tr>
+<tr>
+<td>Atari 2600</td>
+<td><code>atari2600</code></td>
+<td>stella2014</td>
+<td><code>.a26</code> <code>.bin</code></td>
+</tr>
+<tr>
+<td>Atari 5200</td>
+<td><code>atari5200</code></td>
+<td>atari800</td>
+<td><code>.a52</code> <code>.bin</code> <code>.car</code></td>
+</tr>
+<tr>
+<td>Atari 7800</td>
+<td><code>atari7800</code></td>
+<td>prosystem</td>
+<td><code>.a78</code> <code>.bin</code></td>
+</tr>
+<tr>
+<td>Neo Geo Pocket</td>
+<td><code>ngp</code></td>
+<td>mednafen_ngp</td>
+<td><code>.ngp</code> <code>.ngc</code> <code>.ngpc</code></td>
+</tr>
+<tr>
+<td>Neo Geo Pocket Color</td>
+<td><code>ngpc</code></td>
+<td>mednafen_ngp</td>
+<td><code>.ngc</code> <code>.ngpc</code> <code>.ngp</code></td>
+</tr>
+<tr>
+<td>WonderSwan</td>
+<td><code>ws</code></td>
+<td>mednafen_wswan</td>
+<td><code>.ws</code> <code>.wsc</code> <code>.pc2</code></td>
+</tr>
+<tr>
+<td>WonderSwan Color</td>
+<td><code>wsc</code></td>
+<td>mednafen_wswan</td>
+<td><code>.wsc</code> <code>.ws</code> <code>.pc2</code></td>
+</tr>
+<tr>
+<td>PlayStation</td>
+<td><code>psx</code></td>
+<td>pcsx_rearmed</td>
+<td><code>.cue</code> <code>.chd</code> <code>.pbp</code> <code>.m3u</code> <code>.iso</code> <code>.img</code> <code>.ccd</code></td>
+</tr>
+<tr>
+<td>GameCube (Rotate only)</td>
+<td><code>gc</code></td>
+<td>dolphin</td>
+<td><code>.gcm</code> <code>.iso</code> <code>.gcz</code> <code>.rvz</code> <code>.ciso</code> <code>.m3u</code> <code>.dol</code> <code>.elf</code></td>
+</tr>
+<tr>
+<td>Arcade (FinalBurn Neo)</td>
+<td><code>arcade</code></td>
+<td>fbneo</td>
+<td><code>.zip</code> <code>.7z</code></td>
+</tr>
+<tr>
+<td>Neo Geo</td>
+<td><code>neogeo</code></td>
+<td>fbneo</td>
+<td><code>.zip</code> <code>.7z</code></td>
+</tr>
+<tr>
+<td>Ports</td>
+<td><code>ports</code></td>
+<td>native</td>
+<td><code>.sh</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Files that start with <code>.</code> are ignored.</p>
+<h2 id="which-cores-ship-in-the-image">Which cores ship in the image</h2>
+<p><code>build.sh</code> installs these Debian libretro packages: gambatte, mgba, snes9x, nestopia and beetle-wswan. It also builds, best effort, the PlayStation core (pcsx_rearmed), Genesis Plus GX, the Neo Geo Pocket core the three Atari cores (stella2014 for the 2600, atari800 for the 5200, prosystem for the 7800), Flycast, Mupen64Plus-Next and YabaSanshiro (Saturn) from source, plus Dolphin on the RG Rotate. A failed source build is reported with a <code>!!</code> line and the image is built without that core.</p>
+<p>Systems that the build does not provide a core for (for example Arcade/Neo Geo with FinalBurn Neo) only appear when you supply the core yourself: put a prebuilt aarch64 <code>&lt;name&gt;_libretro.so</code> in <code>cores/</code> before building, or install a Debian package with <code>EXTRA_PKGS</code> (<a href="building.html">BUILDING.md</a>). The menu lists a system only when a compatible core is present.</p>
+<h2 id="nintendo-64">Nintendo 64</h2>
+<p><code>build.sh</code> builds Mupen64Plus-Next (<code>mupen64plus_next</code>) as an <strong>OpenGL ES</strong> core, for the same reason as Flycast below: RetroArch on this image is a GLES build and a desktop-OpenGL core closes right after launch. <code>N64_REPO=none</code> skips it, <code>N64_MAKE_ARGS</code> changes the make arguments (default <code>platform=unix FORCE_GLES=1</code>; the ARM64 dynarec is picked automatically on aarch64) and <code>N64_REQUIRED=1</code> stops the build when the core fails to build. The image's own core is looked up before the one on the ROMS card. ParaLLEl N64 (<code>parallel_n64</code>) is listed as an alternative core and can be added with <em>Tools &gt; Core Installer</em> or by putting a GLES build in <code>cores/</code>.</p>
+<p>Put ROMs in <code>roms/n64/</code> as <code>.z64</code>, <code>.n64</code> or <code>.v64</code> (any byte order works), or <code>.ndd</code> for 64DD disks. No BIOS is needed. The system runs with the CPU and GPU clocks pinned to <code>performance</code> while a game is running. Many games need the right stick: turn on <em>DPAD to joystick</em> (<a href="settings.html">SETTINGS.md</a>) if your console has no sticks. Speed varies a lot between games and consoles; the RG35XX H and similar H700 consoles will not run every title at full speed. The video driver can be forced with <code>retroarch-n64-video.txt</code> (<a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>).</p>
+<h2 id="saturn">Saturn</h2>
+<p>Put discs in <code>roms/saturn/</code> (<code>.cue</code> with its <code>.bin</code> tracks next to it, <code>.chd</code>, <code>.iso</code>, <code>.mds</code>, or <code>.m3u</code> for multi-disc games). The image has exactly one Saturn core pre-installed, YabaSanshiro (the best fit for ARM handhelds), built by <code>build.sh</code> from <code>SATURN_REPO</code> (<code>SATURN_REPO=none</code> skips it, <code>SATURN_MAKE_DIR</code> / <code>SATURN_MAKE_ARGS</code> change the build, <code>SATURN_REQUIRED=1</code> stops the build when it fails). The alternatives, Yabause and Beetle Saturn, are not in the image: install them from <em>Tools &gt; Core Installer</em>, or drop a <code>&lt;name&gt;_libretro.so</code> into <code>cores/</code> on the ROMS card, then pick one in <em>Settings &gt; Emulators</em>. If the YabaSanshiro build fails, the image has no Saturn core and the Saturn menu entry stays hidden until you install one. The CPU and GPU clocks are pinned to <code>performance</code> while a game runs. BIOS files are listed in <a href="bios.html">BIOS.md</a>.</p>
+<h2 id="dreamcast">Dreamcast</h2>
+<p><code>build.sh</code> builds Flycast as an <strong>OpenGL ES</strong> core (<code>DC_REPO=none</code> skips it; <code>DC_MAKE_ARGS</code> changes the make arguments). RetroArch on this image is a GLES build, and the libretro buildbot Flycast (what <em>Tools &gt; Core Installer</em> downloads) is desktop-OpenGL only: it closes right after launch with <code>Requesting OpenGL context, but RetroArch is compiled against OpenGLES</code>. The image's own core is looked up before the one on the ROMS card, so it wins. Without a GLES Flycast, put one in <code>cores/</code> on the ROMS card (it must be built with <code>FORCE_GLES=1</code>).</p>
+<p><strong>Standalone Flycast.</strong> Besides the libretro core, Dreamcast can run the standalone Flycast emulator. It shows up as <strong>Flycast (standalone)</strong> in <em>Settings &gt; Emulators</em> once a <code>flycast</code> executable is found in <code>/usr/local/bin</code>, <code>/usr/bin</code>, <code>/opt/flycast</code> or <code>cores/standalone/</code> on the ROMS card; the libretro core stays the default until you pick it. RG OS starts it itself (no RetroArch): the game's file is passed on the command line, Select + Start held stops it like a native port, and its output goes to <code>rgos-native.log</code> / <code>rgos-native.txt</code>. Its settings live on the ROMS card in <code>config/flycast/</code> (data in <code>config/data/flycast/</code>), and <code>bios/dc/</code> is linked in as its BIOS folder, so the BIOS Manager files are shared. RetroArch features (RetroArch's own menu, its save states, overlays and <code>retroarch.cfg</code> overrides) do not apply to it; use Flycast's own settings. <code>build.sh</code> builds it from <code>DC_REPO</code> as an OpenGL ES program and installs <code>/usr/local/bin/flycast</code> (<code>DC_STANDALONE=0</code> skips it, <code>DC_SA_CMAKE_ARGS</code> adds CMake arguments, <code>DC_SA_REQUIRED=1</code> stops the build when it fails). It is not on the Core Installer list: a program cannot be fetched from the libretro buildbot, so to add your own build put a GLES <code>flycast</code> executable in <code>cores/standalone/</code>.</p>
+<p>Put discs in <code>roms/dreamcast/</code>, one folder per game is fine. Use <code>.gdi</code> (keep its track files next to it), <code>.cdi</code>, <code>.chd</code>, or <code>.cue</code>/<code>.m3u</code> for multi-disc games. Only the disc file is listed, not the track files. The system runs with the CPU and GPU clocks pinned to <code>performance</code> while a game is running, and it is demanding: on the RG35XX H and similar H700 consoles many games will not reach full speed. A real BIOS is optional (<a href="bios.html">BIOS.md</a>).</p>
+<h2 id="choosing-another-core">Choosing another core</h2>
+<p><em>Settings &gt; Emulators</em> lists each system and the installed cores that are compatible with it. Compatible alternatives include, for example, gpsp / vbam for GBA, sameboy for Game Boy, fceumm / quicknes / mesen for NES, bsnes variants for SNES, picodrive for Sega systems, and swanstation / mednafen_psx for PlayStation. Only cores that are actually installed appear. <em>Tools &gt; Core Installer</em> downloads the ones you do not have yet (<a href="core-installer.html">CORE-INSTALLER.md</a>).</p>
+<h2 id="multi-disc-games">Multi-disc games</h2>
+<p>Use an <code>.m3u</code> playlist for PlayStation, Sega CD and GameCube multi-disc games, and keep the playlist next to the disc images. Prefer <code>.chd</code> over a pile of <code>.bin</code> / <code>.cue</code> files.</p>
+<h2 id="notes">Notes</h2>
+<ul>
+<li><code>.bin</code> is shared by Genesis, 32X, Pico and Atari systems. Keep each system's files in its own folder.</li>
+<li><code>.iso</code> is shared by Sega CD, PlayStation and GameCube. Keep Wii dumps out of <code>roms/gc</code>; Wii is not supported.</li>
+<li>Many systems need BIOS files (<a href="bios.html">BIOS.md</a>).</li>
+<li>System-specific notes: <a href="nes.html">NES.md</a>, <a href="gamecube.html">GAMECUBE.md</a>, <a href="ports.html">PORTS.md</a>.</li>
+</ul>
+<p><strong>Dreamcast says <code>Requesting OpenGL context, but RetroArch is compiled against OpenGLES</code>?</strong> The <code>flycast_libretro.so</code> on the ROMS card is a desktop-GL build. The image build had no GLES Flycast to ship (see <code>flycast-build.log</code> in the build work folder; <code>DC_REQUIRED=1</code> stops the build when that happens), and the Core Installer no longer downloads the buildbot Flycast. Delete <code>cores/flycast_libretro.so</code> from the card, fix the build error and rebuild, or put a <code>FORCE_GLES=1</code> build in <code>cores/</code>.</p></article><div class="pn"><a href="updates.html"><small>Previous</small>Offline updates (.tar from the SD card)</a><a class="r" href="bios.html"><small>Next</small>BIOS files</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Core Installer · RG OS Docs</title>
+<meta name="description" content="Download more RetroArch cores without reflashing.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html" class="on" aria-current="page">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="core-installer">Core Installer</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#using-it">Using it</a><a href="#where-cores-go">Where cores go</a><a href="#where-they-come-from">Where they come from</a><a href="#errors">Errors</a></nav>
+<p><em>Tools &gt; Core Installer</em> downloads RetroArch cores that are not installed yet, so you can add alternative emulators for your systems (gpSP or VBA-M for GBA, PicoDrive for Sega, SwanStation for PlayStation, FinalBurn Neo for Arcade, Flycast for Dreamcast, YabaSanshiro for Saturn, ParaLLEl N64 for Nintendo 64 and so on) without rebuilding the image.</p>
+<p>It needs a network connection first: see <a href="networking.html">NETWORKING.md</a>.</p>
+<h2 id="using-it">Using it</h2>
+<p>The list shows every compatible core for the systems on this device, with the ones you do not have first. Each row shows the core, the systems it runs (for example <code>GBA, GB</code>) and its state.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Up / Down</td>
+<td>Select a core</td>
+</tr>
+<tr>
+<td>L / R</td>
+<td>Page up / down</td>
+</tr>
+<tr>
+<td>A</td>
+<td>Install the selected core</td>
+</tr>
+<tr>
+<td>X</td>
+<td>Reinstall the selected core: download it again and replace your copy (see below)</td>
+</tr>
+<tr>
+<td>B</td>
+<td>Back (while a download runs: cancel it)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Reinstall (X)</strong> works on cores you downloaded, the ones that have their own <code>&lt;name&gt;_libretro.so</code> in the <code>cores</code> folder on the ROMS card (the row shows <em>X Reinstall</em> when it is selected). Use it to get a fresh copy of a core that misbehaves, a damaged file, or a newer nightly build. The new file is downloaded and checked first and only then swapped in, so a failed or cancelled reinstall leaves the working core in place. Cores that ship in the system image are read-only and are not replaced; pressing X on one says so.</p>
+<p>When an install finishes, the menu rescans: a system that had no core appears straight away, and the new core is selectable in <em>Settings &gt; Emulators</em>.</p>
+<p>A system whose only compatible core is missing (for example Arcade and Neo Geo without FinalBurn Neo) is hidden from the Games list until you install one. It is listed in the Core Installer like any other.</p>
+<h2 id="where-cores-go">Where cores go</h2>
+<p>Downloaded cores are written to <code>&lt;ROMS&gt;/cores/&lt;name&gt;_libretro.so</code> on the ROMS card. The system image is read-only, and this folder survives reboots and updates. The menu and <code>rgos-launch</code> look there after the built-in core folders. Delete a file there to remove a core, or copy your own <code>*_libretro.so</code> into the folder by hand.</p>
+<p>Only cores that are not already installed are offered, so a downloaded core never replaces one that ships in the image. GameCube's Dolphin core is not offered: it needs data files that only the RG Rotate image carries (<a href="gamecube.html">GAMECUBE.md</a>).</p>
+<h2 id="where-they-come-from">Where they come from</h2>
+<p>The libretro buildbot, <code>https://buildbot.libretro.com/nightly/linux/aarch64/latest/&lt;core&gt;_libretro.so.zip</code>. To use a mirror or your own folder with the same layout, set <code>RGOS_CORE_URL</code> or put <code>{"url": "https://..."}</code> in <code>/etc/rgos/coreinstall.json</code>.</p>
+<p>Each download is checked before it is installed: the zip must contain exactly <code>&lt;core&gt;_libretro.so</code>, the file must be an ELF library for this CPU, and it is written under a temporary name and renamed into place, so a failed or cancelled download never leaves a half-written core.</p>
+<h2 id="errors">Errors</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Can't reach the server. Check Wi-Fi in Settings</td>
+<td>No network, or the server is down</td>
+</tr>
+<tr>
+<td>Not available for this device</td>
+<td>The buildbot has no build of that core for aarch64</td>
+</tr>
+<tr>
+<td>Not enough free space on the ROMS card</td>
+<td>Free some space and try again</td>
+</tr>
+<tr>
+<td>That core is built for a different CPU</td>
+<td>The mirror serves the wrong architecture</td>
+</tr>
+</tbody>
+</table></div>
+<p>A core can install fine and still fail to start if it needs a library that is missing from the image. <code>rgos-retroarch.txt</code> on the boot partition lists the missing libraries (<a href="logs.html">LOGS.md</a>).</p></article><div class="pn"><a href="bios.html"><small>Previous</small>BIOS files</a><a class="r" href="nes.html"><small>Next</small>NES / Famicom (RetroArch + Nestopia core)</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

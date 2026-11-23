@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RG Rotate: flashing the SPL · RG OS Docs</title>
+<meta name="description" content="Flash the SPL on an RG Rotate.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html" class="on" aria-current="page">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="rg-rotate-flashing-the-spl">RG Rotate: flashing the SPL</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#flash-the-spl">Flash the SPL</a><a href="#restore-the-stock-spl">Restore the stock SPL</a><a href="#after-flashing">After flashing</a></nav>
+<p>The RG Rotate needs a replacement splloader (SPL) so that it can boot Linux from the SD card. This is done once, from a PC, with the tools in <code>spl-flasher/</code>. <strong>Use it only on an Anbernic RG Rotate.</strong></p>
+<p>Contents: <code>flash-spl.bat</code> / <code>flash-spl.sh</code>, <code>restore-stock-spl.bat</code> / <code>restore-stock-spl.sh</code>, <code>spl.img</code>, the download helpers <code>fdl1-dl.bin</code> and <code>fdl2-dl.bin</code>, and <code>spd_dump</code> for Windows and Linux.</p>
+<h2 id="flash-the-spl">Flash the SPL</h2>
+<ol>
+<li>Fully power off the console.</li>
+<li>Windows: double-click <code>flash-spl.bat</code>. Linux: run <code>./flash-spl.sh</code> (use <code>sudo</code> if you get a USB permissions error).</li>
+<li>While holding the <strong>Home/Back</strong> combo button, plug the console into the PC with a USB-A to USB-C cable.</li>
+<li>Wait for <code>SPL flash complete!</code> or an error message.</li>
+</ol>
+<h2 id="restore-the-stock-spl">Restore the stock SPL</h2>
+<p>If the console no longer boots after flashing:</p>
+<ol>
+<li>Plug it into the PC with a USB-A to USB-C cable.</li>
+<li>Hold <strong>Power + Volume Down + Home/Back</strong>. Do not let go of Home/Back.</li>
+<li>Run <code>restore-stock-spl.bat</code> (Windows) or <code>./restore-stock-spl.sh</code> (Linux, <code>sudo</code> if needed).</li>
+<li>When it finishes you can release Home/Back. If the console stays off, hold only Power and Volume Down until it turns on.</li>
+</ol>
+<h2 id="after-flashing">After flashing</h2>
+<p>Flash the RG OS image to the card (<a href="getting-started.html">GETTING-STARTED.md</a>). Partition 3 of the card must be the GPT partition named <code>uboot</code>; if the console boots Android instead of RG OS, see <a href="troubleshooting.html">TROUBLESHOOTING.md</a>.</p></article><div class="pn"><a href="faq.html"><small>Previous</small>FAQ</a><a class="r" href="building.html"><small>Next</small>Build options</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

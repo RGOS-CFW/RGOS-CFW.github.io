@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>In-game menu · RG OS Docs</title>
+<meta name="description" content="The Menu-button panel and DPAD to joystick.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html" class="on" aria-current="page">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="in-game-menu">In-game menu</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#dpad-to-joystick-menu-select">DPAD to joystick (Menu + Select)</a><a href="#retroarch-gets-the-same-panel-as-native-ports">RetroArch gets the same panel as native ports</a><a href="#how-it-works">How it works</a><a href="#demo-video">Demo video</a></nav>
+<p>Tap the <strong>Menu</strong> button (the hub's Mode button) while a game is running and a panel slides in from the right with
+<strong>Resume, Restart, Save State, Load State, Exit Game</strong>. The game is paused while it is open.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Button</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D-pad Up / Down</td>
+<td>move</td>
+</tr>
+<tr>
+<td>A (or Start)</td>
+<td>select</td>
+</tr>
+<tr>
+<td>B or Menu</td>
+<td>back / resume</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Restart</strong> and <strong>Exit Game</strong> ask "Are you sure?" first (Cancel is preselected).</li>
+<li><strong>Save State</strong> keeps the menu open and shows "State saved"; <strong>Load State</strong> closes the menu and resumes from the state.
+  Both are RetroArch only, so native ports show Resume / Restart / Exit Game.</li>
+<li>Only a quick, clean tap opens it. Holding Menu, or pressing another button while it is down, is left to RetroArch's
+  hotkey combos (Menu is its hotkey-enable button).</li>
+<li>Select+Start held for 2 s still force-stops a native port.</li>
+</ul>
+<h2 id="dpad-to-joystick-menu-select">DPAD to joystick (Menu + Select)</h2>
+<p>While a game runs, press <strong>Menu + Select</strong> together:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Press</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>quick press</td>
+<td>the device vibrates once and <strong>DPAD to joystick</strong> turns on: D-pad presses move the left stick</td>
+</tr>
+<tr>
+<td>hold for 1 s</td>
+<td>the device vibrates twice and <strong>DPAD to joystick</strong> turns off</td>
+</tr>
+</tbody>
+</table></div>
+<p>The combo flips the same switch as <strong>Settings &gt; DPAD to joystick</strong>, so the Settings row always shows the current state
+and the choice is kept across games and reboots. It only works while a game runs; the launcher keeps its normal D-pad.</p>
+<ul>
+<li>The combo is swallowed: the game never sees Select while Menu is down, and the in-game menu does not open. This
+  replaces RetroArch's old Menu + Select hotkey (its menu is still one tap of Menu away).</li>
+<li>Diagonals are scaled like a real stick (both directions held gives about 70 % on each axis); opposite directions cancel.
+  A real analog stick, on devices that have one, keeps working and the D-pad wins on an axis while it is pushed.</li>
+<li>Games and cores that read only the digital D-pad (NES, SNES, Game Boy, ...) will not respond to the D-pad while it is
+  on. Hold Menu + Select to switch it off again.</li>
+<li>If the device has no vibration motor the combo still works, silently.</li>
+</ul>
+<h2 id="retroarch-gets-the-same-panel-as-native-ports">RetroArch gets the same panel as native ports</h2>
+<p>RetroArch renders through DRM/KMS, so pixels written into <code>/dev/fb0</code> never show over a running game. Both the volume bar and the
+in-game menu panel therefore go on a hardware overlay plane (<code>drmplane.py</code>), which the display controller composites above the
+game, for RetroArch exactly as for native ports. While RetroArch is the foreground program (<code>/run/rgos/ingame</code> has
+<code>"kind": "retroarch"</code>):</p>
+<ul>
+<li><strong>Menu tap</strong> opens the RG OS panel above the game (paused): Resume, Restart, Save State, Load State, Exit Game.</li>
+<li><strong>Volume</strong> is the bar on the overlay plane (<code>rgos-overlay</code>).</li>
+</ul>
+<p>If the display has no free overlay plane, the panel falls back to RetroArch's own: a Menu tap sends <code>MENU_TOGGLE</code>, which opens RGUI
+above the game (paused; tap Menu again to close it; its Quick Menu has Resume, Save State, Load State, Restart and Close Content),
+and the volume uses RetroArch's on-screen message (<code>SHOW_MSG</code>). The fallback is chosen per game, and the log
+(<code>/var/log/rgos-gamemenu.log</code>) says <code>no overlay plane</code> when it happens. Set <code>RGOS_GAMEMENU_RGUI=1</code> to always use RGUI for RetroArch,
+and <code>RGOS_GAMEMENU_DRM=0</code> to never use a plane for the menu.</p>
+<h2 id="how-it-works">How it works</h2>
+<p><code>rgos-launch</code> writes <code>/run/rgos/ingame</code> as JSON (<code>kind</code>, <code>title</code>, and for native ports the <code>pid</code>). <code>gamemenu.py daemon</code>
+(started by <code>rgos-session</code>) watches the hub pad, and on a tap it grabs the pad (the game stops seeing buttons), pauses
+the game and paints the panel into the framebuffer the same way <code>rgos-overlay</code> paints the volume bar (the pixels under
+it are saved and put back). It uses the colours of the launcher theme.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th></th>
+<th>RetroArch</th>
+<th>Native ports</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pause / resume</td>
+<td><code>PAUSE_TOGGLE</code> (only if not already paused)</td>
+<td><code>SIGSTOP</code> / <code>SIGCONT</code> to the port's process group</td>
+</tr>
+<tr>
+<td>restart</td>
+<td><code>RESET</code></td>
+<td>stop the port; <code>rgos-launch</code> sees <code>/run/rgos/restart</code> and starts it again</td>
+</tr>
+<tr>
+<td>exit</td>
+<td><code>QUIT</code> (SIGKILL after 3 s if it hangs)</td>
+<td><code>SIGTERM</code>, then <code>SIGKILL</code> after 3 s</td>
+</tr>
+<tr>
+<td>save / load</td>
+<td><code>SAVE_STATE</code> / <code>LOAD_STATE</code></td>
+<td>not offered</td>
+</tr>
+</tbody>
+</table></div>
+<p>RetroArch's network commands are already enabled in <code>config/retroarch*.cfg</code> (<code>network_cmd_enable</code>, port 55355).
+Log: <code>/var/log/rgos-gamemenu.log</code>.</p>
+<h2 id="demo-video">Demo video</h2>
+<p><code>python3 tools/render-gamemenu-demo.py out.mp4</code> renders a demo with the real menu code and a fake RetroArch (needs
+Pillow and ffmpeg; no device).</p>
+<p>See also: <a href="controls.html">CONTROLS.md</a> for RetroArch hotkeys.</p></article><div class="pn"><a href="controls.html"><small>Previous</small>Controls and hotkeys</a><a class="r" href="settings.html"><small>Next</small>Settings reference</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

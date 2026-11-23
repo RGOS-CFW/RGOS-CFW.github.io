@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Documentation · RG OS Docs</title>
+<meta name="description" content="RG OS documentation: install, controls, systems, BIOS, networking, building and troubleshooting.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home on" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1>RG OS documentation</h1><p class="lead">RG OS is a Debian-based emulation distribution for Anbernic handhelds (RG34XXSP, RG35XX H, RG35XX SP and RG Rotate), built on the ROCKNIX kernel and device trees.</p><div class="quick"><a class="btn p" href="getting-started.html">Getting started</a><a class="btn" href="systems.html">Supported systems</a><a class="btn" href="troubleshooting.html">Troubleshooting</a></div><h2>Start here</h2><div class="grid"><a class="card" href="getting-started.html"><h3>Getting started</h3><p>Flash a card, boot for the first time and add games.</p></a><a class="card" href="installer.html"><h3>First-boot installer</h3><p>The first-boot installer image: partitioning, ROMS formats, controls.</p></a><a class="card" href="devices.html"><h3>Supported devices</h3><p>What differs between the RG34XXSP, RG35XX H, RG35XX SP and RG Rotate.</p></a><a class="card" href="sd-card-layout.html"><h3>SD card layout</h3><p>Where ROMs, saves, BIOS files, music and config live on the card.</p></a></div><h2>Using RG OS</h2><div class="grid"><a class="card" href="controls.html"><h3>Controls and hotkeys</h3><p>Launcher buttons, RetroArch hotkeys and native port controls.</p></a><a class="card" href="in-game-menu.html"><h3>In-game menu</h3><p>The Menu-button panel and DPAD to joystick.</p></a><a class="card" href="settings.html"><h3>Settings reference</h3><p>Every row in Settings, plus the File Manager.</p></a><a class="card" href="launchers-and-themes.html"><h3>Launchers, themes, splash and music</h3><p>Launchers, themes, startup splash and launcher music.</p></a><a class="card" href="networking.html"><h3>Wi-Fi, Bluetooth and SSH</h3><p>Wi-Fi, Bluetooth and SSH / SFTP.</p></a><a class="card" href="artwork.html"><h3>Game artwork (SteamGridDB)</h3><p>Download cover art from SteamGridDB.</p></a><a class="card" href="ports.html"><h3>Native Linux ports</h3><p>Native Linux ports and PortMaster.</p></a><a class="card" href="updates.html"><h3>Offline updates (.tar from the SD card)</h3><p>Offline .tar updates from the SD card.</p></a></div><h2>Systems and games</h2><div class="grid"><a class="card" href="systems.html"><h3>Supported systems</h3><p>Supported systems, file types, default cores and notes per system.</p></a><a class="card" href="bios.html"><h3>BIOS files</h3><p>Which BIOS files each system wants and where they go.</p></a><a class="card" href="core-installer.html"><h3>Core Installer</h3><p>Download more RetroArch cores without reflashing.</p></a><a class="card" href="nes.html"><h3>NES / Famicom (RetroArch + Nestopia core)</h3><p>NES-specific notes and RetroArch overrides.</p></a><a class="card" href="gamecube.html"><h3>Nintendo GameCube (RG Rotate only)</h3><p>GameCube on the RG Rotate (Dolphin).</p></a></div><h2>Help</h2><div class="grid"><a class="card" href="troubleshooting.html"><h3>Troubleshooting</h3><p>Black screens, boot problems, evidence files and fixes.</p></a><a class="card" href="logs.html"><h3>Logs and diagnostic files</h3><p>Where logs live and how to read them.</p></a><a class="card" href="faq.html"><h3>FAQ</h3><p>Short answers to common questions.</p></a><a class="card" href="rg-rotate-spl.html"><h3>RG Rotate: flashing the SPL</h3><p>Flash the SPL on an RG Rotate.</p></a></div><h2>Building RG OS</h2><div class="grid"><a class="card" href="building.html"><h3>Build options</h3><p>Every build option in one place.</p></a><a class="card" href="build-workflow.html"><h3>Build RGOS in GitHub Actions</h3><p>Build images in GitHub Actions.</p></a></div><h2>Conventions used in these docs</h2>
+<ul>
+<li><strong>ROMS</strong> is the large exFAT partition on the card (<code>/media/roms</code> on the device). <strong>Boot partition</strong> is the small FAT partition labelled <code>RGOS</code> (<code>/boot</code> on the device).</li>
+<li>Button names follow the RG OS Gamepad layout: A bottom, B right, X left, Y top. If A and B feel swapped, see <em>Swap A / B buttons</em> in <a href="settings.html">SETTINGS.md</a>.</li>
+<li><strong>Menu</strong> is the hub's Mode button.</li>
+<li>Device ids used in commands: <code>rg34xxsp</code>, <code>rg35xxh</code>, <code>rg35xxsp</code>, <code>rg-rotate</code>.</li>
+</ul></article>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

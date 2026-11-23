@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Launchers, themes, splash and music · RG OS Docs</title>
+<meta name="description" content="Launchers, themes, startup splash and launcher music.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html" class="on" aria-current="page">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="launchers-themes-splash-and-music">Launchers, themes, splash and music</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#launchers">Launchers</a><a href="#themes">Themes</a><a href="#startup-splash">Startup splash</a><a href="#launcher-music">Launcher music</a><a href="#favorites-and-recents">Favorites and recents</a><a href="#cover-art">Cover art</a></nav>
+<h2 id="launchers">Launchers</h2>
+<p>Choose one in <em>Settings &gt; Launcher</em>. The choice is remembered.</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Launcher</th>
+<th>Look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RG OS</strong> (default)</td>
+<td>Classic tile launcher</td>
+</tr>
+<tr>
+<td><strong>RG XMB</strong></td>
+<td>PlayStation-style cross media bar</td>
+</tr>
+<tr>
+<td><strong>RG Classic</strong></td>
+<td>Pixel tile launcher with 3x2 buttons</td>
+</tr>
+</tbody>
+</table></div>
+<p>All launchers share the same home sections: Games, Recents, Favorites, Tools and Settings, plus Power Off (the XMB shows Settings first). <strong>Tools</strong> holds the File Manager and PortMaster.</p>
+<p>While you use the launcher the CPU and GPU clocks are held at <code>performance</code> (and put back about 4 seconds after the last input, and always before a game starts), so scrolling does not start on slow clocks. Set <code>RGOS_UI_BOOST=0</code> in the environment to turn this off. On the 640x480 handhelds (RG35XX H / SP) only the rows of the 720x540 menu that changed are scaled and written to the screen each frame.</p>
+<h3 id="startup-and-big-libraries">Startup and big libraries</h3>
+<p>The launcher keeps the result of the last ROM scan in <code>scan-cache.json</code> next to <code>state.json</code>. On the next start (including every return from a game) the library is shown at once from that file and a background scan replaces it only if something changed. Game cards are built when they come into view instead of for the whole list, and a game's file size is read when it is selected rather than for every ROM during the scan, so systems with thousands of games open and scroll without a pause. <code>RGOS_SWITCH_S</code> (default <code>0.001</code>) sets how long a background thread may hold the interpreter before the render loop gets it back.</p>
+<h3 id="animation">Animation</h3>
+<p>All three launchers animate. RG Classic has its own pixel animation; <strong>RG OS</strong> and <strong>RG XMB</strong> share the same kind of motion:</p>
+<ul>
+<li><strong>Entrance.</strong> On the home screen, tiles (RG OS) or categories and items (RG XMB) pop in one after another with a small overshoot. It replays whenever you come back to the home screen, for example after a game or a sub-menu.</li>
+<li><strong>RG OS focus ring.</strong> One focus ring glides between tiles on a damped spring: it hops, stretches along the direction of travel and leaves a short ghost trail on fast moves. At rest it pulses, sweeps a diagonal shine across the tile and twinkles, the selected icon bobs, and the description fades up after each move. Slow embers drift up behind the tiles.</li>
+<li><strong>RG XMB.</strong> The selected category icon breathes and sends out a ring when picked, with an occasional sparkle. Items slide in from the right in a staggered wave after a category change; the selected item pops, pulses a ring and gets a nudging chevron.</li>
+</ul>
+<p>Animation redraws at full speed only while something moves and drops back to the idle frame rate once the screen settles, so it costs nothing when you leave the launcher alone.</p>
+<h2 id="themes">Themes</h2>
+<p><em>Settings &gt; Theme</em> opens the list; the colours apply to the launchers and the in-game menu.</p>
+<p>Midnight (default), Ocean, Forest, Sunset, Purple Haze, Amber Terminal, Game Boy, Paper (light), MustardOS, High Contrast.</p>
+<h2 id="startup-splash">Startup splash</h2>
+<p><em>Settings &gt; Startup splash</em> cycles between <strong>On</strong> (video and sound), <strong>video only</strong> and <strong>Off</strong>. The splash plays once at power on; <strong>X</strong> previews it.</p>
+<h2 id="launcher-music">Launcher music</h2>
+<p>Music plays in shuffled order and does not repeat a track until the list has been played through.</p>
+<ul>
+<li><strong>Bundled</strong> tracks: put files in <code>music/</code> in the repository before building the image.</li>
+<li><strong>Your own</strong> tracks: copy them to <code>music/</code> on the ROMS partition (<code>/media/roms/music/</code> on the device).</li>
+<li>Both locations are scanned recursively.</li>
+<li>Supported formats depend on pygame/SDL_mixer: MP3, OGG, WAV, FLAC, MOD, XM, IT and S3M.</li>
+</ul>
+<h2 id="favorites-and-recents">Favorites and recents</h2>
+<p>Press <strong>Y</strong> on a game to favourite it. Favourites are stored in <code>favorites.txt</code> on the ROMS partition, so they survive reflashing the system partition and can be edited from a PC. Recents list the games you played last.</p>
+<h2 id="cover-art">Cover art</h2>
+<p>See <a href="artwork.html">ARTWORK.md</a>.</p></article><div class="pn"><a href="settings.html"><small>Previous</small>Settings reference</a><a class="r" href="networking.html"><small>Next</small>Wi-Fi, Bluetooth and SSH</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

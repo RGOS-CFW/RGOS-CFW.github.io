@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build options · RG OS Docs</title>
+<meta name="description" content="Every build option in one place.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html" class="on" aria-current="page">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="build-options">Build options</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#host-requirements">Host requirements</a><a href="#environment-variables">Environment variables</a><a href="#prebuilt-cores">Prebuilt cores</a><a href="#bundled-content">Bundled content</a></nav>
+<pre><code>sudo ./build.sh &lt;device&gt; [image|installer|update]
+</code></pre>
+<p><code>device</code> is <code>rg34xxsp</code>, <code>rg35xxh</code>, <code>rg35xxsp</code>, <code>rg-rotate</code> or <code>all</code>. With no device the script only prints usage. Output goes to <code>out/</code>; work files go to <code>work/&lt;device&gt;/</code>.</p>
+<p><code>installer</code> builds a first-boot installer image (<code>out/&lt;device&gt;-rgos-installer.img</code>): PortMaster, the libretro cores and the optional <code>extras/</code> folder travel as a payload that the device installs on its first boot (<a href="installer.html">INSTALLER.md</a>).</p>
+<p>The stock ROCKNIX image is cached in <code>work/&lt;device&gt;/</code> and is not downloaded again on later builds. <code>sudo ./build.sh update-img [device]</code> (or <code>./build.sh &lt;device&gt; update-img</code>) deletes the cached copy and downloads it again without building. Changing <code>ROCKNIX_URL</code>, <code>ROCKNIX_H700_VERSION</code> or <code>H700_RAM</code> selects a different cached file by name, so it downloads that one the first time.</p>
+<h2 id="host-requirements">Host requirements</h2>
+<p>Root (or <code>sudo</code>), and: <code>debootstrap</code>, <code>losetup</code>, <code>mksquashfs</code>/<code>unsquashfs</code>, <code>wget</code>, <code>gunzip</code>, <code>md5sum</code>, <code>python3</code>, <code>readelf</code>, <code>sfdisk</code>, <code>truncate</code>, plus <code>sgdisk</code> for the RG Rotate and <code>qemu-aarch64-static</code> when the host is not arm64. On Debian/Ubuntu: <code>apt install debootstrap qemu-user-static binfmt-support squashfs-tools wget gdisk dosfstools</code>. Plan for tens of GB of disk and a long run (<a href="build-workflow.html">BUILD-WORKFLOW.md</a>).</p>
+<h2 id="environment-variables">Environment variables</h2>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>H700_RAM</code></td>
+<td><code>DDR4</code></td>
+<td><code>DDR4</code> or <code>DDR3</code>; must match the console (H700 devices)</td>
+</tr>
+<tr>
+<td><code>RG34XXSP_DTB</code></td>
+<td><code>sun50i-h700-anbernic-rg34xx-sp</code></td>
+<td>or <code>...-v2-panel</code></td>
+</tr>
+<tr>
+<td><code>RG35XXH_DTB</code></td>
+<td><code>sun50i-h700-anbernic-rg35xx-h</code></td>
+<td>or <code>...-rev6-panel</code></td>
+</tr>
+<tr>
+<td><code>RG35XXSP_DTB</code></td>
+<td><code>sun50i-h700-anbernic-rg35xx-sp</code></td>
+<td>or <code>...-rev6-panel</code></td>
+</tr>
+<tr>
+<td><code>ROCKNIX_H700_VERSION</code></td>
+<td><code>20261001</code></td>
+<td>ROCKNIX release tag for the H700 base image</td>
+</tr>
+<tr>
+<td><code>ROCKNIX_URL</code></td>
+<td>per device</td>
+<td>Full URL of the stock <code>.img.gz</code>; not with <code>all</code></td>
+</tr>
+<tr>
+<td><code>DEBIAN_SUITE</code>, <code>DEBIAN_MIRROR</code></td>
+<td><code>trixie</code>, deb.debian.org</td>
+<td>Root filesystem source</td>
+</tr>
+<tr>
+<td><code>EXTRA_PKGS</code></td>
+<td>empty</td>
+<td>Extra Debian packages, space separated</td>
+</tr>
+<tr>
+<td><code>PSX_REPO</code>, <code>GENESIS_REPO</code>, <code>NGP_SRC</code></td>
+<td>libretro upstreams</td>
+<td>Sources of the cores built from source</td>
+</tr>
+<tr>
+<td><code>STELLA_REPO</code>, <code>ATARI800_REPO</code>, <code>PROSYSTEM_REPO</code></td>
+<td>libretro upstreams</td>
+<td>Sources of the Atari 2600 (<code>stella2014</code>), 5200 (<code>atari800</code>) and 7800 (<code>prosystem</code>) cores; <code>none</code> skips that core</td>
+</tr>
+<tr>
+<td><code>GC_REPO</code></td>
+<td>libretro/dolphin</td>
+<td>RG Rotate only; <code>none</code> skips GameCube (<a href="gamecube.html">GAMECUBE.md</a>)</td>
+</tr>
+<tr>
+<td><code>PORTMASTER</code></td>
+<td><code>1</code></td>
+<td><code>0</code> leaves PortMaster out</td>
+</tr>
+<tr>
+<td><code>PORTMASTER_URL</code>, <code>PORTMASTER_ZIP</code></td>
+<td>latest release / none</td>
+<td>Where to get PortMaster; a local zip builds offline</td>
+</tr>
+<tr>
+<td><code>RGOS_INITRD</code></td>
+<td><code>1</code></td>
+<td><code>0</code> keeps ROCKNIX's own init (<a href="troubleshooting.html">TROUBLESHOOTING.md</a>)</td>
+</tr>
+<tr>
+<td><code>UPDATE_ID</code></td>
+<td>timestamp</td>
+<td>Build id of an update tar</td>
+</tr>
+<tr>
+<td><code>UPDATE_EXTLINUX</code>, <code>UPDATE_DTB</code></td>
+<td><code>0</code></td>
+<td>Include <code>extlinux.conf</code> / <code>dtb.img</code> in an update tar (<a href="updates.html">UPDATES.md</a>)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pass variables through sudo with <code>sudo -E</code>, for example <code>H700_RAM=DDR3 sudo -E ./build.sh rg35xxh</code>.</p>
+<h2 id="prebuilt-cores">Prebuilt cores</h2>
+<p>Any aarch64 <code>*_libretro.so</code> placed in <code>cores/</code> is copied into the image. <code>dolphin_libretro.so</code> is removed again for every device except <code>rg-rotate</code>.</p>
+<h2 id="bundled-content">Bundled content</h2>
+<ul>
+<li><code>music/</code>: launcher music baked into the image (<a href="launchers-and-themes.html">LAUNCHERS-AND-THEMES.md</a>).</li>
+<li><code>config/</code>: RetroArch configs, one per device family, and the RG OS gamepad autoconfig.</li>
+<li><code>rgos/</code>: the launcher, input hub, session scripts and tools.</li>
+<li><code>initramfs/</code>: the RG OS initramfs and extlinux patcher.</li>
+</ul></article><div class="pn"><a href="rg-rotate-spl.html"><small>Previous</small>RG Rotate: flashing the SPL</a><a class="r" href="build-workflow.html"><small>Next</small>Build RGOS in GitHub Actions</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

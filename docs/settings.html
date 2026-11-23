@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Settings reference · RG OS Docs</title>
+<meta name="description" content="Every row in Settings, plus the File Manager.">
+<link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+</head>
+<body>
+<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
+<div id="bd"></div>
+<div class="wrap">
+<aside id="sb" aria-label="Documentation">
+<a class="home" href="index.html">Documentation home</a>
+<h4>Start here</h4>
+<a href="getting-started.html">Getting started</a>
+<a href="installer.html">First-boot installer</a>
+<a href="devices.html">Supported devices</a>
+<a href="sd-card-layout.html">SD card layout</a>
+<h4>Using RG OS</h4>
+<a href="controls.html">Controls and hotkeys</a>
+<a href="in-game-menu.html">In-game menu</a>
+<a href="settings.html" class="on" aria-current="page">Settings reference</a>
+<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
+<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+<a href="artwork.html">Game artwork (SteamGridDB)</a>
+<a href="ports.html">Native Linux ports</a>
+<a href="updates.html">Offline updates (.tar from the SD card)</a>
+<h4>Systems and games</h4>
+<a href="systems.html">Supported systems</a>
+<a href="bios.html">BIOS files</a>
+<a href="core-installer.html">Core Installer</a>
+<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+<h4>Help</h4>
+<a href="troubleshooting.html">Troubleshooting</a>
+<a href="logs.html">Logs and diagnostic files</a>
+<a href="faq.html">FAQ</a>
+<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+<h4>Building RG OS</h4>
+<a href="building.html">Build options</a>
+<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+</aside>
+<main>
+<article><h1 id="settings-reference">Settings reference</h1>
+<p>Open <strong>Settings</strong> from the home screen. Rows, in order:</p>
+<div class="tw"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Theme</strong></td>
+<td>Colour scheme. See <a href="launchers-and-themes.html">LAUNCHERS-AND-THEMES.md</a></td>
+</tr>
+<tr>
+<td><strong>Launcher</strong></td>
+<td>RG OS, RG XMB or RG Classic</td>
+</tr>
+<tr>
+<td><strong>Startup splash</strong></td>
+<td>On, video only or off; X previews</td>
+</tr>
+<tr>
+<td><strong>Emulators</strong></td>
+<td>Pick the RetroArch core used for each system (<a href="systems.html">SYSTEMS.md</a>)</td>
+</tr>
+<tr>
+<td><strong>Missing BIOS check</strong></td>
+<td>Lists missing BIOS files and where they go (<a href="bios.html">BIOS.md</a>)</td>
+</tr>
+<tr>
+<td><strong>Game artwork</strong></td>
+<td>SteamGridDB key, download missing artwork, show or hide covers (<a href="artwork.html">ARTWORK.md</a>)</td>
+</tr>
+<tr>
+<td><strong>Map buttons</strong></td>
+<td>Teach RG OS which physical button is which, for when buttons are wrong</td>
+</tr>
+<tr>
+<td><strong>Swap A / B buttons</strong></td>
+<td>Toggle with A. Applies to the launcher, RetroArch and native ports</td>
+</tr>
+<tr>
+<td><strong>DPAD to joystick</strong></td>
+<td>Toggle with A. While a game runs, D-pad presses move the left stick instead (for N64, PSP, PlayStation and other games that read the stick). Menu + Select in a game turns it on, holding Menu + Select turns it off (<a href="in-game-menu.html">IN-GAME-MENU.md</a>)</td>
+</tr>
+<tr>
+<td><strong>Wi-Fi</strong></td>
+<td>Scan, connect, hidden networks (<a href="networking.html">NETWORKING.md</a>)</td>
+</tr>
+<tr>
+<td><strong>Bluetooth</strong></td>
+<td>Pair controllers, keyboards and headsets</td>
+</tr>
+<tr>
+<td><strong>SSH / file transfer</strong></td>
+<td>Turn the SSH/SFTP server on or off</td>
+</tr>
+<tr>
+<td><strong>Information</strong></td>
+<td>Build, kernel, storage, battery, brightness, volume and input status</td>
+</tr>
+</tbody>
+</table></div>
+<p>Favourites, artwork and your key file live on the ROMS card (<a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>).</p>
+<h2 id="file-manager-tools">File Manager (Tools)</h2>
+<p>Browse, copy, cut, paste, rename and delete files on the SD cards. Pasting into a folder that already holds the same name creates a <code>(copy)</code> name instead of overwriting. Use it for small jobs; for bulk copying use a PC or SFTP.</p>
+<h2 id="power">Power</h2>
+<p><em>Power Off</em> in the home screen, or hold Select + Start from the launcher.</p></article><div class="pn"><a href="in-game-menu.html"><small>Previous</small>In-game menu</a><a class="r" href="launchers-and-themes.html"><small>Next</small>Launchers, themes, splash and music</a></div>
+</main>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>
