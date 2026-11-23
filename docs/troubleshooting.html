@@ -94,6 +94,8 @@
               file&quot; and returns to the menu</a
             ><a href="#portmaster-shows-its-splash-and-then-returns-to-the-menu"
               >PortMaster shows its splash and then returns to the menu</a
+            ><a href="#no-bluetooth-adapter-found"
+              >No Bluetooth adapter found (RG34XXSP / RG35XX H / RG35XX SP)</a
             ><a href="#still-stuck">Still stuck</a
             ><a
               href="#black-screen-or-kernel-text-between-the-boot-logo-and-the-first-rg-os-screen"
@@ -392,6 +394,84 @@
             <code>9.9.9.9</code>. Reconnect to renew the lease. If the problem
             persists, include the networking log when reporting it; do not
             edit the generated resolver file by hand.
+          </p>
+          <h2 id="no-bluetooth-adapter-found">
+            No Bluetooth adapter found (RG34XXSP / RG35XX H / RG35XX SP)
+          </h2>
+          <p>
+            The H700 consoles have a Realtek RTL8821CS whose Bluetooth half sits
+            on a UART. The kernel only creates <code>hci0</code> when the device
+            tree has a Bluetooth node, the driver modules load, and the Realtek
+            firmware is present. The <code>rgos-bt:</code> lines in
+            <code>rgos-logs.txt</code> (or
+            <code>python3 /opt/rgos/btctl.py diag</code> over SSH) show which
+            one fails:
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th><code>rgos-bt:</code> line</th>
+                <th>Meaning</th>
+                <th>Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>device-tree Bluetooth nodes: NONE</code></td>
+                <td>
+                  the device tree on the card has no Bluetooth node under the
+                  UART
+                </td>
+                <td>
+                  use the ROCKNIX device tree for your panel revision (see
+                  <a href="devices.html">DEVICES.md</a>); RG OS cannot add the
+                  node itself
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <code>modprobe failed: hci_uart ...</code> or
+                  <code>btrtl ...</code>
+                </td>
+                <td>
+                  the stock kernel has no such module (or
+                  <code>/lib/modules</code> does not match
+                  <code>uname -r</code>)
+                </td>
+                <td>rebuild against the matching ROCKNIX release</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>/lib/firmware Bluetooth files: NONE</code>, or no
+                  <code>rtl8821cs_fw.bin</code> /
+                  <code>rtl8821cs_config.bin</code> in <code>rtl_bt/</code>
+                </td>
+                <td>
+                  the Realtek firmware did not come across from the stock image
+                </td>
+                <td>
+                  rebuild with the current <code>build.sh</code>: it now merges
+                  every firmware directory from the stock SYSTEM, aliases
+                  <code>rtlbt/</code> to <code>rtl_bt/</code>, and prints
+                  <code>!! Bluetooth firmware ... is not in the image</code> when
+                  it is still missing
+                </td>
+              </tr>
+              <tr>
+                <td><code>serdev devices: serial0-0-&gt;unbound</code></td>
+                <td>the device exists but no driver took it</td>
+                <td>
+                  RG OS re-probes it automatically; if it stays unbound, read the
+                  <code>dmesg</code> lines printed under it
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            The adapter is now looked for three times at boot (about 70 s in
+            total) and again each time <em>Settings &gt; Bluetooth</em> is opened
+            with no adapter present, so one slow firmware download no longer
+            leaves Bluetooth dead until the next reboot.
           </p>
           <h2 id="still-stuck">Still stuck</h2>
           <p>

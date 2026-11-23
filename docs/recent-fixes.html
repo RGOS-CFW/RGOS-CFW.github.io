@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Recent fixes · RG OS Docs</title>
-    <meta name="description" content="Recent RG OS emulator, networking and launch reliability fixes." />
+    <meta name="description" content="Recent RG OS emulator, Bluetooth, networking and launch reliability fixes." />
     <link rel="stylesheet" href="style.css" />
     <script>try { var t = localStorage.getItem("rgos-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
   </head>
@@ -24,7 +24,7 @@
       </aside>
       <main><article>
         <h1 id="recent-fixes">Recent fixes</h1>
-        <p class="lead">A short record of the recent launch, core-configuration and networking fixes. See the linked system guides for setup details.</p>
+        <p class="lead">A short record of the recent launch, core-configuration, Bluetooth and networking fixes. See the linked system guides for setup details.</p>
         <h2 id="n64">Nintendo 64</h2>
         <p>The Mupen64Plus-Next launch profile now uses a supported 16:9 render-size preset (640x360) alongside the 4:3 320x240 preset. The profile keeps GLideN64, HLE RSP, the dynamic recompiler and conservative GLES-friendly graphics options. A failed first launch can retry with the cached interpreter. See <a href="systems.html#nintendo-64">Nintendo 64</a>.</p>
         <h2 id="saturn">Sega Saturn</h2>
@@ -33,6 +33,8 @@
         <p>Both <code>.p8</code> and <code>.p8.png</code> carts are recognized. PNG-cart display names and artwork stems drop both extensions, and the launcher has a fallback core order of fake-08 then retro8. See <a href="systems.html#pico-8">PICO-8</a>.</p>
         <h2 id="wifi">Wi-Fi and DHCP</h2>
         <p>The DHCP hook uses Unix line endings so the POSIX shell can parse its case statement. Lease handling flushes stale routes before adding the new address and default route; DNS uses lease-provided servers, or falls back to the router followed by 1.1.1.1 and 9.9.9.9 when the lease has no DNS option. See <a href="networking.html#wi-fi">Wi-Fi</a>.</p>
+        <h2 id="bluetooth">Bluetooth on the H700 consoles</h2>
+        <p>The RG34XXSP, RG35XX H and RG35XX SP could report no Bluetooth adapter until the next reboot, with nothing in the logs to say why. RG OS now looks for the adapter three times at boot, re-probes the adapter's UART device if no driver bound to it, and retries the whole bring-up when <em>Settings &gt; Bluetooth</em> is opened with no adapter present. <code>build.sh</code> merges every firmware directory from the stock image, aliases Realtek's <code>rtlbt/</code> files to the <code>rtl_bt/*.bin</code> names the kernel asks for, and warns when the RTL8821CS firmware is missing. <code>rgos-logs.txt</code> gains a <code>rgos-bt:</code> diagnostic section. See <a href="troubleshooting.html#no-bluetooth-adapter-found">No Bluetooth adapter found</a>.</p>
         <h2 id="flycast">Dreamcast standalone Flycast</h2>
         <p>RG OS detects a standalone <code>flycast</code> executable separately from libretro cores, launches it directly, persists its XDG config/data on the ROMS card, and links the shared Dreamcast BIOS directory when appropriate. It is not downloaded by Core Installer. See <a href="systems.html#dreamcast">Dreamcast</a>.</p>
         <h2 id="diagnostics">Diagnostics</h2>
