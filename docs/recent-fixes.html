@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Recent fixes · RG OS Docs</title>
+    <meta name="description" content="Recent RG OS emulator, networking and launch reliability fixes." />
+    <link rel="stylesheet" href="style.css" />
+    <script>try { var t = localStorage.getItem("rgos-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4><a href="getting-started.html">Getting started</a><a href="installer.html">First-boot installer</a><a href="devices.html">Supported devices</a><a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4><a href="controls.html">Controls and hotkeys</a><a href="in-game-menu.html">In-game menu</a><a href="settings.html">Settings reference</a><a href="hdmi.html">Mini-HDMI output</a><a href="launchers-and-themes.html">Launchers, themes, splash and music</a><a href="networking.html">Wi-Fi, Bluetooth and SSH</a><a href="artwork.html">Game artwork (SteamGridDB)</a><a href="ports.html">Native Linux ports</a><a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4><a href="systems.html">Supported systems</a><a href="bios.html">BIOS files</a><a href="core-installer.html">Core Installer</a><a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a><a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4><a href="recent-fixes.html" class="on" aria-current="page">Recent fixes</a><a href="troubleshooting.html">Troubleshooting</a><a href="logs.html">Logs and diagnostic files</a><a href="faq.html">FAQ</a><a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4><a href="building.html">Build options</a><a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main><article>
+        <h1 id="recent-fixes">Recent fixes</h1>
+        <p class="lead">A short record of the recent launch, core-configuration and networking fixes. See the linked system guides for setup details.</p>
+        <h2 id="n64">Nintendo 64</h2>
+        <p>The Mupen64Plus-Next launch profile now uses a supported 16:9 render-size preset (640x360) alongside the 4:3 320x240 preset. The profile keeps GLideN64, HLE RSP, the dynamic recompiler and conservative GLES-friendly graphics options. A failed first launch can retry with the cached interpreter. See <a href="systems.html#nintendo-64">Nintendo 64</a>.</p>
+        <h2 id="saturn">Sega Saturn</h2>
+        <p>Saturn settings are separated by core. YabaSanshiro uses its own SH-2 dynarec, frameskip and original-resolution defaults; Yabause has its own frameskip/thread settings; Beetle Saturn remains on its software-rendered path. BIOS detection distinguishes the optional YabaSanshiro/Yabause BIOS from Beetle's regional BIOS files. See <a href="systems.html#saturn">Saturn</a> and <a href="bios.html">BIOS files</a>.</p>
+        <h2 id="pico-8">PICO-8</h2>
+        <p>Both <code>.p8</code> and <code>.p8.png</code> carts are recognized. PNG-cart display names and artwork stems drop both extensions, and the launcher has a fallback core order of fake-08 then retro8. See <a href="systems.html#pico-8">PICO-8</a>.</p>
+        <h2 id="wifi">Wi-Fi and DHCP</h2>
+        <p>The DHCP hook uses Unix line endings so the POSIX shell can parse its case statement. Lease handling flushes stale routes before adding the new address and default route; DNS uses lease-provided servers, or falls back to the router followed by 1.1.1.1 and 9.9.9.9 when the lease has no DNS option. See <a href="networking.html#wi-fi">Wi-Fi</a>.</p>
+        <h2 id="flycast">Dreamcast standalone Flycast</h2>
+        <p>RG OS detects a standalone <code>flycast</code> executable separately from libretro cores, launches it directly, persists its XDG config/data on the ROMS card, and links the shared Dreamcast BIOS directory when appropriate. It is not downloaded by Core Installer. See <a href="systems.html#dreamcast">Dreamcast</a>.</p>
+        <h2 id="diagnostics">Diagnostics</h2>
+        <p>For RetroArch systems, include <code>rgos-retroarch.txt</code> from the boot partition. For standalone Flycast, include <code>rgos-native.txt</code>. A log from one system should not be used as proof of the cause of another system's launch failure. See <a href="logs.html">Logs and diagnostic files</a>.</p>
+      </article><div class="pn"><a href="troubleshooting.html"><small>Next</small>Troubleshooting</a><a class="r" href="systems.html"><small>Related</small>Supported systems</a></div></main>
+    </div>
+    <footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
+    <script src="docs.js"></script>
+  </body>
+</html>

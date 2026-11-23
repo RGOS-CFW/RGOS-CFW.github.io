@@ -58,6 +58,7 @@
         <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
         <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
         <h4>Help</h4>
+        <a href="recent-fixes.html">Recent fixes</a>
         <a href="troubleshooting.html">Troubleshooting</a>
         <a href="logs.html">Logs and diagnostic files</a>
         <a href="faq.html">FAQ</a>
@@ -75,6 +76,7 @@
               >Which cores ship in the image</a
             ><a href="#nintendo-64">Nintendo 64</a><a href="#saturn">Saturn</a
             ><a href="#dreamcast">Dreamcast</a><a href="#pico-8">PICO-8</a
+            ><a href="#recent-launch-notes">Recent launch notes</a>
             ><a href="#choosing-another-core">Choosing another core</a
             ><a href="#multi-disc-games">Multi-disc games</a
             ><a href="#notes">Notes</a>
@@ -356,6 +358,16 @@
               >SD-CARD-LAYOUT.md</a
             >).
           </p>
+          <p>
+            <strong>Launch profile.</strong> RG OS supplies a conservative
+            GLideN64 profile for the Mali-G31: dynamic-recompiler CPU, HLE RSP,
+            320x240 for 4:3 and 640x360 for 16:9, no MSAA, and the more costly
+            framebuffer, shader-storage and threaded-renderer features disabled.
+            If the normal launch fails immediately, RG OS retries with the
+            cached interpreter. These settings are generated for each launch;
+            optional user overrides belong in
+            <code>config/n64-options.cfg</code> on the ROMS card.
+          </p>
           <h2 id="saturn">Saturn</h2>
           <p>
             Put discs in <code>roms/saturn/</code> (<code>.cue</code> with its
@@ -377,6 +389,21 @@
             Saturn menu entry stays hidden until you install one. The CPU and
             GPU clocks are pinned to <code>performance</code> while a game runs.
             BIOS files are listed in <a href="bios.html">BIOS.md</a>.
+          </p>
+          <p>
+            <strong>Saturn core profiles.</strong> YabaSanshiro uses frameskip,
+            the SH-2 dynamic recompiler and original-resolution rendering; its
+            compute-shader path is disabled by default. If
+            <code>bios/saturn_bios.bin</code> is absent, RG OS explicitly selects
+            its HLE BIOS. Yabause has its own option namespace, with frameskip
+            and two rendering threads by default (one thread on a safe retry),
+            and also falls back to HLE when its optional BIOS is absent. Beetle
+            Saturn is software-rendered: RG OS does not force the GLES hardware
+            video driver or apply YabaSanshiro options to it. Beetle instead
+            needs a supported regional BIOS. Per-core overrides can be placed
+            in <code>config/saturn-options.cfg</code>; only options belonging to
+            the selected core are passed through. See <a href="bios.html">BIOS
+            files</a> for the BIOS requirements.
           </p>
           <h2 id="dreamcast">Dreamcast</h2>
           <p>
@@ -420,6 +447,13 @@
             not on the Core Installer list: a program cannot be fetched from the
             libretro buildbot, so to add your own build put a GLES
             <code>flycast</code> executable in <code>cores/standalone/</code>.
+            RG OS checks the known executable locations, validates that the
+            file is executable, launches it directly with the selected disc,
+            and restores the performance governor when it exits. A missing or
+            failing executable produces an error instead of silently treating
+            it as a libretro core. Standalone diagnostics are written to
+            <code>rgos-native.txt</code> and
+            <code>/var/log/rgos-native.log</code>.
           </p>
           <p>
             Put discs in <code>roms/dreamcast/</code>, one folder per game is
@@ -464,6 +498,14 @@
             PICO-8 entry stays hidden until you install a core.
           </p>
           <p>
+            RG OS strips both extensions from a <code>.p8.png</code> cart when
+            displaying its game title and matching artwork, so
+            <code>Celeste.p8.png</code> appears as <code>Celeste</code>. If the
+            normal core table cannot be loaded, the launcher still has a
+            PICO-8 fallback: <code>fake08</code> first, then
+            <code>retro8</code> as the compatible alternative.
+          </p>
+          <p>
             No BIOS is needed and the official Lexaloffle PICO-8 program is not
             used, so nothing is installed from lexaloffle.com. Both cores
             re-implement the PICO-8 API themselves, so a few carts that lean on
@@ -473,6 +515,13 @@
             layout applies. Carts that need a keyboard or mouse cannot be used
             without one.
           </p>
+          <h2 id="recent-launch-notes">Recent launch notes</h2>
+          <ul>
+            <li>N64 has a GLES-specific launch profile and a conservative retry path; see the N64 section above.</li>
+            <li>Saturn options and BIOS handling are selected per core, rather than mixing YabaSanshiro, Yabause and Beetle settings.</li>
+            <li>Dreamcast standalone Flycast is a native executable, not a RetroArch core; its settings persist on the ROMS card.</li>
+            <li>PICO-8 recognizes both <code>.p8</code> and <code>.p8.png</code> cartridges and cleans up double-extension titles.</li>
+          </ul>
           <h2 id="choosing-another-core">Choosing another core</h2>
           <p>
             <em>Settings &gt; Emulators</em> lists each system and the installed

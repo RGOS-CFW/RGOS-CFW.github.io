@@ -56,6 +56,7 @@
         <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
         <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
         <h4>Help</h4>
+        <a href="recent-fixes.html">Recent fixes</a>
         <a href="troubleshooting.html" class="on" aria-current="page"
           >Troubleshooting</a
         >
@@ -339,6 +340,58 @@
             error means the first start could not download its runtime.
             <code>ALSOFT ... PipeWire</code> warnings are harmless; the launcher
             now sets <code>ALSOFT_DRIVERS=alsa</code> to avoid them.
+          </p>
+          <h2 id="recent-emulator-and-network-fixes">Emulator and network fixes</h2>
+          <h3>Nintendo 64 closes immediately</h3>
+          <p>
+            Confirm that the installed Mupen64Plus-Next core is a GLES build;
+            RG OS's RetroArch is built for OpenGL ES. The launcher pins N64 to
+            the GLES <code>gl</code> driver and supplies a conservative
+            GLideN64 option profile. If the first attempt crashes, it retries
+            with the cached interpreter. Check <code>rgos-retroarch.txt</code>
+            on the boot partition and the N64 section of
+            <a href="systems.html">Supported systems</a>. A log from another
+            system (for example Saturn) cannot establish the cause of an N64
+            launch failure.
+          </p>
+          <h3>Saturn game fails or has poor performance</h3>
+          <p>
+            Check which core is selected in <em>Settings &gt; Emulators</em>.
+            YabaSanshiro and Yabause use HLE when their optional
+            <code>saturn_bios.bin</code> is absent; Beetle Saturn requires a
+            supported regional BIOS and uses software rendering. Do not apply
+            YabaSanshiro options to Beetle. See <a href="systems.html#saturn">the Saturn core profiles</a> and
+            <a href="bios.html">BIOS files</a>.
+          </p>
+          <h3>PICO-8 cartridge title looks wrong or does not launch</h3>
+          <p>
+            Put carts in <code>roms/pico8/</code> and use
+            <code>.p8</code> or <code>.p8.png</code>. A plain cover
+            <code>.png</code> is not a cartridge. The launcher removes both
+            extensions from PNG-cart titles. Check that either
+            <code>fake08</code> or <code>retro8</code> is installed in
+            <em>Tools &gt; Core Installer</em> or listed in
+            <em>Settings &gt; Emulators</em>.
+          </p>
+          <h3>Dreamcast standalone Flycast does not appear</h3>
+          <p>
+            The standalone choice appears only when an executable named
+            <code>flycast</code> is found in
+            <code>/usr/local/bin</code>, <code>/usr/bin</code>,
+            <code>/opt/flycast</code> or <code>cores/standalone/</code> on the
+            ROMS card. It must be executable and built for GLES. It is not
+            downloaded by Core Installer. Check
+            <code>rgos-native.txt</code> and
+            <code>/var/log/rgos-native.log</code> after trying to launch it.
+          </p>
+          <h3>Wi-Fi says connected but names do not resolve</h3>
+          <p>
+            Check <code>/run/rgos/resolv.conf</code> on the device and
+            <code>rgos-wifi.log</code>. A DHCP lease with no DNS option should
+            use the router, then <code>1.1.1.1</code> and
+            <code>9.9.9.9</code>. Reconnect to renew the lease. If the problem
+            persists, include the networking log when reporting it; do not
+            edit the generated resolver file by hand.
           </p>
           <h2 id="still-stuck">Still stuck</h2>
           <p>
