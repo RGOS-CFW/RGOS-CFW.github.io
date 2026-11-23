@@ -9,7 +9,7 @@
     <title>Supported devices · RG OS Docs</title>
     <meta
       name="description"
-      content="What differs between the RG34XXSP, RG35XX H, RG35XX SP and RG Rotate."
+      content="What differs between the RG34XXSP, RG35XX H, RG35XX SP, RG Rotate and MiniLoong Pocket 1."
     />
     <link rel="stylesheet" href="style.css" />
     <script>
@@ -38,6 +38,7 @@
         <a href="devices.html" class="on" aria-current="page"
           >Supported devices</a
         >
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
@@ -115,6 +116,14 @@
                   <td>GPT (<code>uboot</code> partition 3)</td>
                   <td>4</td>
                 </tr>
+                <tr>
+                  <td>MiniLoong Pocket 1</td>
+                  <td><code>miniloong</code></td>
+                  <td>Rockchip RK3566</td>
+                  <td>AURKNIX-RK3566 (Specific)</td>
+                  <td>MBR</td>
+                  <td>3</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -133,6 +142,7 @@
                   <th>RG35XX H</th>
                   <th>RG35XX SP</th>
                   <th>RG Rotate</th>
+                  <th>MiniLoong Pocket 1</th>
                 </tr>
               </thead>
               <tbody>
@@ -146,6 +156,7 @@
                   <td>
                     enabled per <code>/etc/rgos/input-&lt;device&gt;.json</code>
                   </td>
+                  <td>one (left); <code>"sticks": 1</code></td>
                 </tr>
                 <tr>
                   <td>L2/R2, L3/R3</td>
@@ -153,6 +164,7 @@
                   <td>yes</td>
                   <td>no</td>
                   <td>yes</td>
+                  <td>L2/R2 and L3, no R3</td>
                 </tr>
                 <tr>
                   <td>Bootloader</td>
@@ -160,12 +172,14 @@
                   <td>same</td>
                   <td>same</td>
                   <td>SPL flashed once, U-Boot on card</td>
+                  <td>stock RK3566 U-Boot on the card, no SPL</td>
                 </tr>
                 <tr>
                   <td>RAM choice at build</td>
                   <td><code>H700_RAM</code> DDR4/DDR3</td>
                   <td>same</td>
                   <td>same</td>
+                  <td>not applicable</td>
                   <td>not applicable</td>
                 </tr>
                 <tr>
@@ -174,6 +188,7 @@
                   <td><code>RG35XXH_DTB</code></td>
                   <td><code>RG35XXSP_DTB</code></td>
                   <td>not applicable</td>
+                  <td><code>MINILOONG_DTB</code></td>
                 </tr>
                 <tr>
                   <td>GameCube</td>
@@ -181,6 +196,7 @@
                   <td>not shipped</td>
                   <td>not shipped</td>
                   <td>yes (Dolphin libretro)</td>
+                  <td>not shipped</td>
                 </tr>
                 <tr>
                   <td>Device tree file</td>
@@ -188,12 +204,20 @@
                   <td><code>dtb.img</code></td>
                   <td><code>dtb.img</code></td>
                   <td><code>device_trees/ums512-rg-rotate.dtb</code></td>
+                  <td><code>miniloong.dtb</code>, set in the <code>FDT</code> line of <code>extlinux.conf</code></td>
                 </tr>
               </tbody>
             </table>
           </div>
           <p>Notes:</p>
           <ul>
+            <li>
+              The MiniLoong Pocket 1 has one analog stick (left) and a 960x720
+              (4:3) screen. It uses the 720x540 menu layout, scaled up. Its
+              input profile sets <code>"sticks": 1</code>, so the right stick
+              and R3 are not published, mapped or calibrated. See
+              <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>.
+            </li>
             <li>
               The RG35XX SP's screen is 640x480, so it uses the same 720x540
               menu layout and startup video as the RG35XX H.
@@ -247,8 +271,8 @@
         <div class="pn">
           <a href="installer.html"
             ><small>Previous</small>First-boot installer</a
-          ><a class="r" href="sd-card-layout.html"
-            ><small>Next</small>SD card layout</a
+          ><a class="r" href="miniloong-pocket-1.html"
+            ><small>Next</small>MiniLoong Pocket 1</a
           >
         </div>
       </main>

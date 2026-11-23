@@ -33,6 +33,7 @@
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
         <a href="devices.html">Supported devices</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
@@ -75,7 +76,8 @@
 </code></pre>
           <p>
             <code>device</code> is <code>rg34xxsp</code>, <code>rg35xxh</code>,
-            <code>rg35xxsp</code>, <code>rg-rotate</code> or <code>all</code>.
+            <code>rg35xxsp</code>, <code>rg-rotate</code>, <code>miniloong</code> or
+            <code>all</code>.
             With no device the script only prints usage. Output goes to
             <code>out/</code>; work files go to
             <code>work/&lt;device&gt;/</code>.
@@ -150,6 +152,16 @@
                   <td><code>RG35XXSP_DTB</code></td>
                   <td><code>sun50i-h700-anbernic-rg35xx-sp</code></td>
                   <td>or <code>...-rev6-panel</code></td>
+                </tr>
+                <tr>
+                  <td><code>MINILOONG_DTB</code></td>
+                  <td><code>miniloong</code></td>
+                  <td>MiniLoong Pocket 1 device tree, name without <code>.dtb</code></td>
+                </tr>
+                <tr>
+                  <td><code>ROCKNIX_RK3566_VERSION</code></td>
+                  <td><code>20260809</code></td>
+                  <td>AURKNIX release tag for the MiniLoong Pocket 1 base image</td>
                 </tr>
                 <tr>
                   <td><code>ROCKNIX_H700_VERSION</code></td>

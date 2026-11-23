@@ -33,6 +33,7 @@
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
         <a href="devices.html">Supported devices</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
@@ -81,8 +82,8 @@
             a flashable disk image (<code>.img</code>) or an on-device update
             package (<code>.tar</code>) for the
             <strong>Anbernic RG34XXSP</strong>, <strong>RG35XX H</strong>,
-            <strong>RG35XX SP</strong> and
-            <strong>RG Rotate</strong> (<code>build.sh</code>: a Debian arm64
+            <strong>RG35XX SP</strong>,
+            <strong>RG Rotate</strong> and <strong>MiniLoong Pocket 1</strong> (<code>build.sh</code>: a Debian arm64
             rootfs on each device's stock ROCKNIX image).
           </p>
           <h2 id="run-it">Run it</h2>
@@ -99,7 +100,7 @@
             <li>
               Choose the <code>device</code> (<code>rg34xxsp</code>,
               <code>rg35xxh</code>, <code>rg35xxsp</code>,
-              <code>rg-rotate</code> or <code>all</code>) and
+              <code>rg-rotate</code>, <code>miniloong</code> or <code>all</code>) and
               <code>img</code> or <code>update-tar</code>. - <code>img</code>:
               artifact
               <code>rgos-&lt;device&gt;-&lt;id&gt;-img</code> containing
@@ -109,12 +110,13 @@
               <code>ROCKNIX</code>), <code>extlinux.conf</code> has
               <code>rdinit=/rgos-init</code>, and then the device-specific part:
               RG Rotate = partition 3 is <code>uboot</code> (GPT); RG34XXSP =
-              MBR image with <code>dtb.img</code> present. -
+              MBR image with <code>dtb.img</code> present; MiniLoong Pocket 1 = MBR
+              image whose <code>extlinux.conf</code> loads <code>miniloong.dtb</code>. -
               <code>update-tar</code>:
               <code>rgos-update-&lt;device&gt;-&lt;id&gt;.tar</code> (manifest
               device is the one you chose: <code>rg-rotate</code>,
               <code>rg34xxsp</code>, <code>rg35xxh</code> or
-              <code>rg35xxsp</code>; SHA-256 checked). Tick
+              <code>rg35xxsp</code> or <code>miniloong</code>; SHA-256 checked). Tick
               <em>update_extlinux</em> to include <code>extlinux.conf</code>.
             </li>
             <li>
@@ -177,7 +179,7 @@
           <h2 id="building-locally">Building locally</h2>
           <p>
             <code
-              >./build.sh &lt;rg34xxsp|rg35xxh|rg35xxsp|rg-rotate|all&gt;
+              >./build.sh &lt;rg34xxsp|rg35xxh|rg35xxsp|rg-rotate|miniloong|all&gt;
               [image|update]</code
             >
             from the repository root, using <code>sudo</code> when it is not

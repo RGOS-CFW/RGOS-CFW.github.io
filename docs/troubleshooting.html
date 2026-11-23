@@ -36,6 +36,7 @@
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
         <a href="devices.html">Supported devices</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
@@ -77,6 +78,8 @@
               href="#rg34xxsp-rg35xx-h-rg35xx-sp-black-screen-nothing-is-written-to-the-card"
               >RG34XXSP / RG35XX H / RG35XX SP: black screen, nothing is written
               to the card</a
+            ><a href="#miniloong-pocket-1-black-screen"
+              >MiniLoong Pocket 1: black screen</a
             ><a href="#rg-rotate-boots-android-instead-of-rg-os"
               >RG Rotate boots Android instead of RG OS</a
             ><a
@@ -204,6 +207,32 @@
             only a concern for fresh images: offline updates reuse the U-Boot
             already on the card.
           </p>
+          <h2 id="miniloong-pocket-1-black-screen">
+            MiniLoong Pocket 1: black screen
+          </h2>
+          <p>
+            The Pocket 1 has no RAM type or panel revision to choose. It picks
+            its device tree with the <code>FDT</code> line of
+            <code>extlinux/extlinux.conf</code> on the card's FAT partition,
+            which the build points at <code>miniloong.dtb</code>.
+          </p>
+          <ol>
+            <li>
+              Open <code>extlinux/extlinux.conf</code> and check that the
+              <code>FDT</code> line names <code>miniloong.dtb</code> (the
+              spelling matters), and that the file exists on the card.
+            </li>
+            <li>
+              If <code>rgos-initramfs.txt</code> was written, boot got as far as
+              the initramfs: read it. If nothing was written, the kernel or
+              device tree did not start.
+            </li>
+            <li>
+              To fall back to the stock boot,
+              <code>extlinux/extlinux.conf.stock</code> is a copy of the
+              config before the RG OS initramfs was added.
+            </li>
+          </ol>
           <h2 id="rg-rotate-boots-android-instead-of-rg-os">
             RG Rotate boots Android instead of RG OS
           </h2>

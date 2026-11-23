@@ -36,6 +36,7 @@
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
         <a href="devices.html">Supported devices</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
         <h4>Using RG OS</h4>
         <a href="controls.html" class="on" aria-current="page"
@@ -189,6 +190,13 @@
             <strong>Menu + Down</strong> to rewind, and the rest of the combos
             above are unchanged.
           </p>
+          <h3 id="miniloong-pocket-1">MiniLoong Pocket 1</h3>
+          <p>
+            The Pocket 1 has a single analog stick (left). The right stick and
+            R3 are not published, mapped or calibrated, and the first-boot
+            button mapper asks only for the left stick and L3. The combos above
+            are otherwise unchanged.
+          </p>
           <h2 id="native-ports">Native ports</h2>
           <p>
             Hold <strong>Select + Start</strong> for about 2 seconds to stop the
@@ -211,7 +219,8 @@
             </li>
             <li>
               Analog sticks are enabled per device in
-              <code>/etc/rgos/input-&lt;device&gt;.json</code>.
+              <code>/etc/rgos/input-&lt;device&gt;.json</code>
+              (<code>"sticks": 1</code> for a one-stick device).
             </li>
           </ul>
         </article>

@@ -777,6 +777,13 @@
             <td>ROCKNIX-T618</td>
             <td>GPT (<code>uboot</code>)</td>
           </tr>
+          <tr>
+            <td>MiniLoong Pocket 1</td>
+            <td><code>miniloong</code></td>
+            <td>Rockchip RK3566</td>
+            <td>AURKNIX-RK3566 (Specific)</td>
+            <td>MBR</td>
+          </tr>
         </table>
       </details>
       <blockquote class="rv">
@@ -786,7 +793,7 @@
         The three H700 consoles boot a U-Boot built for one RAM type: use the
         DDR4 image unless you know yours is DDR3, because a wrong choice gives a
         black screen. The RG Rotate needs its SPL flashed once before first
-        boot.
+        boot. The MiniLoong Pocket 1 (RK3566) boots straight from the card: no SPL to flash, no RAM choice, and it has a single analog stick.
       </p>
 
       <h2 id="community" class="rv"><span>#</span>Community</h2>
@@ -864,6 +871,15 @@
           "ROCKNIX-T618",
           "GPT (uboot)",
         ],
+        [
+          "MiniLoong Pocket 1",
+          "miniloong",
+          "hori1",
+          "#4a4a4a",
+          "Rockchip RK3566",
+          "AURKNIX-RK3566 (Specific)",
+          "MBR",
+        ],
       ];
       const dp = (x, y) =>
           `<rect class="k" x="${x - 13}" y="${y - 4}" width="26" height="8" rx="2"/><rect class="k" x="${x - 4}" y="${y - 13}" width="8" height="26" rx="2"/>`,
@@ -881,10 +897,10 @@
             .join("");
       const art = (t, c) => {
         const s = `<svg viewBox="0 0 200 130" role="img" aria-hidden="true">`;
-        if (t == "hori")
+        if (t == "hori" || t == "hori1")
           return (
             s +
-            `<rect class="b" x="8" y="20" width="184" height="92" rx="20" fill="${c}"/><rect class="sc" x="58" y="30" width="84" height="62" rx="4"/><rect class="gl" x="68" y="38" width="30" height="4" rx="2"/>${dp(32, 58)}${bt(168, 58)}<circle class="k" cx="38" cy="90" r="7"/><circle class="k" cx="162" cy="90" r="7"/></svg>`
+            `<rect class="b" x="8" y="20" width="184" height="92" rx="20" fill="${c}"/><rect class="sc" x="58" y="30" width="84" height="62" rx="4"/><rect class="gl" x="68" y="38" width="30" height="4" rx="2"/>${dp(32, 58)}${bt(168, 58)}<circle class="k" cx="38" cy="90" r="7"/>${t == "hori" ? `<circle class="k" cx="162" cy="90" r="7"/>` : ""}</svg>`
           );
         if (t == "rot")
           return (
@@ -903,11 +919,12 @@
         rg35xxh: "assets/rg35xxh.png",
         rg35xxsp: "assets/rg35xxsp.png",
         "rg-rotate": "assets/rg-rotate.png",
+        miniloong: "assets/miniloong.png",
       };
       window.ART = D.map((d) => art(d[2], d[3]));
       document.getElementById("dv").innerHTML = D.map(
         (d, i) =>
-          `<div class="card" style="--d:${i * 80}ms"><div class="im"><img src="${IMG[d[1]]}" alt="${d[0]}" loading="lazy" onerror="this.parentNode.innerHTML=window.ART[${i}]"></div><h3>${d[0]}</h3><p>${d[4]} · ${d[5]} · ${d[6]}</p><p><code>${d[1]}</code></p><a class="btn p" href="https://github.com/RGOS-CFW/RGOS">Download</a></div>`,
+          `<div class="card" style="--d:${i * 80}ms"><div class="im">${IMG[d[1]] ? `<img src="${IMG[d[1]]}" alt="${d[0]}" loading="lazy" onerror="this.parentNode.innerHTML=window.ART[${i}]">` : window.ART[i]}</div><h3>${d[0]}</h3><p>${d[4]} · ${d[5]} · ${d[6]}</p><p><code>${d[1]}</code></p><a class="btn p" href="https://github.com/RGOS-CFW/RGOS">Download</a></div>`,
       ).join("");
       const io = new IntersectionObserver(
         (es) =>

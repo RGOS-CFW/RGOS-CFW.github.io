@@ -33,6 +33,7 @@
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
         <a href="devices.html">Supported devices</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
@@ -78,8 +79,8 @@
             ><a href="#if-an-update-fails">If an update fails</a>
           </nav>
           <p>
-            RG OS (all four devices: RG34XXSP, RG35XX H, RG35XX SP and RG
-            Rotate) boots a Debian squashfs (<code>SYSTEM</code>) plus a small
+            RG OS (all five devices: RG34XXSP, RG35XX H, RG35XX SP, RG
+            Rotate and MiniLoong Pocket 1) boots a Debian squashfs (<code>SYSTEM</code>) plus a small
             initramfs from the FAT boot partition. An update replaces files on
             that partition: <code>SYSTEM</code> (and its <code>.md5</code>),
             <code>rgos-initrd.cpio</code>, and optionally <code>KERNEL</code>,
@@ -108,7 +109,8 @@
 sudo ./build.sh rg35xxh update                        # pack out/rgos-update-rg35xxh-&lt;id&gt;.tar
 sudo ./build.sh rg35xxsp update                       # pack out/rgos-update-rg35xxsp-&lt;id&gt;.tar
 sudo ./build.sh rg-rotate update                      # pack out/rgos-update-rg-rotate-&lt;id&gt;.tar
-sudo ./build.sh all update                            # all four, with the same id
+sudo ./build.sh miniloong update                     # pack out/rgos-update-miniloong-&lt;id&gt;.tar
+sudo ./build.sh all update                            # all five, with the same id
 UPDATE_ID=2026.11-rc1 sudo -E ./build.sh rg34xxsp update   # custom id (default: timestamp)
 UPDATE_EXTLINUX=1 sudo -E ./build.sh rg34xxsp update       # also include extlinux.conf
 UPDATE_DTB=1 sudo -E ./build.sh rg34xxsp update            # also include dtb.img (H700 consoles; leave it out if you picked the v2-panel dtb by hand)
@@ -142,7 +144,7 @@ UPDATE_DTB=1 sudo -E ./build.sh rg34xxsp update            # also include dtb.im
               Wrong device (<code>manifest.json</code> <code>device</code> must
               match <code>/etc/rgos-device</code>, i.e. <code>rg-rotate</code>,
               <code>rg34xxsp</code>, <code>rg35xxh</code> or
-              <code>rg35xxsp</code>), unknown files, bad paths, damaged tar, too
+              <code>rg35xxsp</code> or <code>miniloong</code>), unknown files, bad paths, damaged tar, too
               little free space: nothing is changed and the old system boots.
             </li>
             <li>
