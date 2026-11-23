@@ -26,13 +26,27 @@
         <h1 id="changelog">Changelog</h1>
         <h2 id="rg-os-1-0-0">RG OS 1.0.0 Changelog</h2>
         <ul class="commits">
-          <li>Document H700 Bluetooth fix; rename Recent fixes to Changelog</li>
-          <li>Fix H700 Bluetooth adapter not being found</li>
-          <li>Detect and launch standalone Flycast directly; persist its config on the ROMS card</li>
-          <li>Fix DHCP hook line endings; flush stale routes and fall back to router, 1.1.1.1 and 9.9.9.9 DNS</li>
-          <li>Recognize .p8.png PICO-8 carts; add fake-08 then retro8 fallback order</li>
-          <li>Separate Saturn settings per core; detect YabaSanshiro, Yabause and Beetle BIOS files separately</li>
-          <li>Add 16:9 640x360 render preset to the Mupen64Plus-Next profile; retry a failed first launch with the cached interpreter</li>
+          <li>bluetooth: fix H700 Bluetooth adapter driver not being found<li>
+          <li>fix(dreamcast): implement standalone Flycast launching<li>
+          <li>fix(pico8): correct cartridge titles and core fallback<li>
+          <li>retroarch: optimize saturn core settings and BIOS handling<li>
+          <li>retroarch: use supported GLideN64 render resolution<li>
+          <li>output, docs: add hdmi output support and add hdmi output docs<li>
+          <li>logs: move diagnostic logs into logs/ on the RGOS partition<li>
+          <li>retroarch: fix N64 segfault and Saturn silent launch failure<li>
+          <li>docs: update ports docs<li>
+          <li>tests: add new ports tests<li>
+          <li>ports: improve and add more port support<li>
+          <li>tests: add pico8 tests<li>
+          <li>docs: updated pico8 docs<li>
+          <li>cores: add pico8 core<li>
+          <li>build: add pico8<li>
+          <li>launchers: optimize the launchers<li>
+          <li>tests: update satuen tests<li>
+          <li>docs: update docs<li>
+          <li>docs: updated systems docs<li>
+          <li>cores: move all non preinstalled cores to core installer</li>
+          <li>build: make YabaSanshiro be the only preinstalled Saturn core</li>
         </ul>
       </article><div class="pn"><a href="troubleshooting.html"><small>Next</small>Troubleshooting</a><a class="r" href="systems.html"><small>Related</small>Supported systems</a></div></main>
     </div>
