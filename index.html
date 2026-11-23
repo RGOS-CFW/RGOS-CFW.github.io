@@ -53,7 +53,7 @@ footer{margin-top:60px;padding-top:16px;border-top:1px solid var(--line);color:v
 nav{gap:12px}nav b{margin-right:0}
 #mb,#mc{background:none;border:1px solid var(--line);color:var(--tx);border-radius:8px;width:38px;height:38px;font-size:18px;cursor:pointer;transition:border-color .2s,color .2s}#mb:hover,#mc:hover{border-color:var(--ac);color:var(--ac)}
 #bd{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s;z-index:30}
-#dr{position:fixed;top:0;bottom:0;left:0;width:min(300px,82vw);background:var(--card);border-right:1px solid var(--line);z-index:31;transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.7,.2,1);padding:calc(16px + env(safe-area-inset-top,0px)) 0 calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;overflow-y:auto;box-shadow:8px 0 40px #0006}
+#dr{position:fixed;top:0;bottom:0;left:0;width:min(300px,82vw);background:var(--card);border-right:1px solid var(--line);z-index:31;transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.7,.2,1);padding:calc(16px + env(safe-area-inset-top,0px)) 0 calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;box-shadow:8px 0 40px #0006}#dr>*{flex-shrink:0}body.open{overflow:hidden}
 body.open #dr{transform:none}body.open #bd{opacity:1;pointer-events:auto}
 .dh{display:flex;justify-content:space-between;align-items:center;padding:0 18px 14px;font-size:20px;border-bottom:1px solid var(--line);margin-bottom:8px}.dh i{color:var(--ac);font-style:normal}
 #dr>a{padding:12px 22px;color:var(--tx);font-size:16px;border-left:3px solid transparent;opacity:0;transform:translateX(-14px);transition:opacity .3s,transform .3s,background .2s,color .2s}
@@ -66,18 +66,18 @@ body.open #dr>a{opacity:1;transform:none;transition-delay:calc(var(--i)*50ms + 1
 <div id="pg"></div>
 <nav><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><b>RG <i>OS</i></b></nav>
 <div id="bd"></div>
-<aside id="dr" aria-hidden="true"><div class="dh"><b>RG <i>OS</i></b><button id="mc" aria-label="Close menu">✕</button></div><a href="#features">Features</a><a href="#download">Download</a><a href="#install">Install</a><a href="#hotkeys">Hotkeys</a><a href="#community">Community</a><a href="#" id="th">Toggle theme</a></aside>
+<aside id="dr" aria-hidden="true"><div class="dh"><b>RG <i>OS</i></b><button id="mc" aria-label="Close menu">✕</button></div><a href="#features">Features</a><a href="#download">Download</a><a href="#install">Install</a><a href="#hotkeys">Hotkeys</a><a href="docs/index.html">Docs</a><a href="#community">Community</a><a href="#" id="th">Toggle theme</a></aside>
 <main>
-<section class="hero"><h1>RG OS</h1><p class="tag">An open source Linux emulation distribution for retro handhelds, built on Debian with the ROCKNIX kernel and Device Trees.</p><a class="btn p" href="#download">Download</a><a class="btn" href="#features">Features</a></section>
+<section class="hero"><h1>RG OS</h1><p class="tag">An open source Linux emulation distribution for retro handhelds, built on Debian with the ROCKNIX kernel and Device Trees.</p><a class="btn p" href="#download">Download</a><a class="btn" href="#features">Features</a><a class="btn" href="docs/index.html">Docs</a></section>
 
 <h2 id="features" class="rv"><span>#</span>Features</h2>
 <div class="grid">
-<div class="card rv"><h3>Python launcher</h3><p>A pygame frontend with artwork, animated menus and shuffled launcher music.</p></div>
-<div class="card rv"><h3>RetroArch cores</h3><p>25 systems with sensible default cores, plus standalone emulators.</p></div>
-<div class="card rv"><h3>In-game menu</h3><p>Tap Menu mid-game to resume, restart, save state, load state or exit.</p></div>
-<div class="card rv"><h3>Core Installer</h3><p>Download missing libretro cores to the ROMS card without reflashing.</p></div>
-<div class="card rv"><h3>Wi-Fi, Bluetooth, SSH</h3><p>Networking, pairing and remote access built in.</p></div>
-<div class="card rv"><h3>Offline updates</h3><p>Drop an update tar in <code>update/</code> on the ROMS card and reboot.</p></div>
+<div class="card rv"><h3>Three launchers</h3><p>RG OS, RG XMB or RG Classic, with themes, cover art and shuffled music.</p></div>
+<div class="card rv"><h3>26 systems</h3><p>RetroArch cores for each, including Sega Saturn, plus a Core Installer for more.</p></div>
+<div class="card rv"><h3>In-game menu</h3><p>Tap Menu to resume, restart, save, load or exit. Menu + Select maps the D-pad to the stick.</p></div>
+<div class="card rv"><h3>Ports and PortMaster</h3><p>Native Linux ports run from <code>roms/ports</code>, with PortMaster preinstalled.</p></div>
+<div class="card rv"><h3>Wi-Fi, Bluetooth, SSH</h3><p>Networking, controller pairing and file transfer built in.</p></div>
+<div class="card rv"><h3>Offline updates</h3><p>Drop an update tar in <code>update/</code> and reboot. Your games and saves are never touched.</p></div>
 </div>
 
 <h2 id="download" class="rv"><span>#</span>Download</h2>
@@ -88,15 +88,16 @@ body.open #dr>a{opacity:1;transform:none;transition-delay:calc(var(--i)*50ms + 1
 <tr><td>Anbernic RG35XX SP</td><td><code>rg35xxsp</code></td><td>Allwinner H700</td><td>ROCKNIX-H700 (DDR4)</td><td>MBR</td></tr>
 <tr><td>Anbernic RG Rotate</td><td><code>rg-rotate</code></td><td>Unisoc T618</td><td>ROCKNIX-T618</td><td>GPT (<code>uboot</code>)</td></tr></table></details>
 <blockquote class="rv">Always download RG OS from the official project page or trusted mirrors.</blockquote>
+<p class="rv">The three H700 consoles boot a U-Boot built for one RAM type: use the DDR4 image unless you know yours is DDR3, because a wrong choice gives a black screen. The RG Rotate needs its SPL flashed once before first boot.</p>
 
 <h2 id="install" class="rv"><span>#</span>Install</h2>
-<ol class="rv"><li>Flash the image (or installer image) for your device to an SD card.</li><li>Insert the card and power on. An installer image shows Install and Power off; nothing is touched until you choose Install.</li><li>The ROMS partition is created (exFAT by default, FAT32 or ext4 optional) and the folder tree is set up.</li><li>Copy ROMs to <code>roms/&lt;system&gt;</code>, BIOS files to <code>bios/</code>, music to <code>music/</code>.</li><li>Update later by placing an update tar in <code>update/</code> and rebooting.</li></ol>
+<ol class="rv"><li>Flash the image (or installer image) for your device to the whole SD card, then eject it cleanly.</li><li>Insert the card and power on. An installer image shows Install and Power off; nothing is touched until you choose Install, which asks for the ROMS format (FAT32, exFAT or ext4) first.</li><li>The ROMS partition is created (exFAT by default), PortMaster is set up and the folder tree is created.</li><li>Copy ROMs to <code>roms/&lt;system&gt;</code>, BIOS files to <code>bios/</code>, music to <code>music/</code>, then press X in the launcher to rescan. Systems with no games and no installed core are hidden.</li><li>Check <i>Settings &gt; Missing BIOS check</i>, connect Wi-Fi and add cover art from <i>Settings &gt; Game artwork</i> if you like.</li><li>Update later by placing an update tar in <code>update/</code> and rebooting.</li></ol>
 
 <h2 id="hotkeys" class="rv"><span>#</span>Handy Hotkeys</h2>
-<table class="rv"><tr><th>Input</th><th>Action</th></tr><tr><td>Tap Menu (in game)</td><td>Open the in-game panel</td></tr><tr><td>Up / Down, A, B</td><td>Move, select, back in the panel</td></tr><tr><td>Hotkey enable (10) + Exit (9)</td><td>Exit RetroArch</td></tr><tr><td>Hotkey enable (10) + Save (5) / Load (4)</td><td>Save or load state</td></tr><tr><td>Hotkey enable (10) + 7</td><td>Hold to fast-forward</td></tr><tr><td>Hotkey enable (10) + 2</td><td>Screenshot</td></tr><tr><td>Select + Start (hold)</td><td>Quit a native port</td></tr></table>
+<table class="rv"><tr><th>Input</th><th>Action</th></tr><tr><td>A / B</td><td>Open or run / go back (launcher)</td></tr><tr><td>X</td><td>Rescan games</td></tr><tr><td>Y</td><td>Add or remove a favourite (game list)</td></tr><tr><td>L / R</td><td>Page up / down in long lists</td></tr><tr><td>Select + Start (hold)</td><td>Power off from the launcher; quit a native port while it runs</td></tr><tr><td>Tap Menu (in game)</td><td>Open the in-game panel</td></tr><tr><td>Up / Down, A, B</td><td>Move, select, back in the panel</td></tr><tr><td>Menu + Start</td><td>Exit the game</td></tr><tr><td>Menu + R / Menu + L</td><td>Save state / load state</td></tr><tr><td>Menu + Right / Left</td><td>Next / previous state slot</td></tr><tr><td>Menu + R2 (hold)</td><td>Fast-forward (RG35XX SP: Menu + Up, rewind on Menu + Down)</td></tr><tr><td>Menu + A</td><td>Pause</td></tr><tr><td>Menu + X</td><td>Screenshot</td></tr><tr><td>Menu + Select</td><td>DPAD to joystick: quick press on, hold 1 s off</td></tr></table>
 
 <h2 id="community" class="rv"><span>#</span>Community</h2>
-<p class="rv">Chat, get support and help the project grow.</p><a class="btn p" href="https://discord.gg/PmQeRvpGa">Join the Discord</a>
+<p class="rv">Chat, get support and help the project grow. Looking for guides? Read the <a href="docs/index.html">documentation</a>.</p><a class="btn p" href="https://discord.gg/PmQeRvpGa">Join the Discord</a>
 <p class="rv">Thanks to MuOS for being the entire inspiration behind this CFW, to our testers, to Noxwell for the ROCKNIX kernel and Device Trees for the Anbernic RG Rotate, and to ROCKNIX for the kernel and Device Trees.</p>
 <footer>RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository.</footer>
 </main>
