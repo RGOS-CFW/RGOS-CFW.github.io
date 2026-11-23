@@ -36,8 +36,13 @@
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
         <a href="devices.html">Supported devices</a>
-        <a href="miniloong-pocket-1.html" class="on" aria-current="page">MiniLoong Pocket 1</a>
         <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html">RG Rotate</a>
+        <a href="miniloong-pocket-1.html" class="on" aria-current="page">MiniLoong Pocket 1</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
         <a href="in-game-menu.html">In-game menu</a>
@@ -69,6 +74,9 @@
       <main>
         <article>
           <h1 id="miniloong-pocket-1">MiniLoong Pocket 1</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#build">Build</a><a href="#how-it-boots">How it boots</a><a href="#flash-and-first-boot">Flash and first boot</a><a href="#controls-and-input">Controls</a><a href="#offline-updates">Updates</a><a href="#troubleshooting">Troubleshooting</a>
+          </nav>
           <p class="lead">
             RG OS runs on the MiniLoong Pocket 1, a Rockchip RK3566 handheld
             with a 4" 960x720 (4:3) screen and a single analog stick.
@@ -86,11 +94,15 @@
             <table>
               <tbody>
                 <tr><td>Argument</td><td><code>miniloong</code></td></tr>
+                <tr><td><code>/etc/rgos-device</code></td><td><code>miniloong</code></td></tr>
                 <tr><td>SoC</td><td>Rockchip RK3566, 1 GB RAM</td></tr>
                 <tr><td>Screen</td><td>4", 960x720 (4:3)</td></tr>
                 <tr><td>Sticks</td><td>one analog stick (left)</td></tr>
                 <tr><td>Base image</td><td><code>AURKNIX-RK3566.aarch64-&lt;tag&gt;-Specific.img.gz</code> from AveyondFly/distribution_rocknix (default tag <code>20260809</code>)</td></tr>
                 <tr><td>Partition table</td><td>MBR; ROMS is created on first boot as partition 3</td></tr>
+                <tr><td>Bootloader</td><td>stock RK3566 U-Boot on the card, no SPL</td></tr>
+                <tr><td>Device tree</td><td><code>miniloong.dtb</code>, set in the <code>FDT</code> line of <code>extlinux/extlinux.conf</code></td></tr>
+                <tr><td>Image</td><td><code>miniloong-rgos.img</code></td></tr>
               </tbody>
             </table>
           </div>
@@ -103,7 +115,7 @@ sudo ./build.sh miniloong update     # offline update tar
             Options: <code>ROCKNIX_RK3566_VERSION=&lt;release tag&gt;</code>,
             <code>MINILOONG_DTB=&lt;name without .dtb&gt;</code> (default
             <code>miniloong</code>) and <code>ROCKNIX_URL=&lt;image .img.gz&gt;</code>.
-            See <a href="building.html">BUILDING.md</a>.
+            See <a href="building.html">Build options</a>.
           </p>
           <h2 id="how-it-boots">How it boots</h2>
           <p>
@@ -114,35 +126,80 @@ sudo ./build.sh miniloong update     # offline update tar
             patch. The Android on the internal storage is not touched; the
             Pocket 1 boots the card.
           </p>
+          <h2 id="flash-and-first-boot">Flash and first boot</h2>
+          <ol>
+            <li>
+              Flash <code>miniloong-rgos.img</code> to the whole card (not to a
+              partition) with balenaEtcher, Raspberry Pi Imager or
+              <code>dd</code>, then eject it cleanly.
+            </li>
+            <li>
+              Insert the card and power on. On the first boot
+              <code>rgos-roms</code> creates the ROMS partition (partition
+              3, exFAT) in the free space on the card. The old
+              partition table is backed up to the boot partition first.
+            </li>
+            <li>
+              Copy ROMs into <code>roms/&lt;system&gt;/</code> on the ROMS
+              partition and press <strong>X</strong> in the launcher to rescan.
+            </li>
+          </ol>
+          <p>
+            The full walkthrough is in
+            <a href="getting-started.html">Getting started</a>; the
+            first-boot installer image is described in
+            <a href="installer.html">First-boot installer</a>.
+          </p>
+          <h2 id="controls-and-input">Controls and input</h2>
+          <p>
+            The Pocket 1 has one analog stick (left), L2/R2 and L3, but no R3.
+            <code>input-miniloong.json</code> has <code>"sticks": 1</code>: the
+            input hub publishes only the left stick, the PortMaster/SDL mapping
+            has no right stick, and the first-boot button mapper asks only for
+            the left stick and L3. The RetroArch combos are otherwise
+            unchanged. See <a href="controls.html">Controls and hotkeys</a>.
+          </p>
+          <h2 id="display">Display</h2>
+          <p>
+            The menu and installer use the 720x540 layout (exact 4:3), scaled
+            up to 960x720. RetroArch uses
+            <code>config/retroarch-miniloong.cfg</code>.
+          </p>
           <h2 id="differences-from-the-h700-consoles">
             Differences from the H700 consoles
           </h2>
           <ul>
             <li>No <code>dtb.img</code>, no DDR3/DDR4 choice, no panel revision choice.</li>
-            <li>
-              One stick: <code>input-miniloong.json</code> has
-              <code>"sticks": 1</code>. The input hub publishes only the left
-              stick, the PortMaster/SDL mapping has no right stick, and the
-              button mapper skips R3 and the right stick calibration. See
-              <a href="controls.html">CONTROLS.md</a>.
-            </li>
-            <li>
-              Menu and installer use the 720x540 layout (exact 4:3), scaled to
-              960x720. RetroArch uses <code>config/retroarch-miniloong.cfg</code>.
-            </li>
-            <li>Mini-HDMI is not covered; <a href="hdmi.html">HDMI.md</a> is H700 only.</li>
-            <li>Offline updates may carry <code>miniloong.dtb</code> or <code>device_trees/miniloong.dtb</code>.</li>
+            <li>Mini-HDMI is not covered; <a href="hdmi.html">Mini-HDMI output</a> is H700 only.</li>
             <li>No GameCube core (RG Rotate only).</li>
           </ul>
-          <h2 id="status">Status</h2>
+          <h2 id="offline-updates">Offline updates</h2>
           <p>
-            Support is new. If the screen stays black, see
-            <a href="troubleshooting.html#miniloong-pocket-1-black-screen">TROUBLESHOOTING.md</a>.
+            An update tar built with <code>./build.sh miniloong update</code>
+            only installs on this device and may carry
+            <code>miniloong.dtb</code> or
+            <code>device_trees/miniloong.dtb</code>. See
+            <a href="updates.html">Offline updates</a>.
+          </p>
+          <h2 id="status">Status</h2>
+          <p>Support is new.</p>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <p>
+            There is no RAM type or panel revision to choose. If the screen
+            stays black, open <code>extlinux/extlinux.conf</code> on the card's
+            FAT partition and check that the <code>FDT</code> line names
+            <code>miniloong.dtb</code> (the spelling matters) and that the file
+            exists on the card. If <code>rgos-initramfs.txt</code> was written,
+            boot got as far as the initramfs: read it. If nothing was written,
+            the kernel or device tree did not start. To fall back to the stock
+            boot, <code>extlinux/extlinux.conf.stock</code> is a copy of the
+            config before the RG OS initramfs was added. See
+            <a href="troubleshooting.html#miniloong-pocket-1-black-screen">Troubleshooting</a>.
           </p>
         </article>
         <div class="pn">
-          <a href="devices.html"
-            ><small>Previous</small>Supported devices</a
+          <a href="rg-rotate.html"
+            ><small>Previous</small>RG Rotate</a
           ><a class="r" href="sd-card-layout.html"
             ><small>Next</small>SD card layout</a
           >

@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>RG35XX H · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Building, flashing and troubleshooting RG OS on the Anbernic RG35XX H (Allwinner H700)."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html" class="on" aria-current="page">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html">RG Rotate</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="hdmi.html">Mini-HDMI output</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="changelog.html">Changelog</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="rg35xx-h">RG35XX H</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#build">Build</a><a href="#ram-type-and-panel-revision">RAM and panel</a><a href="#flash-and-first-boot">Flash and first boot</a><a href="#controls-and-input">Controls</a><a href="#display-and-performance">Display</a><a href="#hdmi">HDMI</a><a href="#offline-updates">Updates</a><a href="#troubleshooting">Troubleshooting</a>
+          </nav>
+          <p class="lead">
+            The Anbernic RG35XX H is an Allwinner H700 handheld with a 640x480
+            screen. It shares its base image, bootloader approach and build
+            options with the other two H700 consoles.
+          </p>
+          <p>
+            <img
+              src="../assets/rg35xxh.png"
+              alt="Anbernic RG35XX H"
+              width="386"
+              height="194"
+              style="max-width: min(100%, 420px); height: auto"
+            />
+          </p>
+          <div class="tw">
+            <table>
+              <tbody>
+                <tr><td>Argument</td><td><code>rg35xxh</code></td></tr>
+                <tr><td><code>/etc/rgos-device</code></td><td><code>rg35xxh</code></td></tr>
+                <tr><td>SoC</td><td>Allwinner H700</td></tr>
+                <tr><td>Screen</td><td>640x480</td></tr>
+                <tr><td>Menu layout</td><td>720x540 layout, with its startup video (shared with the RG35XX SP)</td></tr>
+                <tr><td>Base image</td><td>ROCKNIX-H700 (<code>ROCKNIX-H700.aarch64-&lt;release&gt;-DDR4.img.gz</code>)</td></tr>
+                <tr><td>Partition table</td><td>MBR; no <code>uboot</code> partition, no SPL to flash</td></tr>
+                <tr><td>ROMS partition</td><td>created on first boot as partition 3</td></tr>
+                <tr><td>Device tree</td><td><code>dtb.img</code> (copied from <code>sun50i-h700-anbernic-rg35xx-h.dtb</code>)</td></tr>
+                <tr><td>Image</td><td><code>rg35xxh-rgos.img</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="build">Build</h2>
+          <pre><code>sudo ./build.sh rg35xxh            # SD card image   -&gt; out/rg35xxh-rgos.img
+sudo ./build.sh rg35xxh installer  # first-boot installer image -&gt; out/rg35xxh-rgos-installer.img
+sudo ./build.sh rg35xxh update     # offline update tar -&gt; out/rgos-update-rg35xxh-&lt;id&gt;.tar
+H700_RAM=DDR3 sudo -E ./build.sh rg35xxh   # DDR3 console
+RG35XXH_DTB=sun50i-h700-anbernic-rg35xx-h-rev6-panel sudo -E ./build.sh rg35xxh   # rev6 panel
+</code></pre>
+          <p>
+            Other options: <code>ROCKNIX_H700_VERSION=&lt;release tag&gt;</code>
+            and <code>ROCKNIX_URL=&lt;image .img.gz&gt;</code>. See
+            <a href="building.html">Build options</a>.
+          </p>
+          <h2 id="ram-type-and-panel-revision">RAM type and panel revision</h2>
+          <p>
+            Two independent choices decide whether the screen works on this
+            console. Both are made when the image is built, because the U-Boot
+            and the device tree are written to the card then.
+          </p>
+          <ol>
+            <li>
+              <strong>RAM type</strong>: <code>DDR4</code> (default) or
+              <code>DDR3</code>. The U-Boot on the card is built for exactly
+              one of them. A mismatch is a black screen with nothing written to
+              the card.
+            </li>
+            <li>
+              <strong>Panel revision</strong>: the standard device tree
+              (<code>sun50i-h700-anbernic-rg35xx-h</code>) or the alternate one
+              (<code>sun50i-h700-anbernic-rg35xx-h-rev6-panel</code>, the rev6 panel). A wrong choice gives a
+              black or garbled screen, but the card still boots far enough to
+              write <code>rgos-initramfs.txt</code>.
+            </li>
+          </ol>
+          <pre><code>H700_RAM=DDR3 sudo -E ./build.sh rg35xxh
+RG35XXH_DTB=sun50i-h700-anbernic-rg35xx-h-rev6-panel sudo -E ./build.sh rg35xxh
+</code></pre>
+          <p>
+            In the GitHub workflow these are the <code>h700_ram</code> and
+            <code>h700_panel</code> inputs (<code>standard</code> or
+            <code>alt</code>); see
+            <a href="build-workflow.html">Build RGOS in GitHub Actions</a>. If
+            you do not know which combination your console needs, try the four
+            combinations. The card's <code>rgos-image-info.txt</code> says
+            which RAM type an image was built for. The build copies the chosen
+            tree to <code>dtb.img</code>, which is the only device tree on the
+            boot partition.
+          </p>
+          <h2 id="flash-and-first-boot">Flash and first boot</h2>
+          <ol>
+            <li>
+              Flash <code>rg35xxh-rgos.img</code> to the whole card (not to a
+              partition) with balenaEtcher, Raspberry Pi Imager or
+              <code>dd</code>, then eject it cleanly.
+            </li>
+            <li>
+              Insert the card and power on. On the first boot
+              <code>rgos-roms</code> creates the ROMS partition (partition
+              3, exFAT) in the free space on the card. The old
+              partition table is backed up to the boot partition first.
+            </li>
+            <li>
+              Copy ROMs into <code>roms/&lt;system&gt;/</code> on the ROMS
+              partition and press <strong>X</strong> in the launcher to rescan.
+            </li>
+          </ol>
+          <p>
+            The full walkthrough is in
+            <a href="getting-started.html">Getting started</a>; the
+            first-boot installer image is described in
+            <a href="installer.html">First-boot installer</a>.
+          </p>
+          <h2 id="controls-and-input">Controls and input</h2>
+          <p>
+            The RG35XX H has analog sticks, L2/R2 and L3/R3, enabled by
+            <code>/etc/rgos/input-rg35xxh.json</code>. The standard launcher
+            buttons and RetroArch hotkeys apply, including
+            <strong>Menu + R2</strong> (hold) for fast-forward. See
+            <a href="controls.html">Controls and hotkeys</a>.
+          </p>
+          <h2 id="display-and-performance">Display and performance</h2>
+          <p>
+            The 640x480 screen uses the 720x540 menu layout; the launcher
+            scales only the rows that changed each frame. Heavier systems such
+            as N64 and Saturn will not reach full speed in every game on this
+            console. See <a href="systems.html">Supported systems</a> and
+            <a href="launchers-and-themes.html">Launchers, themes, splash and
+            music</a>.
+          </p>
+          <h2 id="hdmi">Mini-HDMI output</h2>
+          <p>
+            Mini-HDMI is supported on this console. It is selected at boot:
+            power off before connecting or disconnecting the cable, then boot
+            again. The default resolution cap is 720p. See
+            <a href="hdmi.html">Mini-HDMI output</a>.
+          </p>
+          <h2 id="offline-updates">Offline updates</h2>
+          <p>
+            An update tar built with <code>./build.sh rg35xxh update</code> only
+            installs on this device (its manifest must match
+            <code>/etc/rgos-device</code>, which is <code>rg35xxh</code>). The
+            device tree is <code>dtb.img</code>; add it to the tar with
+            <code>UPDATE_DTB=1</code>. Updates never replace the
+            U-Boot already on the card, so changing the RAM type or the panel
+            needs a new image. See
+            <a href="updates.html">Offline updates</a>.
+          </p>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <ul>
+            <li>
+              <strong>Black screen, no <code>rgos-initramfs.txt</code> on the
+              boot partition.</strong> The console never reached Linux. The
+              usual cause is the wrong RAM type; rebuild with
+              <code>H700_RAM=DDR3 sudo -E ./build.sh rg35xxh</code> (or the
+              reverse). Also re-flash if the card was not ejected cleanly.
+            </li>
+            <li>
+              <strong>Black or garbled screen, but
+              <code>rgos-initramfs.txt</code> exists.</strong> The panel
+              revision is wrong; rebuild with
+              <code>RG35XXH_DTB=sun50i-h700-anbernic-rg35xx-h-rev6-panel</code> (rev6 panel). Fully power off
+              (10 s power hold) before trying a new card.
+            </li>
+            <li>
+              <strong>No Bluetooth adapter found.</strong> The H700 consoles
+              use a Realtek RTL8821CS whose Bluetooth half sits on a UART. The
+              <code>rgos-bt:</code> lines in <code>rgos-logs.txt</code> (or
+              <code>python3 /opt/rgos/btctl.py diag</code> over SSH) show
+              which step fails.
+            </li>
+          </ul>
+          <p>
+            The full tables are in
+            <a href="troubleshooting.html">Troubleshooting</a> and
+            <a href="logs.html">Logs and diagnostic files</a>.
+          </p>
+          <h2 id="related-pages">Related pages</h2>
+          <ul>
+            <li><a href="devices.html">Supported devices</a>: side-by-side comparison</li>
+            <li><a href="rg34xxsp.html">RG34XXSP</a> and <a href="rg35xxsp.html">RG35XX SP</a>: the other H700 consoles</li>
+          </ul>
+        </article>
+        <div class="pn">
+          <a href="rg34xxsp.html"
+            ><small>Previous</small>RG34XXSP</a
+          ><a class="r" href="rg35xxsp.html"
+            ><small>Next</small>RG35XX SP</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
+</html>

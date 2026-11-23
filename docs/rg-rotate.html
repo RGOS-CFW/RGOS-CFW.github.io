@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>RG Rotate · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Building, flashing the SPL and troubleshooting RG OS on the Anbernic RG Rotate (Unisoc T618), including GameCube."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html" class="on" aria-current="page">RG Rotate</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="hdmi.html">Mini-HDMI output</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="changelog.html">Changelog</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="rg-rotate">RG Rotate</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#flash-the-spl-first">SPL</a><a href="#build">Build</a><a href="#flash-and-first-boot">Flash and first boot</a><a href="#controls-and-input">Controls</a><a href="#gamecube">GameCube</a><a href="#offline-updates">Updates</a><a href="#troubleshooting">Troubleshooting</a>
+          </nav>
+          <p class="lead">
+            The Anbernic RG Rotate is a Unisoc T618 handheld with a 720x720
+            screen. It is the only device that needs a replacement SPL flashed
+            once from a PC, and the only one that ships the GameCube core.
+          </p>
+          <p>
+            <img
+              src="../assets/rg-rotate.png"
+              alt="Anbernic RG Rotate"
+              width="195"
+              height="317"
+              style="max-width: min(100%, 200px); height: auto"
+            />
+          </p>
+          <div class="tw">
+            <table>
+              <tbody>
+                <tr><td>Argument</td><td><code>rg-rotate</code></td></tr>
+                <tr><td><code>/etc/rgos-device</code></td><td><code>rg-rotate</code></td></tr>
+                <tr><td>SoC</td><td>Unisoc T618 (Mali-G52 GPU)</td></tr>
+                <tr><td>Screen</td><td>720x720 (native size of the boot logo)</td></tr>
+                <tr><td>Base image</td><td>ROCKNIX-T618</td></tr>
+                <tr><td>Partition table</td><td>GPT; partition 3 is the <code>uboot</code> partition</td></tr>
+                <tr><td>ROMS partition</td><td>created on first boot as partition 4</td></tr>
+                <tr><td>Bootloader</td><td>SPL flashed once from a PC, U-Boot on the card</td></tr>
+                <tr><td>Device tree</td><td><code>device_trees/ums512-rg-rotate.dtb</code></td></tr>
+                <tr><td>Image</td><td><code>rg-rotate-rgos.img</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="flash-the-spl-first">Flash the SPL first</h2>
+          <p>
+            The Rotate needs a replacement splloader (SPL) so that it can boot
+            Linux from the SD card. This is done once, from a PC, with the tools
+            in <code>spl-flasher/</code>. Use it only on an Anbernic RG Rotate.
+            The steps, and how to restore the stock SPL, are in
+            <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>.
+          </p>
+          <h2 id="build">Build</h2>
+          <pre><code>sudo ./build.sh rg-rotate            # SD card image   -&gt; out/rg-rotate-rgos.img
+sudo ./build.sh rg-rotate installer  # first-boot installer image -&gt; out/rg-rotate-rgos-installer.img
+sudo ./build.sh rg-rotate update     # offline update tar -&gt; out/rgos-update-rg-rotate-&lt;id&gt;.tar
+GC_REPO=none sudo -E ./build.sh rg-rotate   # skip the GameCube core (faster build)
+RGOS_INITRD=0 sudo -E ./build.sh rg-rotate   # use ROCKNIX's own init instead of the RG OS initramfs
+</code></pre>
+          <p>
+            The GameCube core (Dolphin libretro) is compiled only for this
+            device and the build is slow under qemu emulation. In GitHub
+            Actions use the <code>build_gc</code> checkbox. There is no RAM
+            type or panel revision to choose. See
+            <a href="building.html">Build options</a>.
+          </p>
+          <h2 id="flash-and-first-boot">Flash and first boot</h2>
+          <ol>
+            <li>
+              Flash <code>rg-rotate-rgos.img</code> to the whole card (not to a
+              partition) with balenaEtcher, Raspberry Pi Imager or
+              <code>dd</code>, then eject it cleanly.
+            </li>
+            <li>
+              Make sure the SPL has been flashed (above). Partition 3 of the
+              card must be the GPT partition named <code>uboot</code>.
+            </li>
+            <li>
+              Insert the card and power on. On the first boot
+              <code>rgos-roms</code> creates the ROMS partition (partition
+              4, exFAT) in the free space on the card. The old
+              partition table is backed up to the boot partition first.
+            </li>
+            <li>
+              Copy ROMs into <code>roms/&lt;system&gt;/</code> on the ROMS
+              partition and press <strong>X</strong> in the launcher to rescan.
+            </li>
+          </ol>
+          <p>
+            The full walkthrough is in
+            <a href="getting-started.html">Getting started</a>; the
+            first-boot installer image is described in
+            <a href="installer.html">First-boot installer</a>.
+          </p>
+          <h2 id="controls-and-input">Controls and input</h2>
+          <p>
+            The Rotate has analog sticks, L2/R2 and L3/R3, enabled by
+            <code>/etc/rgos/input-rg-rotate.json</code>. The standard launcher
+            buttons and RetroArch hotkeys apply, including
+            <strong>Menu + R2</strong> (hold) for fast-forward. See
+            <a href="controls.html">Controls and hotkeys</a>.
+          </p>
+          <h2 id="gamecube">GameCube</h2>
+          <p>
+            GameCube (Dolphin libretro, GameCube only, no Wii) runs on this
+            device only; the system is hidden on every other device. Put games
+            in <code>roms/gc/</code>. Every launch gets a tuned set of Dolphin
+            options for the Mali-G52. Setup, performance tuning and what to do
+            when a game closes right after launching are in
+            <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>.
+          </p>
+          <h2 id="hdmi-is-not-available">HDMI</h2>
+          <p>
+            The RG Rotate (T618) is not included in the H700 mini-HDMI
+            implementation. See <a href="hdmi.html">Mini-HDMI output</a>.
+          </p>
+          <h2 id="offline-updates">Offline updates</h2>
+          <p>
+            An update tar built with <code>./build.sh rg-rotate update</code>
+            only installs on this device (<code>/etc/rgos-device</code> is
+            <code>rg-rotate</code>). It can replace <code>SYSTEM</code>,
+            <code>rgos-initrd.cpio</code> and optionally <code>KERNEL</code>,
+            <code>device_trees/ums512-rg-rotate.dtb</code> and
+            <code>extlinux/extlinux.conf</code>. See
+            <a href="updates.html">Offline updates</a>.
+          </p>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <ul>
+            <li>
+              <strong>It boots Android instead of RG OS.</strong> Android does
+              not always mean the SPL failed to find U-Boot: the boot chain
+              falls through to the internal Android whenever the card's U-Boot
+              cannot start Linux, for example when it cannot load the initrd.
+              Check that partition 3 is the <code>uboot</code> GPT partition
+              (<code>sgdisk -p /dev/sdX</code>) and re-flash the image and the
+              SPL. To tell the two cases apart, try the stock ROCKNIX T618
+              image: if it also ends up in Android, the SPL or the card is the
+              problem.
+            </li>
+            <li>
+              <strong>Black screen, no <code>rgos-initramfs.txt</code>.</strong>
+              U-Boot started but the RG OS initramfs did not run. Copy
+              <code>extlinux/extlinux.conf.stock</code> over
+              <code>extlinux/extlinux.conf</code> on the FAT partition and boot
+              again, or rebuild with <code>RGOS_INITRD=0</code>.
+            </li>
+            <li>
+              <strong>The ROCKNIX boot screen shows before RG OS.</strong> The
+              card was built with <code>RGOS_INITRD=0</code>, or is an older
+              build that left <code>extlinux.conf</code> untouched.
+            </li>
+            <li>
+              <strong>The console no longer boots after flashing the
+              SPL.</strong> Restore the stock SPL; the steps are on
+              <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>.
+            </li>
+          </ul>
+          <p>
+            The full explanation is in
+            <a href="troubleshooting.html">Troubleshooting</a>.
+          </p>
+          <h2 id="related-pages">Related pages</h2>
+          <ul>
+            <li><a href="devices.html">Supported devices</a>: side-by-side comparison</li>
+            <li><a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a></li>
+            <li><a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a></li>
+          </ul>
+        </article>
+        <div class="pn">
+          <a href="rg35xxsp.html"
+            ><small>Previous</small>RG35XX SP</a
+          ><a class="r" href="miniloong-pocket-1.html"
+            ><small>Next</small>MiniLoong Pocket 1</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
+</html>

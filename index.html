@@ -750,35 +750,35 @@
             <th>Partitions</th>
           </tr>
           <tr>
-            <td>Anbernic RG34XXSP</td>
+            <td><a href="docs/rg34xxsp.html">Anbernic RG34XXSP</a></td>
             <td><code>rg34xxsp</code></td>
             <td>Allwinner H700</td>
             <td>ROCKNIX-H700 (DDR4)</td>
             <td>MBR</td>
           </tr>
           <tr>
-            <td>Anbernic RG35XX H</td>
+            <td><a href="docs/rg35xxh.html">Anbernic RG35XX H</a></td>
             <td><code>rg35xxh</code></td>
             <td>Allwinner H700</td>
             <td>ROCKNIX-H700 (DDR4)</td>
             <td>MBR</td>
           </tr>
           <tr>
-            <td>Anbernic RG35XX SP</td>
+            <td><a href="docs/rg35xxsp.html">Anbernic RG35XX SP</a></td>
             <td><code>rg35xxsp</code></td>
             <td>Allwinner H700</td>
             <td>ROCKNIX-H700 (DDR4)</td>
             <td>MBR</td>
           </tr>
           <tr>
-            <td>Anbernic RG Rotate</td>
+            <td><a href="docs/rg-rotate.html">Anbernic RG Rotate</a></td>
             <td><code>rg-rotate</code></td>
             <td>Unisoc T618</td>
             <td>ROCKNIX-T618</td>
             <td>GPT (<code>uboot</code>)</td>
           </tr>
           <tr>
-            <td>MiniLoong Pocket 1</td>
+            <td><a href="docs/miniloong-pocket-1.html">MiniLoong Pocket 1</a></td>
             <td><code>miniloong</code></td>
             <td>Rockchip RK3566</td>
             <td>AURKNIX-RK3566 (Specific)</td>
@@ -914,6 +914,13 @@
         );
       };
       const B = (s) => s.replace(/\s/g, "");
+      const DOC = {
+        rg34xxsp: "docs/rg34xxsp.html",
+        rg35xxh: "docs/rg35xxh.html",
+        rg35xxsp: "docs/rg35xxsp.html",
+        "rg-rotate": "docs/rg-rotate.html",
+        miniloong: "docs/miniloong-pocket-1.html",
+      };
       const IMG = {
         rg34xxsp: "assets/rg34xxsp.png",
         rg35xxh: "assets/rg35xxh.png",
@@ -924,7 +931,7 @@
       window.ART = D.map((d) => art(d[2], d[3]));
       document.getElementById("dv").innerHTML = D.map(
         (d, i) =>
-          `<div class="card" style="--d:${i * 80}ms"><div class="im">${IMG[d[1]] ? `<img src="${IMG[d[1]]}" alt="${d[0]}" loading="lazy" onerror="this.parentNode.innerHTML=window.ART[${i}]">` : window.ART[i]}</div><h3>${d[0]}</h3><p>${d[4]} · ${d[5]} · ${d[6]}</p><p><code>${d[1]}</code></p><a class="btn p" href="https://github.com/RGOS-CFW/RGOS">Download</a></div>`,
+          `<div class="card" style="--d:${i * 80}ms"><div class="im">${IMG[d[1]] ? `<img src="${IMG[d[1]]}" alt="${d[0]}" loading="lazy" onerror="this.parentNode.innerHTML=window.ART[${i}]">` : window.ART[i]}</div><h3>${d[0]}</h3><p>${d[4]} · ${d[5]} · ${d[6]}</p><p><code>${d[1]}</code></p><a class="btn p" href="https://github.com/RGOS-CFW/RGOS">Download</a><a class="btn" href="${DOC[d[1]]}">Docs</a></div>`,
       ).join("");
       const io = new IntersectionObserver(
         (es) =>

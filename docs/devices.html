@@ -35,11 +35,14 @@
         <h4>Start here</h4>
         <a href="getting-started.html">Getting started</a>
         <a href="installer.html">First-boot installer</a>
-        <a href="devices.html" class="on" aria-current="page"
-          >Supported devices</a
-        >
-        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
+        <a href="devices.html" class="on" aria-current="page">Supported devices</a>
         <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html">RG Rotate</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
         <h4>Using RG OS</h4>
         <a href="controls.html">Controls and hotkeys</a>
         <a href="in-game-menu.html">In-game menu</a>
@@ -85,7 +88,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>Anbernic RG34XXSP</td>
+                  <td><a href="rg34xxsp.html">Anbernic RG34XXSP</a></td>
                   <td><code>rg34xxsp</code></td>
                   <td>Allwinner H700</td>
                   <td>ROCKNIX-H700</td>
@@ -93,7 +96,7 @@
                   <td>3</td>
                 </tr>
                 <tr>
-                  <td>Anbernic RG35XX H</td>
+                  <td><a href="rg35xxh.html">Anbernic RG35XX H</a></td>
                   <td><code>rg35xxh</code></td>
                   <td>Allwinner H700</td>
                   <td>ROCKNIX-H700</td>
@@ -101,7 +104,7 @@
                   <td>3</td>
                 </tr>
                 <tr>
-                  <td>Anbernic RG35XX SP</td>
+                  <td><a href="rg35xxsp.html">Anbernic RG35XX SP</a></td>
                   <td><code>rg35xxsp</code></td>
                   <td>Allwinner H700</td>
                   <td>ROCKNIX-H700</td>
@@ -109,7 +112,7 @@
                   <td>3</td>
                 </tr>
                 <tr>
-                  <td>Anbernic RG Rotate</td>
+                  <td><a href="rg-rotate.html">Anbernic RG Rotate</a></td>
                   <td><code>rg-rotate</code></td>
                   <td>Unisoc T618</td>
                   <td>ROCKNIX-T618</td>
@@ -117,7 +120,7 @@
                   <td>4</td>
                 </tr>
                 <tr>
-                  <td>MiniLoong Pocket 1</td>
+                  <td><a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a></td>
                   <td><code>miniloong</code></td>
                   <td>Rockchip RK3566</td>
                   <td>AURKNIX-RK3566 (Specific)</td>
@@ -127,6 +130,15 @@
               </tbody>
             </table>
           </div>
+          <p>
+            Each device has its own page with its specs, build commands, first
+            boot steps, controls and troubleshooting:
+            <a href="rg34xxsp.html">RG34XXSP</a>,
+            <a href="rg35xxh.html">RG35XX H</a>,
+            <a href="rg35xxsp.html">RG35XX SP</a>,
+            <a href="rg-rotate.html">RG Rotate</a> and
+            <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>.
+          </p>
           <p>
             The running device is stored in <code>/etc/rgos-device</code>.
             Offline updates check it, and the menu uses it to pick layouts and
@@ -138,11 +150,11 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th>RG34XXSP</th>
-                  <th>RG35XX H</th>
-                  <th>RG35XX SP</th>
-                  <th>RG Rotate</th>
-                  <th>MiniLoong Pocket 1</th>
+                  <th><a href="rg34xxsp.html">RG34XXSP</a></th>
+                  <th><a href="rg35xxh.html">RG35XX H</a></th>
+                  <th><a href="rg35xxsp.html">RG35XX SP</a></th>
+                  <th><a href="rg-rotate.html">RG Rotate</a></th>
+                  <th><a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a></th>
                 </tr>
               </thead>
               <tbody>
@@ -238,6 +250,7 @@
             <li>
               The Rotate boots Android from internal storage when the card's
               U-Boot cannot start Linux. See
+              <a href="rg-rotate.html">RG Rotate</a> and
               <a href="troubleshooting.html">TROUBLESHOOTING.md</a>.
             </li>
           </ul>
@@ -271,8 +284,8 @@
         <div class="pn">
           <a href="installer.html"
             ><small>Previous</small>First-boot installer</a
-          ><a class="r" href="miniloong-pocket-1.html"
-            ><small>Next</small>MiniLoong Pocket 1</a
+          ><a class="r" href="rg34xxsp.html"
+            ><small>Next</small>RG34XXSP</a
           >
         </div>
       </main>
