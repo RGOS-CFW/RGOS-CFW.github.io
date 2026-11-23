@@ -1,94 +1,283 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nintendo GameCube (RG Rotate only) · RG OS Docs</title>
-<meta name="description" content="GameCube on the RG Rotate (Dolphin).">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html" class="on" aria-current="page">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="nintendo-gamecube-rg-rotate-only">Nintendo GameCube (RG Rotate only)</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#build-options">Build options</a><a href="#runtime-dependency-fix">Runtime dependency fix</a><a href="#performance-tuning">Performance tuning</a><a href="#if-a-gamecube-game-closes-right-after-launching">If a GameCube game closes right after launching</a></nav>
-<p>GameCube runs through RetroArch with the <strong>Dolphin libretro</strong> core (<code>dolphin_libretro.so</code>). It is built from source (<code>GC_REPO</code>, default <code>https://github.com/libretro/dolphin.git</code>) <strong>only when building <code>rg-rotate</code></strong>. The <code>rg34xxsp</code> and <code>rg35xxh</code> builds never compile or ship it, and <code>menu.py</code> hides the system on any other device.</p>
-<p><strong>GameCube only, no Wii.</strong> The Dolphin core can technically run both, so there is no Wii menu entry, no <code>roms/wii</code> folder, and <code>.wbfs</code>/<code>.wad</code> are not accepted. Wii games placed in <code>roms/gc</code> are not supported (<code>.iso</code> is shared by both consoles, so keep Wii dumps out of that folder).</p>
-<ul>
-<li>ROMs: <code>&lt;ROMS&gt;/roms/gc/*.gcm</code>, <code>.iso</code>, <code>.gcz</code>, <code>.rvz</code>, <code>.ciso</code>, <code>.m3u</code>, <code>.dol</code>, <code>.elf</code>.</li>
-<li>Saves: <code>&lt;ROMS&gt;/saves/gc/</code>, states: <code>&lt;ROMS&gt;/states/gc/</code>.</li>
-<li>Dolphin's <code>Sys</code> data folder is shipped in the image and copied once to <code>&lt;ROMS&gt;/bios/dolphin-emu/Sys</code> on the first GameCube launch.</li>
-<li>Optional GameCube BIOS (boot logo): <code>IPL.bin</code> in <code>&lt;ROMS&gt;/bios/dolphin-emu/Sys/GC/&lt;USA|EUR|JAP&gt;/</code>.</li>
-</ul>
-<h2 id="build-options">Build options</h2>
-<pre><code>sudo ./build.sh rg-rotate          # includes the GameCube core
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Nintendo GameCube (RG Rotate only) · RG OS Docs</title>
+    <meta name="description" content="GameCube on the RG Rotate (Dolphin)." />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html" class="on" aria-current="page"
+          >Nintendo GameCube (RG Rotate only)</a
+        >
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="nintendo-gamecube-rg-rotate-only">
+            Nintendo GameCube (RG Rotate only)
+          </h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#build-options">Build options</a
+            ><a href="#runtime-dependency-fix">Runtime dependency fix</a
+            ><a href="#performance-tuning">Performance tuning</a
+            ><a href="#if-a-gamecube-game-closes-right-after-launching"
+              >If a GameCube game closes right after launching</a
+            >
+          </nav>
+          <p>
+            GameCube runs through RetroArch with the
+            <strong>Dolphin libretro</strong> core
+            (<code>dolphin_libretro.so</code>). It is built from source
+            (<code>GC_REPO</code>, default
+            <code>https://github.com/libretro/dolphin.git</code>)
+            <strong>only when building <code>rg-rotate</code></strong
+            >. The <code>rg34xxsp</code> and <code>rg35xxh</code> builds never
+            compile or ship it, and <code>menu.py</code> hides the system on any
+            other device.
+          </p>
+          <p>
+            <strong>GameCube only, no Wii.</strong> The Dolphin core can
+            technically run both, so there is no Wii menu entry, no
+            <code>roms/wii</code> folder, and <code>.wbfs</code>/<code
+              >.wad</code
+            >
+            are not accepted. Wii games placed in <code>roms/gc</code> are not
+            supported (<code>.iso</code> is shared by both consoles, so keep Wii
+            dumps out of that folder).
+          </p>
+          <ul>
+            <li>
+              ROMs: <code>&lt;ROMS&gt;/roms/gc/*.gcm</code>, <code>.iso</code>,
+              <code>.gcz</code>, <code>.rvz</code>, <code>.ciso</code>,
+              <code>.m3u</code>, <code>.dol</code>, <code>.elf</code>.
+            </li>
+            <li>
+              Saves: <code>&lt;ROMS&gt;/saves/gc/</code>, states:
+              <code>&lt;ROMS&gt;/states/gc/</code>.
+            </li>
+            <li>
+              Dolphin's <code>Sys</code> data folder is shipped in the image and
+              copied once to <code>&lt;ROMS&gt;/bios/dolphin-emu/Sys</code> on
+              the first GameCube launch.
+            </li>
+            <li>
+              Optional GameCube BIOS (boot logo): <code>IPL.bin</code> in
+              <code
+                >&lt;ROMS&gt;/bios/dolphin-emu/Sys/GC/&lt;USA|EUR|JAP&gt;/</code
+              >.
+            </li>
+          </ul>
+          <h2 id="build-options">Build options</h2>
+          <pre><code>sudo ./build.sh rg-rotate          # includes the GameCube core
 GC_REPO=none sudo -E ./build.sh rg-rotate   # skip it (faster build)
 </code></pre>
-<p>A prebuilt aarch64 <code>dolphin_libretro.so</code> in <code>cores/</code> is used instead of building (and is deleted again for every device except <code>rg-rotate</code>). In GitHub Actions use the <em>build_gc</em> checkbox.</p>
-<p>The build is best-effort, like the other source-built cores: if it fails, a <code>!!</code> line is printed and the image is built without GameCube. It is slow under qemu emulation (plan on a long run).</p>
-<h2 id="runtime-dependency-fix">Runtime dependency fix</h2>
-<p>The Dolphin core may fail to load with <code>liblzo2.so.2: cannot open shared object file</code> when a prebuilt <code>dolphin_libretro.so</code> is used. RG OS now includes Debian's <code>liblzo2-2</code> runtime package in the base image so this dependency is present even for prebuilt cores. Rebuild the image or install <code>liblzo2-2</code> on an existing Debian-based RG OS image.</p>
-<h2 id="performance-tuning">Performance tuning</h2>
-<p>Every GameCube launch gets a tuned set of Dolphin core options, written to <code>/run/rgos/dolphin-options.cfg</code> and handed to RetroArch (<code>core_options_path</code>). They target the RG Rotate's Mali-G52 GPU, which is the usual bottleneck:</p>
-<ul>
-<li><strong>Native resolution</strong> (<code>dolphin_efb_scale = x1</code>). The biggest single speed-up; raise it only for light games.</li>
-<li><strong>ARM64 JIT CPU core (<code>JITARM64</code>) + fastmem</strong>, <strong>DSP HLE</strong> (the x86-only <code>JIT64</code> and DSP JIT are never requested on aarch64), GPU-side EFB copies, no forced texture filtering.</li>
-<li><strong>A-sync ubershaders</strong>, so a new effect never freezes the game while its shader compiles. The first minutes of a game can still hitch a little while the shader cache fills; it gets smoother with play.</li>
-<li><strong>Frame pacing.</strong> GameCube launches turn on adaptive vsync, a third swapchain image and a larger audio buffer, so a game that runs at 50-58 fps no longer drops to 30 fps or crackles. The CPU and GPU governors are already set to <code>performance</code> for GameCube (see <code>/boot/rgos-governor.txt</code>).</li>
-<li><strong>Safe retry.</strong> If a game dies within 30 s, the retry also turns fastmem off and uses the cached interpreter. This retry also happens when a video driver is pinned in <code>/boot/retroarch-gc-video.txt</code>.</li>
-</ul>
-<p>To change any option, create <code>&lt;ROMS&gt;/config/dolphin-options.cfg</code> with lines such as:</p>
-<pre><code>dolphin_efb_scale = "x2 (1280 x 1056)"
+          <p>
+            A prebuilt aarch64 <code>dolphin_libretro.so</code> in
+            <code>cores/</code> is used instead of building (and is deleted
+            again for every device except <code>rg-rotate</code>). In GitHub
+            Actions use the <em>build_gc</em> checkbox.
+          </p>
+          <p>
+            The build is best-effort, like the other source-built cores: if it
+            fails, a <code>!!</code> line is printed and the image is built
+            without GameCube. It is slow under qemu emulation (plan on a long
+            run).
+          </p>
+          <h2 id="runtime-dependency-fix">Runtime dependency fix</h2>
+          <p>
+            The Dolphin core may fail to load with
+            <code>liblzo2.so.2: cannot open shared object file</code> when a
+            prebuilt <code>dolphin_libretro.so</code> is used. RG OS now
+            includes Debian's <code>liblzo2-2</code> runtime package in the base
+            image so this dependency is present even for prebuilt cores. Rebuild
+            the image or install <code>liblzo2-2</code> on an existing
+            Debian-based RG OS image.
+          </p>
+          <h2 id="performance-tuning">Performance tuning</h2>
+          <p>
+            Every GameCube launch gets a tuned set of Dolphin core options,
+            written to <code>/run/rgos/dolphin-options.cfg</code> and handed to
+            RetroArch (<code>core_options_path</code>). They target the RG
+            Rotate's Mali-G52 GPU, which is the usual bottleneck:
+          </p>
+          <ul>
+            <li>
+              <strong>Native resolution</strong> (<code
+                >dolphin_efb_scale = x1</code
+              >). The biggest single speed-up; raise it only for light games.
+            </li>
+            <li>
+              <strong
+                >ARM64 JIT CPU core (<code>JITARM64</code>) + fastmem</strong
+              >, <strong>DSP HLE</strong> (the x86-only <code>JIT64</code> and
+              DSP JIT are never requested on aarch64), GPU-side EFB copies, no
+              forced texture filtering.
+            </li>
+            <li>
+              <strong>A-sync ubershaders</strong>, so a new effect never freezes
+              the game while its shader compiles. The first minutes of a game
+              can still hitch a little while the shader cache fills; it gets
+              smoother with play.
+            </li>
+            <li>
+              <strong>Frame pacing.</strong> GameCube launches turn on adaptive
+              vsync, a third swapchain image and a larger audio buffer, so a
+              game that runs at 50-58 fps no longer drops to 30 fps or crackles.
+              The CPU and GPU governors are already set to
+              <code>performance</code> for GameCube (see
+              <code>/boot/rgos-governor.txt</code>).
+            </li>
+            <li>
+              <strong>Safe retry.</strong> If a game dies within 30 s, the retry
+              also turns fastmem off and uses the cached interpreter. This retry
+              also happens when a video driver is pinned in
+              <code>/boot/retroarch-gc-video.txt</code>.
+            </li>
+          </ul>
+          <p>
+            To change any option, create
+            <code>&lt;ROMS&gt;/config/dolphin-options.cfg</code> with lines such
+            as:
+          </p>
+          <pre><code>dolphin_efb_scale = "x2 (1280 x 1056)"
 dolphin_shader_compilation_mode = "sync UberShaders"
 dolphin_fastmem = "disabled"
 </code></pre>
-<p>Your lines win over the built-in ones, including in the retry. Remove the file to go back to the defaults. A prebuilt <code>dolphin_libretro.so</code> is unaffected by the build flag; a core built by <code>build.sh</code> is compiled with <code>-mtune=cortex-a75</code>.</p>
-<h2 id="if-a-gamecube-game-closes-right-after-launching">If a GameCube game closes right after launching</h2>
-<p>RG OS now does these things itself; each one was a way for the game to "just close" without a message:</p>
-<ul>
-<li><strong>Dolphin <code>Sys</code> folder.</strong> A half-copied <code>&lt;ROMS&gt;/bios/dolphin-emu/Sys</code> (interrupted copy, or the exFAT card refusing file permissions) used to count as done forever. Now a stamp file is written only after a complete copy, so an incomplete folder is finished on the next launch and a new image build refreshes the shipped files. Your own files (<code>IPL.bin</code>) are left alone.</li>
-<li><strong>Missing libraries.</strong> Before starting, the launcher runs <code>ldd</code> on the core and, if a library is missing, shows its name instead of closing. <code>build.sh</code> does the same check at build time for <code>rg-rotate</code> and tries to install what is missing.</li>
-<li><strong>Video driver.</strong> Dolphin needs a real GL context. GameCube launches pin RetroArch to <code>glcore</code> and, if that dies within 30 s, retry once with <code>gl</code>. To force one driver, put one word (<code>glcore</code>, <code>gl</code>, <code>vulkan</code>) in <code>/boot/retroarch-gc-video.txt</code>.</li>
-<li><strong>A readable report.</strong> GameCube launches always use RetroArch's verbose log. After every launch <code>/boot/rgos-retroarch.txt</code> (on the FAT partition, readable on a PC) holds the command, the missing libraries (if any), the log of every attempt, the exit code or the signal that killed it (for example <code>SIGSEGV</code>), and kernel lines about segfaults, out-of-memory kills and GPU errors.</li>
-</ul>
-<p>If it still closes, send <code>rgos-retroarch.txt</code> and <code>rgos-logs.txt</code> from the boot partition.</p>
-<p>See also: <a href="systems.html">SYSTEMS.md</a>, <a href="bios.html">BIOS.md</a>, <a href="logs.html">LOGS.md</a>.</p></article><div class="pn"><a href="nes.html"><small>Previous</small>NES / Famicom (RetroArch + Nestopia core)</a><a class="r" href="troubleshooting.html"><small>Next</small>Troubleshooting</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+          <p>
+            Your lines win over the built-in ones, including in the retry.
+            Remove the file to go back to the defaults. A prebuilt
+            <code>dolphin_libretro.so</code> is unaffected by the build flag; a
+            core built by <code>build.sh</code> is compiled with
+            <code>-mtune=cortex-a75</code>.
+          </p>
+          <h2 id="if-a-gamecube-game-closes-right-after-launching">
+            If a GameCube game closes right after launching
+          </h2>
+          <p>
+            RG OS now does these things itself; each one was a way for the game
+            to "just close" without a message:
+          </p>
+          <ul>
+            <li>
+              <strong>Dolphin <code>Sys</code> folder.</strong> A half-copied
+              <code>&lt;ROMS&gt;/bios/dolphin-emu/Sys</code> (interrupted copy,
+              or the exFAT card refusing file permissions) used to count as done
+              forever. Now a stamp file is written only after a complete copy,
+              so an incomplete folder is finished on the next launch and a new
+              image build refreshes the shipped files. Your own files
+              (<code>IPL.bin</code>) are left alone.
+            </li>
+            <li>
+              <strong>Missing libraries.</strong> Before starting, the launcher
+              runs <code>ldd</code> on the core and, if a library is missing,
+              shows its name instead of closing. <code>build.sh</code> does the
+              same check at build time for <code>rg-rotate</code> and tries to
+              install what is missing.
+            </li>
+            <li>
+              <strong>Video driver.</strong> Dolphin needs a real GL context.
+              GameCube launches pin RetroArch to <code>glcore</code> and, if
+              that dies within 30 s, retry once with <code>gl</code>. To force
+              one driver, put one word (<code>glcore</code>, <code>gl</code>,
+              <code>vulkan</code>) in <code>/boot/retroarch-gc-video.txt</code>.
+            </li>
+            <li>
+              <strong>A readable report.</strong> GameCube launches always use
+              RetroArch's verbose log. After every launch
+              <code>/boot/rgos-retroarch.txt</code> (on the FAT partition,
+              readable on a PC) holds the command, the missing libraries (if
+              any), the log of every attempt, the exit code or the signal that
+              killed it (for example <code>SIGSEGV</code>), and kernel lines
+              about segfaults, out-of-memory kills and GPU errors.
+            </li>
+          </ul>
+          <p>
+            If it still closes, send <code>rgos-retroarch.txt</code> and
+            <code>rgos-logs.txt</code> from the boot partition.
+          </p>
+          <p>
+            See also: <a href="systems.html">SYSTEMS.md</a>,
+            <a href="bios.html">BIOS.md</a>, <a href="logs.html">LOGS.md</a>.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="nes.html"
+            ><small>Previous</small>NES / Famicom (RetroArch + Nestopia core)</a
+          ><a class="r" href="troubleshooting.html"
+            ><small>Next</small>Troubleshooting</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

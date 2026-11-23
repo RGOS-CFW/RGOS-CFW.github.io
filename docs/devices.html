@@ -1,177 +1,274 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Supported devices · RG OS Docs</title>
-<meta name="description" content="What differs between the RG34XXSP, RG35XX H, RG35XX SP and RG Rotate.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html" class="on" aria-current="page">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="supported-devices">Supported devices</h1>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Device</th>
-<th>Argument</th>
-<th>SoC</th>
-<th>Base image</th>
-<th>Partition table</th>
-<th>ROMS partition</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Anbernic RG34XXSP</td>
-<td><code>rg34xxsp</code></td>
-<td>Allwinner H700</td>
-<td>ROCKNIX-H700</td>
-<td>MBR</td>
-<td>3</td>
-</tr>
-<tr>
-<td>Anbernic RG35XX H</td>
-<td><code>rg35xxh</code></td>
-<td>Allwinner H700</td>
-<td>ROCKNIX-H700</td>
-<td>MBR</td>
-<td>3</td>
-</tr>
-<tr>
-<td>Anbernic RG35XX SP</td>
-<td><code>rg35xxsp</code></td>
-<td>Allwinner H700</td>
-<td>ROCKNIX-H700</td>
-<td>MBR</td>
-<td>3</td>
-</tr>
-<tr>
-<td>Anbernic RG Rotate</td>
-<td><code>rg-rotate</code></td>
-<td>Unisoc T618</td>
-<td>ROCKNIX-T618</td>
-<td>GPT (<code>uboot</code> partition 3)</td>
-<td>4</td>
-</tr>
-</tbody>
-</table></div>
-<p>The running device is stored in <code>/etc/rgos-device</code>. Offline updates check it, and the menu uses it to pick layouts and hide features.</p>
-<h2 id="what-differs-between-them">What differs between them</h2>
-<div class="tw"><table>
-<thead>
-<tr>
-<th></th>
-<th>RG34XXSP</th>
-<th>RG35XX H</th>
-<th>RG35XX SP</th>
-<th>RG Rotate</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Analog sticks</td>
-<td>enabled per <code>/etc/rgos/input-&lt;device&gt;.json</code></td>
-<td>same</td>
-<td><strong>no</strong> (<code>"analog": false</code>)</td>
-<td>enabled per <code>/etc/rgos/input-&lt;device&gt;.json</code></td>
-</tr>
-<tr>
-<td>L2/R2, L3/R3</td>
-<td>yes</td>
-<td>yes</td>
-<td>no</td>
-<td>yes</td>
-</tr>
-<tr>
-<td>Bootloader</td>
-<td>stock U-Boot on the card, per RAM type</td>
-<td>same</td>
-<td>same</td>
-<td>SPL flashed once, U-Boot on card</td>
-</tr>
-<tr>
-<td>RAM choice at build</td>
-<td><code>H700_RAM</code> DDR4/DDR3</td>
-<td>same</td>
-<td>same</td>
-<td>not applicable</td>
-</tr>
-<tr>
-<td>Panel choice at build</td>
-<td><code>RG34XXSP_DTB</code></td>
-<td><code>RG35XXH_DTB</code></td>
-<td><code>RG35XXSP_DTB</code></td>
-<td>not applicable</td>
-</tr>
-<tr>
-<td>GameCube</td>
-<td>not shipped</td>
-<td>not shipped</td>
-<td>not shipped</td>
-<td>yes (Dolphin libretro)</td>
-</tr>
-<tr>
-<td>Device tree file</td>
-<td><code>dtb.img</code></td>
-<td><code>dtb.img</code></td>
-<td><code>dtb.img</code></td>
-<td><code>device_trees/ums512-rg-rotate.dtb</code></td>
-</tr>
-</tbody>
-</table></div>
-<p>Notes:</p>
-<ul>
-<li>The RG35XX SP's screen is 640x480, so it uses the same 720x540 menu layout and startup video as the RG35XX H.</li>
-<li>The RG35XX SP has its own RetroArch config (<code>config/retroarch-rg35xxsp.cfg</code>) and input profile: the stick axes and L3/R3 are unbound, and fast-forward and rewind move to <strong>Menu + Up</strong> and <strong>Menu + Down</strong>. See <a href="controls.html">CONTROLS.md</a>.</li>
-<li>Because the H700 image is MBR, there is no <code>uboot</code> partition and no SPL to flash on those consoles.</li>
-<li>The Rotate boots Android from internal storage when the card's U-Boot cannot start Linux. See <a href="troubleshooting.html">TROUBLESHOOTING.md</a>.</li>
-</ul>
-<h2 id="panel-revisions-and-ram-types">Panel revisions and RAM types</h2>
-<p>For the three H700 consoles two independent choices decide whether the screen works:</p>
-<ol>
-<li><strong>RAM type</strong> (<code>DDR4</code> default, or <code>DDR3</code>). A mismatch is a black screen with nothing written to the card.</li>
-<li><strong>Panel revision</strong>: standard device tree, or the alternate tree (<code>-v2-panel</code> on the RG34XXSP, <code>-rev6-panel</code> on the RG35XX H and SP). A wrong choice gives a black or garbled screen, but the card still boots far enough to write <code>rgos-initramfs.txt</code>.</li>
-</ol>
-<p>With an unknown console, try the four combinations. The RAM type matters only for fresh images; offline updates reuse the U-Boot already on the card.</p></article><div class="pn"><a href="installer.html"><small>Previous</small>First-boot installer</a><a class="r" href="sd-card-layout.html"><small>Next</small>SD card layout</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Supported devices · RG OS Docs</title>
+    <meta
+      name="description"
+      content="What differs between the RG34XXSP, RG35XX H, RG35XX SP and RG Rotate."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html" class="on" aria-current="page"
+          >Supported devices</a
+        >
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="supported-devices">Supported devices</h1>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Device</th>
+                  <th>Argument</th>
+                  <th>SoC</th>
+                  <th>Base image</th>
+                  <th>Partition table</th>
+                  <th>ROMS partition</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Anbernic RG34XXSP</td>
+                  <td><code>rg34xxsp</code></td>
+                  <td>Allwinner H700</td>
+                  <td>ROCKNIX-H700</td>
+                  <td>MBR</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>Anbernic RG35XX H</td>
+                  <td><code>rg35xxh</code></td>
+                  <td>Allwinner H700</td>
+                  <td>ROCKNIX-H700</td>
+                  <td>MBR</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>Anbernic RG35XX SP</td>
+                  <td><code>rg35xxsp</code></td>
+                  <td>Allwinner H700</td>
+                  <td>ROCKNIX-H700</td>
+                  <td>MBR</td>
+                  <td>3</td>
+                </tr>
+                <tr>
+                  <td>Anbernic RG Rotate</td>
+                  <td><code>rg-rotate</code></td>
+                  <td>Unisoc T618</td>
+                  <td>ROCKNIX-T618</td>
+                  <td>GPT (<code>uboot</code> partition 3)</td>
+                  <td>4</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The running device is stored in <code>/etc/rgos-device</code>.
+            Offline updates check it, and the menu uses it to pick layouts and
+            hide features.
+          </p>
+          <h2 id="what-differs-between-them">What differs between them</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>RG34XXSP</th>
+                  <th>RG35XX H</th>
+                  <th>RG35XX SP</th>
+                  <th>RG Rotate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Analog sticks</td>
+                  <td>
+                    enabled per <code>/etc/rgos/input-&lt;device&gt;.json</code>
+                  </td>
+                  <td>same</td>
+                  <td><strong>no</strong> (<code>"analog": false</code>)</td>
+                  <td>
+                    enabled per <code>/etc/rgos/input-&lt;device&gt;.json</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td>L2/R2, L3/R3</td>
+                  <td>yes</td>
+                  <td>yes</td>
+                  <td>no</td>
+                  <td>yes</td>
+                </tr>
+                <tr>
+                  <td>Bootloader</td>
+                  <td>stock U-Boot on the card, per RAM type</td>
+                  <td>same</td>
+                  <td>same</td>
+                  <td>SPL flashed once, U-Boot on card</td>
+                </tr>
+                <tr>
+                  <td>RAM choice at build</td>
+                  <td><code>H700_RAM</code> DDR4/DDR3</td>
+                  <td>same</td>
+                  <td>same</td>
+                  <td>not applicable</td>
+                </tr>
+                <tr>
+                  <td>Panel choice at build</td>
+                  <td><code>RG34XXSP_DTB</code></td>
+                  <td><code>RG35XXH_DTB</code></td>
+                  <td><code>RG35XXSP_DTB</code></td>
+                  <td>not applicable</td>
+                </tr>
+                <tr>
+                  <td>GameCube</td>
+                  <td>not shipped</td>
+                  <td>not shipped</td>
+                  <td>not shipped</td>
+                  <td>yes (Dolphin libretro)</td>
+                </tr>
+                <tr>
+                  <td>Device tree file</td>
+                  <td><code>dtb.img</code></td>
+                  <td><code>dtb.img</code></td>
+                  <td><code>dtb.img</code></td>
+                  <td><code>device_trees/ums512-rg-rotate.dtb</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Notes:</p>
+          <ul>
+            <li>
+              The RG35XX SP's screen is 640x480, so it uses the same 720x540
+              menu layout and startup video as the RG35XX H.
+            </li>
+            <li>
+              The RG35XX SP has its own RetroArch config
+              (<code>config/retroarch-rg35xxsp.cfg</code>) and input profile:
+              the stick axes and L3/R3 are unbound, and fast-forward and rewind
+              move to <strong>Menu + Up</strong> and
+              <strong>Menu + Down</strong>. See
+              <a href="controls.html">CONTROLS.md</a>.
+            </li>
+            <li>
+              Because the H700 image is MBR, there is no
+              <code>uboot</code> partition and no SPL to flash on those
+              consoles.
+            </li>
+            <li>
+              The Rotate boots Android from internal storage when the card's
+              U-Boot cannot start Linux. See
+              <a href="troubleshooting.html">TROUBLESHOOTING.md</a>.
+            </li>
+          </ul>
+          <h2 id="panel-revisions-and-ram-types">
+            Panel revisions and RAM types
+          </h2>
+          <p>
+            For the three H700 consoles two independent choices decide whether
+            the screen works:
+          </p>
+          <ol>
+            <li>
+              <strong>RAM type</strong> (<code>DDR4</code> default, or
+              <code>DDR3</code>). A mismatch is a black screen with nothing
+              written to the card.
+            </li>
+            <li>
+              <strong>Panel revision</strong>: standard device tree, or the
+              alternate tree (<code>-v2-panel</code> on the RG34XXSP,
+              <code>-rev6-panel</code> on the RG35XX H and SP). A wrong choice
+              gives a black or garbled screen, but the card still boots far
+              enough to write <code>rgos-initramfs.txt</code>.
+            </li>
+          </ol>
+          <p>
+            With an unknown console, try the four combinations. The RAM type
+            matters only for fresh images; offline updates reuse the U-Boot
+            already on the card.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="installer.html"
+            ><small>Previous</small>First-boot installer</a
+          ><a class="r" href="sd-card-layout.html"
+            ><small>Next</small>SD card layout</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

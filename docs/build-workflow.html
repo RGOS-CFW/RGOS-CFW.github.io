@@ -1,79 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Build RGOS in GitHub Actions · RG OS Docs</title>
-<meta name="description" content="Build images in GitHub Actions.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html" class="on" aria-current="page">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="build-rgos-in-github-actions">Build RGOS in GitHub Actions</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#run-it">Run it</a><a href="#runner-requirements">Runner requirements</a><a href="#important">Important</a><a href="#building-locally">Building locally</a></nav>
-<p>The workflow at <code>.github/workflows/build-rgos.yml</code> manually builds either a flashable disk image (<code>.img</code>) or an on-device update package (<code>.tar</code>) for the <strong>Anbernic RG34XXSP</strong>, <strong>RG35XX H</strong>, <strong>RG35XX SP</strong> and <strong>RG Rotate</strong> (<code>build.sh</code>: a Debian arm64 rootfs on each device's stock ROCKNIX image).</p>
-<h2 id="run-it">Run it</h2>
-<ol>
-<li>Push this repository to GitHub with the workflow file included.</li>
-<li>Open <strong>Actions → Build RGOS image or update → Run workflow</strong>.</li>
-<li>Choose the <code>device</code> (<code>rg34xxsp</code>, <code>rg35xxh</code>, <code>rg35xxsp</code>, <code>rg-rotate</code> or <code>all</code>) and <code>img</code> or <code>update-tar</code>.
-   - <code>img</code>: artifact <code>rgos-&lt;device&gt;-&lt;id&gt;-img</code> containing <code>&lt;device&gt;-rgos.img.gz</code> (gunzip it, then flash). The run checks that partition 1 carries the <code>RGOS</code> label (renamed from the stock <code>ROCKNIX</code>), <code>extlinux.conf</code> has <code>rdinit=/rgos-init</code>, and then the device-specific part: RG Rotate = partition 3 is <code>uboot</code> (GPT); RG34XXSP = MBR image with <code>dtb.img</code> present.
-   - <code>update-tar</code>: <code>rgos-update-&lt;device&gt;-&lt;id&gt;.tar</code> (manifest device is the one you chose: <code>rg-rotate</code>, <code>rg34xxsp</code>, <code>rg35xxh</code> or <code>rg35xxsp</code>; SHA-256 checked). Tick <em>update_extlinux</em> to include <code>extlinux.conf</code>.</li>
-<li>For <code>rg34xxsp</code>, <code>rg35xxh</code> and <code>rg35xxsp</code> pick <code>h700_ram</code> (<code>DDR4</code> default, <code>DDR3</code> for consoles with LPDDR3; the stock U-Boot is RAM-specific, the wrong one is a black screen) and <code>h700_panel</code> (<code>standard</code>, or <code>alt</code> for the <code>-v2-panel</code> / <code>-rev6-panel</code> device tree). Both are ignored for <code>rg-rotate</code>.
-   Optionally provide a build ID, turn off <em>build_psx</em> (skips the slow emulated PlayStation core build), turn off <em>portmaster</em> (builds without the preinstalled PortMaster, see <code>docs/PORTS.md</code>), turn off <em>build_gc</em> (skips the RG Rotate-only GameCube core, see <code>docs/GAMECUBE.md</code>) or override <em>rocknix_url</em> (not with <code>device=all</code>: each device has its own stock image).</li>
-<li>When the run succeeds, open its summary and download the artifact under <strong>Artifacts</strong>.</li>
-</ol>
-<p>The workflow installs debootstrap, qemu-user-static and the partitioning tools, frees runner disk space, runs <code>./build.sh &lt;device&gt; image|update</code>, and validates the result. Update tar files are checked against the SHA-256 hashes in <code>manifest.json</code>. Artifacts are retained for 14 days.</p>
-<h2 id="runner-requirements">Runner requirements</h2>
-<p>The build is large and can take hours. GitHub-hosted runners have limited free disk space; the Debian rootfs plus the downloaded ROCKNIX image may exceed it. If a run fails with <code>No space left on device</code> or is killed for memory pressure, use a Linux self-hosted runner with substantial free disk space (suggested: 50+ GB free disk and 16+ GB RAM), or adapt the workflow to provision more storage.</p>
-<h2 id="important">Important</h2>
-<ul>
-<li>An <code>.img</code> is a whole-disk image intended to be flashed to an SD card; flashing overwrites the selected drive.</li>
-<li>An update <code>.tar</code> is copied to the <code>update/</code> directory on the ROMS partition. It is not a disk image.</li>
-<li>The workflow runs only when manually started; it does not build on every push.</li>
-</ul>
-<h2 id="building-locally">Building locally</h2>
-<p><code>./build.sh &lt;rg34xxsp|rg35xxh|rg35xxsp|rg-rotate|all&gt; [image|update]</code> from the repository root, using <code>sudo</code> when it is not already root. <strong>A device is required</strong>: <code>sudo ./build.sh</code> on its own only prints the usage text and does nothing. Output goes to <code>out/</code> (<code>rg34xxsp-rgos.img</code>, <code>rg-rotate-rgos.img</code>); each device has its own work directory under <code>work/&lt;device&gt;/</code>. <code>all</code> builds the devices one after the other and needs roughly twice the disk space.</p>
-<p>RG34XXSP specifics (see the header of <code>build.sh</code>): the base is the stock ROCKNIX H700 image (<code>ROCKNIX-H700.aarch64-&lt;release&gt;-DDR4.img.gz</code> from the ROCKNIX releases; <code>H700_RAM=DDR3</code> / <code>ROCKNIX_H700_VERSION=&lt;tag&gt;</code> / <code>ROCKNIX_URL=&lt;url&gt;</code> change it). The image has an MBR, so there is no <code>uboot</code> partition and no SPL to flash; the build copies <code>device_trees/sun50i-h700-anbernic-rg34xx-sp.dtb</code> to <code>dtb.img</code> (<code>RG34XXSP_DTB=sun50i-h700-anbernic-rg34xx-sp-v2-panel</code> for the v2 panel) and then removes <code>device_trees/</code>, so <code>dtb.img</code> is the only device tree on the RGOS partition. The ROMS partition is created on first boot as partition 3.</p>
-<p>RG35XX SP specifics: same stock ROCKNIX H700 image as the RG34XXSP and RG35XX H. The build copies <code>device_trees/sun50i-h700-anbernic-rg35xx-sp.dtb</code> to <code>dtb.img</code> (<code>RG35XXSP_DTB=sun50i-h700-anbernic-rg35xx-sp-rev6-panel</code> if the screen shows garbage; if the dtb name is not in the stock image the build stops and lists the ones that are). The screen is 640x480, so it uses the RG35XX H's 720x540 menu layout and startup video. It has no analog sticks (and no L2/R2 or L3/R3), so it does not share the RG34XXSP's / RG35XX H's input setup: the image carries its own <code>config/retroarch-rg35xxsp.cfg</code> (stick axes and L3/R3 unbound, fast-forward on MENU+UP and rewind on MENU+DOWN instead of the triggers) and <code>/etc/rgos/input-rg35xxsp.json</code> with <code>"analog": false</code>, so the input hub publishes no axes. It never falls back to the RG34XXSP's RetroArch config.</p>
-<p>See also: <a href="building.html">BUILDING.md</a> for all environment variables, <a href="updates.html">UPDATES.md</a> for installing an update tar.</p></article><div class="pn"><a href="building.html"><small>Previous</small>Build options</a><span></span></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Build RGOS in GitHub Actions · RG OS Docs</title>
+    <meta name="description" content="Build images in GitHub Actions." />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html" class="on" aria-current="page"
+          >Build RGOS in GitHub Actions</a
+        >
+      </aside>
+      <main>
+        <article>
+          <h1 id="build-rgos-in-github-actions">
+            Build RGOS in GitHub Actions
+          </h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#run-it">Run it</a
+            ><a href="#runner-requirements">Runner requirements</a
+            ><a href="#important">Important</a
+            ><a href="#building-locally">Building locally</a>
+          </nav>
+          <p>
+            The workflow at
+            <code>.github/workflows/build-rgos.yml</code> manually builds either
+            a flashable disk image (<code>.img</code>) or an on-device update
+            package (<code>.tar</code>) for the
+            <strong>Anbernic RG34XXSP</strong>, <strong>RG35XX H</strong>,
+            <strong>RG35XX SP</strong> and
+            <strong>RG Rotate</strong> (<code>build.sh</code>: a Debian arm64
+            rootfs on each device's stock ROCKNIX image).
+          </p>
+          <h2 id="run-it">Run it</h2>
+          <ol>
+            <li>
+              Push this repository to GitHub with the workflow file included.
+            </li>
+            <li>
+              Open
+              <strong
+                >Actions → Build RGOS image or update → Run workflow</strong
+              >.
+            </li>
+            <li>
+              Choose the <code>device</code> (<code>rg34xxsp</code>,
+              <code>rg35xxh</code>, <code>rg35xxsp</code>,
+              <code>rg-rotate</code> or <code>all</code>) and
+              <code>img</code> or <code>update-tar</code>. - <code>img</code>:
+              artifact
+              <code>rgos-&lt;device&gt;-&lt;id&gt;-img</code> containing
+              <code>&lt;device&gt;-rgos.img.gz</code> (gunzip it, then flash).
+              The run checks that partition 1 carries the
+              <code>RGOS</code> label (renamed from the stock
+              <code>ROCKNIX</code>), <code>extlinux.conf</code> has
+              <code>rdinit=/rgos-init</code>, and then the device-specific part:
+              RG Rotate = partition 3 is <code>uboot</code> (GPT); RG34XXSP =
+              MBR image with <code>dtb.img</code> present. -
+              <code>update-tar</code>:
+              <code>rgos-update-&lt;device&gt;-&lt;id&gt;.tar</code> (manifest
+              device is the one you chose: <code>rg-rotate</code>,
+              <code>rg34xxsp</code>, <code>rg35xxh</code> or
+              <code>rg35xxsp</code>; SHA-256 checked). Tick
+              <em>update_extlinux</em> to include <code>extlinux.conf</code>.
+            </li>
+            <li>
+              For <code>rg34xxsp</code>, <code>rg35xxh</code> and
+              <code>rg35xxsp</code> pick <code>h700_ram</code> (<code
+                >DDR4</code
+              >
+              default, <code>DDR3</code> for consoles with LPDDR3; the stock
+              U-Boot is RAM-specific, the wrong one is a black screen) and
+              <code>h700_panel</code> (<code>standard</code>, or
+              <code>alt</code> for the <code>-v2-panel</code> /
+              <code>-rev6-panel</code> device tree). Both are ignored for
+              <code>rg-rotate</code>. Optionally provide a build ID, turn off
+              <em>build_psx</em> (skips the slow emulated PlayStation core
+              build), turn off <em>portmaster</em> (builds without the
+              preinstalled PortMaster, see <code>docs/PORTS.md</code>), turn off
+              <em>build_gc</em> (skips the RG Rotate-only GameCube core, see
+              <code>docs/GAMECUBE.md</code>) or override
+              <em>rocknix_url</em> (not with <code>device=all</code>: each
+              device has its own stock image).
+            </li>
+            <li>
+              When the run succeeds, open its summary and download the artifact
+              under <strong>Artifacts</strong>.
+            </li>
+          </ol>
+          <p>
+            The workflow installs debootstrap, qemu-user-static and the
+            partitioning tools, frees runner disk space, runs
+            <code>./build.sh &lt;device&gt; image|update</code>, and validates
+            the result. Update tar files are checked against the SHA-256 hashes
+            in <code>manifest.json</code>. Artifacts are retained for 14 days.
+          </p>
+          <h2 id="runner-requirements">Runner requirements</h2>
+          <p>
+            The build is large and can take hours. GitHub-hosted runners have
+            limited free disk space; the Debian rootfs plus the downloaded
+            ROCKNIX image may exceed it. If a run fails with
+            <code>No space left on device</code> or is killed for memory
+            pressure, use a Linux self-hosted runner with substantial free disk
+            space (suggested: 50+ GB free disk and 16+ GB RAM), or adapt the
+            workflow to provision more storage.
+          </p>
+          <h2 id="important">Important</h2>
+          <ul>
+            <li>
+              An <code>.img</code> is a whole-disk image intended to be flashed
+              to an SD card; flashing overwrites the selected drive.
+            </li>
+            <li>
+              An update <code>.tar</code> is copied to the
+              <code>update/</code> directory on the ROMS partition. It is not a
+              disk image.
+            </li>
+            <li>
+              The workflow runs only when manually started; it does not build on
+              every push.
+            </li>
+          </ul>
+          <h2 id="building-locally">Building locally</h2>
+          <p>
+            <code
+              >./build.sh &lt;rg34xxsp|rg35xxh|rg35xxsp|rg-rotate|all&gt;
+              [image|update]</code
+            >
+            from the repository root, using <code>sudo</code> when it is not
+            already root. <strong>A device is required</strong>:
+            <code>sudo ./build.sh</code> on its own only prints the usage text
+            and does nothing. Output goes to
+            <code>out/</code> (<code>rg34xxsp-rgos.img</code>,
+            <code>rg-rotate-rgos.img</code>); each device has its own work
+            directory under <code>work/&lt;device&gt;/</code>.
+            <code>all</code> builds the devices one after the other and needs
+            roughly twice the disk space.
+          </p>
+          <p>
+            RG34XXSP specifics (see the header of <code>build.sh</code>): the
+            base is the stock ROCKNIX H700 image (<code
+              >ROCKNIX-H700.aarch64-&lt;release&gt;-DDR4.img.gz</code
+            >
+            from the ROCKNIX releases; <code>H700_RAM=DDR3</code> /
+            <code>ROCKNIX_H700_VERSION=&lt;tag&gt;</code> /
+            <code>ROCKNIX_URL=&lt;url&gt;</code> change it). The image has an
+            MBR, so there is no <code>uboot</code> partition and no SPL to
+            flash; the build copies
+            <code>device_trees/sun50i-h700-anbernic-rg34xx-sp.dtb</code> to
+            <code>dtb.img</code> (<code
+              >RG34XXSP_DTB=sun50i-h700-anbernic-rg34xx-sp-v2-panel</code
+            >
+            for the v2 panel) and then removes <code>device_trees/</code>, so
+            <code>dtb.img</code> is the only device tree on the RGOS partition.
+            The ROMS partition is created on first boot as partition 3.
+          </p>
+          <p>
+            RG35XX SP specifics: same stock ROCKNIX H700 image as the RG34XXSP
+            and RG35XX H. The build copies
+            <code>device_trees/sun50i-h700-anbernic-rg35xx-sp.dtb</code> to
+            <code>dtb.img</code> (<code
+              >RG35XXSP_DTB=sun50i-h700-anbernic-rg35xx-sp-rev6-panel</code
+            >
+            if the screen shows garbage; if the dtb name is not in the stock
+            image the build stops and lists the ones that are). The screen is
+            640x480, so it uses the RG35XX H's 720x540 menu layout and startup
+            video. It has no analog sticks (and no L2/R2 or L3/R3), so it does
+            not share the RG34XXSP's / RG35XX H's input setup: the image carries
+            its own <code>config/retroarch-rg35xxsp.cfg</code> (stick axes and
+            L3/R3 unbound, fast-forward on MENU+UP and rewind on MENU+DOWN
+            instead of the triggers) and
+            <code>/etc/rgos/input-rg35xxsp.json</code> with
+            <code>"analog": false</code>, so the input hub publishes no axes. It
+            never falls back to the RG34XXSP's RetroArch config.
+          </p>
+          <p>
+            See also: <a href="building.html">BUILDING.md</a> for all
+            environment variables, <a href="updates.html">UPDATES.md</a> for
+            installing an update tar.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="building.html"><small>Previous</small>Build options</a
+          ><span></span>
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

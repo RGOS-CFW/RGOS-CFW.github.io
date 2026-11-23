@@ -1,257 +1,520 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>First-boot installer · RG OS Docs</title>
-<meta name="description" content="The first-boot installer image: partitioning, ROMS formats, controls.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html" class="on" aria-current="page">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="first-boot-installer">First-boot installer</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#menu-motion">Menu motion</a><a href="#build">Build</a><a href="#the-install-screen">The install screen</a><a href="#what-the-installer-does">What the installer does</a><a href="#your-own-files-in-the-installer">Your own files in the installer</a><a href="#options">Options</a><a href="#if-something-fails">If something fails</a><a href="#files">Files</a><a href="#notes">Notes</a></nav>
-<p>An <strong>installer image</strong> works like the MustardOS / muOS one: you write it to an SD card and boot the console once. It opens on a welcome screen with two square icon buttons side by side, <strong>Install</strong> (an arrow into a tray) and <strong>Power off</strong> (the power symbol). Choose Install and a popup asks which file system the <strong>ROMS</strong> partition should use (FAT32, exFAT or ext4); then a progress screen partitions the card and installs everything; when it finishes the device restarts into RG OS. Choose Power off and the console switches off without changing anything on the card.</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Control</th>
-<th>On the welcome screen</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>D-pad left / right (up / down works too)</td>
-<td>Move between Install and Power off</td>
-</tr>
-<tr>
-<td><strong>A</strong> (or START)</td>
-<td>Confirm the highlighted button</td>
-</tr>
-</tbody>
-</table></div>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Control</th>
-<th>On the ROMS format popup</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>D-pad up / down (left / right works too)</td>
-<td>Move between FAT32, exFAT and ext4</td>
-</tr>
-<tr>
-<td><strong>A</strong> (or START)</td>
-<td>Format ROMS with the highlighted file system and start installing</td>
-</tr>
-<tr>
-<td><strong>B</strong></td>
-<td>Go back to the welcome screen (nothing has been changed)</td>
-</tr>
-</tbody>
-</table></div>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Format</th>
-<th>Good for</th>
-<th>Limits</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>FAT32</td>
-<td>Reads on every PC, Mac and console</td>
-<td>A single file cannot be bigger than 4 GB</td>
-</tr>
-<tr>
-<td>exFAT (default, recommended)</td>
-<td>Windows, macOS and Linux, big files</td>
-<td>None that matter for games</td>
-</tr>
-<tr>
-<td>ext4</td>
-<td>Linux-native, journaled</td>
-<td>Windows cannot read it without extra software; macOS needs a driver</td>
-</tr>
-</tbody>
-</table></div>
-<p>The choice only applies to a <strong>new</strong> ROMS partition. A card that already has a formatted ROMS partition keeps its file system, so existing games are never wiped. The popup does not appear on a card with no screen: the install runs on its own with exFAT.</p>
-<p>If the console has no usable screen there is nothing to choose with, so the install runs on its own.</p>
-<h2 id="menu-motion">Menu motion</h2>
-<p>The welcome screen and the format popup move like the RG OS launcher. The motion is a port of the launcher's (<code>rgos/uimotion.py</code>, same spring constants, easing and frame rates as <code>menu.py</code>), so the two feel the same:</p>
-<ul>
-<li><strong>Entrance.</strong> The Install and Power off tiles pop in one after another: each glides up and fades in with a small stagger.</li>
-<li><strong>Focus ring.</strong> One ring springs between the tiles with about 5% overshoot and breathes softly when it rests.</li>
-<li><strong>Tiles.</strong> The selected tile lifts 4 px, eases to its selected colour (the same eased 3D buttons as the launcher), and gets a diagonal shine sweep every few seconds. Embers drift up behind everything.</li>
-<li><strong>Caption.</strong> The line under the tiles fades up after every move.</li>
-<li><strong>Format popup.</strong> It rises in each time it opens; each row's colour, border and radio dot ease in and out as the highlight moves, and the welcome screen stays dimmed behind it with the ring where it was.</li>
-<li><strong>Between screens.</strong> Welcome, popup and install console crossfade into each other (0.18 s for the popup, 0.35 s into the console), and the console's progress bar glides to each new value.</li>
-</ul>
-<p>Like the launcher, it draws at 60 frames per second only while something moves (and for half a second after a button press), at 30 otherwise and at 15 after three idle seconds; the console never drops below 30 because it keeps scrolling. While you are using the menu the CPU and GPU clocks are held at <code>performance</code> (<code>rgos/uiboost.py</code>, <code>RGOS_UI_BOOST=0</code> turns it off) and put back when the installer exits.</p>
-<h2 id="build">Build</h2>
-<pre><code>sudo ./build.sh rg34xxsp installer      # out/rg34xxsp-rgos-installer.img
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>First-boot installer · RG OS Docs</title>
+    <meta
+      name="description"
+      content="The first-boot installer image: partitioning, ROMS formats, controls."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html" class="on" aria-current="page"
+          >First-boot installer</a
+        >
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="first-boot-installer">First-boot installer</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#menu-motion">Menu motion</a
+            ><a href="#build">Build</a
+            ><a href="#the-install-screen">The install screen</a
+            ><a href="#what-the-installer-does">What the installer does</a
+            ><a href="#your-own-files-in-the-installer"
+              >Your own files in the installer</a
+            ><a href="#options">Options</a
+            ><a href="#if-something-fails">If something fails</a
+            ><a href="#files">Files</a><a href="#notes">Notes</a>
+          </nav>
+          <p>
+            An <strong>installer image</strong> works like the MustardOS / muOS
+            one: you write it to an SD card and boot the console once. It opens
+            on a welcome screen with two square icon buttons side by side,
+            <strong>Install</strong> (an arrow into a tray) and
+            <strong>Power off</strong> (the power symbol). Choose Install and a
+            popup asks which file system the <strong>ROMS</strong> partition
+            should use (FAT32, exFAT or ext4); then a progress screen partitions
+            the card and installs everything; when it finishes the device
+            restarts into RG OS. Choose Power off and the console switches off
+            without changing anything on the card.
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>On the welcome screen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>D-pad left / right (up / down works too)</td>
+                  <td>Move between Install and Power off</td>
+                </tr>
+                <tr>
+                  <td><strong>A</strong> (or START)</td>
+                  <td>Confirm the highlighted button</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Control</th>
+                  <th>On the ROMS format popup</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>D-pad up / down (left / right works too)</td>
+                  <td>Move between FAT32, exFAT and ext4</td>
+                </tr>
+                <tr>
+                  <td><strong>A</strong> (or START)</td>
+                  <td>
+                    Format ROMS with the highlighted file system and start
+                    installing
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>B</strong></td>
+                  <td>
+                    Go back to the welcome screen (nothing has been changed)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Format</th>
+                  <th>Good for</th>
+                  <th>Limits</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>FAT32</td>
+                  <td>Reads on every PC, Mac and console</td>
+                  <td>A single file cannot be bigger than 4 GB</td>
+                </tr>
+                <tr>
+                  <td>exFAT (default, recommended)</td>
+                  <td>Windows, macOS and Linux, big files</td>
+                  <td>None that matter for games</td>
+                </tr>
+                <tr>
+                  <td>ext4</td>
+                  <td>Linux-native, journaled</td>
+                  <td>
+                    Windows cannot read it without extra software; macOS needs a
+                    driver
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The choice only applies to a <strong>new</strong> ROMS partition. A
+            card that already has a formatted ROMS partition keeps its file
+            system, so existing games are never wiped. The popup does not appear
+            on a card with no screen: the install runs on its own with exFAT.
+          </p>
+          <p>
+            If the console has no usable screen there is nothing to choose with,
+            so the install runs on its own.
+          </p>
+          <h2 id="menu-motion">Menu motion</h2>
+          <p>
+            The welcome screen and the format popup move like the RG OS
+            launcher. The motion is a port of the launcher's
+            (<code>rgos/uimotion.py</code>, same spring constants, easing and
+            frame rates as <code>menu.py</code>), so the two feel the same:
+          </p>
+          <ul>
+            <li>
+              <strong>Entrance.</strong> The Install and Power off tiles pop in
+              one after another: each glides up and fades in with a small
+              stagger.
+            </li>
+            <li>
+              <strong>Focus ring.</strong> One ring springs between the tiles
+              with about 5% overshoot and breathes softly when it rests.
+            </li>
+            <li>
+              <strong>Tiles.</strong> The selected tile lifts 4 px, eases to its
+              selected colour (the same eased 3D buttons as the launcher), and
+              gets a diagonal shine sweep every few seconds. Embers drift up
+              behind everything.
+            </li>
+            <li>
+              <strong>Caption.</strong> The line under the tiles fades up after
+              every move.
+            </li>
+            <li>
+              <strong>Format popup.</strong> It rises in each time it opens;
+              each row's colour, border and radio dot ease in and out as the
+              highlight moves, and the welcome screen stays dimmed behind it
+              with the ring where it was.
+            </li>
+            <li>
+              <strong>Between screens.</strong> Welcome, popup and install
+              console crossfade into each other (0.18 s for the popup, 0.35 s
+              into the console), and the console's progress bar glides to each
+              new value.
+            </li>
+          </ul>
+          <p>
+            Like the launcher, it draws at 60 frames per second only while
+            something moves (and for half a second after a button press), at 30
+            otherwise and at 15 after three idle seconds; the console never
+            drops below 30 because it keeps scrolling. While you are using the
+            menu the CPU and GPU clocks are held at
+            <code>performance</code> (<code>rgos/uiboost.py</code>,
+            <code>RGOS_UI_BOOST=0</code> turns it off) and put back when the
+            installer exits.
+          </p>
+          <h2 id="build">Build</h2>
+          <pre><code>sudo ./build.sh rg34xxsp installer      # out/rg34xxsp-rgos-installer.img
 sudo ./build.sh all installer           # all four devices
 </code></pre>
-<p>It takes the same environment variables as a normal image (<a href="building.html">BUILDING.md</a>). Write the <code>.img</code> to the whole card like any other image (<a href="getting-started.html">GETTING-STARTED.md</a>).</p>
-<h2 id="the-install-screen">The install screen</h2>
-<p>While it installs, the screen is a fake "kernel exploit" console: green text scrolling on black (addresses, hex dumps, "race won", "uid=0(root)" and so on), with a blinking prompt at the bottom. It is only for show: nothing in it is real and none of it touches the console. It runs for 10 to 15 seconds (picked at random each time) at the very least. If the real install takes longer it keeps scrolling until the install is finished, then prints a few closing lines and restarts. If the install fails, the scrolling stops and the reason appears in red under it with the same <strong>A</strong> / <strong>B</strong> choices as before (see below). The text is generated in <code>console_script()</code> in <code>rgos/rgos-installer</code>.</p>
-<h2 id="what-the-installer-does">What the installer does</h2>
-<p>Everything below happens after you choose <strong>Install</strong>.</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Step</th>
-<th>What happens</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Partitioning the SD card</td>
-<td><code>rgos-roms</code> creates the <strong>ROMS</strong> partition in the free space after the system partitions and formats it with the file system you picked (exFAT by default; partition 3 on the H700 consoles, 4 on the RG Rotate). The old partition table is backed up to the boot partition. A card whose layout is not recognised is left alone and the installer reports it.</td>
-</tr>
-<tr>
-<td>Creating folders</td>
-<td><code>roms/&lt;system&gt;/</code>, <code>saves/&lt;system&gt;/</code>, <code>states/&lt;system&gt;/</code>, <code>bios/</code>, <code>cores/</code>, <code>config/</code>, <code>music/</code>, <code>screenshots/</code>, <code>splash/</code>, <code>update/</code> and <code>artwork/</code>.</td>
-</tr>
-<tr>
-<td>Installing Emulator cores</td>
-<td>Every libretro core of the build (<code>cores</code>) is unpacked into <code>cores/</code> on ROMS, where the launcher and the Core Installer already look.</td>
-</tr>
-<tr>
-<td>Installing PortMaster</td>
-<td>Unpacked into <code>roms/ports/PortMaster</code>. If that folder already exists it is left alone, so a PortMaster that updated itself is never rolled back.</td>
-</tr>
-<tr>
-<td>Installing Extra files</td>
-<td>Only when the build had an <code>extras/</code> folder (below).</td>
-</tr>
-<tr>
-<td>Finishing up</td>
-<td>Writes <code>rgos-installed.json</code> on the boot partition, deletes the payload, restarts.</td>
-</tr>
-</tbody>
-</table></div>
-<p>RetroArch itself and the RG OS system are the <code>SYSTEM</code> file the console just booted from; they are not copied again. The payload is what lives <em>outside</em> it: the cores, PortMaster and your extras.</p>
-<p>Nothing on the ROMS partition is ever deleted. Each archive is checked against its SHA-256 while it is unpacked.</p>
-<h2 id="your-own-files-in-the-installer">Your own files in the installer</h2>
-<p>Put files in an <code>extras/</code> folder next to <code>build.sh</code> before building. Its contents are unpacked into the <strong>root of the ROMS partition</strong>, for example <code>extras/bios/gba_bios.bin</code> or <code>extras/music/theme.mp3</code>. Only add files you may legally redistribute.</p>
-<h2 id="options">Options</h2>
-<p>Create <code>rgos-install.txt</code> in the root of the boot partition (the small FAT one) before the first boot. One <code>key=value</code> per line:</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Key</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>skip_install=1</code></td>
-<td>Never run the installer on this card; boot RG OS as it is</td>
-</tr>
-<tr>
-<td><code>keep_payload=1</code></td>
-<td>Keep <code>/rgos-payload</code> after a successful install</td>
-</tr>
-<tr>
-<td><code>skip=cores,portmaster</code></td>
-<td>Leave those components out (ids are the archive names in <code>/rgos-payload</code>)</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="if-something-fails">If something fails</h2>
-<p>The screen stays up with the reason. <strong>A</strong> tries again, <strong>B</strong> starts RG OS without finishing (the installer runs again on the next boot). Components that already finished are remembered in <code>rgos-install-state.json</code>, so a retry continues where it stopped.</p>
-<p>The log is <code>rgos-install-log.txt</code> on the boot partition (live: <code>/var/log/rgos-installer.log</code>; partitioning detail: <code>/var/log/rgos-roms.log</code>).</p>
-<p>To reinstall later: with <code>keep_payload=1</code> set, delete <code>rgos-installed.json</code> from the boot partition and boot. Without it, flash the installer image again, or use the Core Installer and PortMaster itself.</p>
-<p>To stop the installer for good on a card that keeps failing, delete the <code>rgos-payload</code> folder from the boot partition (or add <code>skip_install=1</code>).</p>
-<h2 id="files">Files</h2>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>File</th>
-<th>Where</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>rgos-payload/</code></td>
-<td>boot partition</td>
-<td>Archives plus <code>manifest.json</code>; removed after a successful install</td>
-</tr>
-<tr>
-<td><code>rgos-installed.json</code></td>
-<td>boot partition</td>
-<td>Build id, device, time, installed components; its presence means "installed"</td>
-</tr>
-<tr>
-<td><code>rgos-install-state.json</code></td>
-<td>boot partition</td>
-<td>Components finished so far (only while an install is unfinished)</td>
-</tr>
-<tr>
-<td><code>rgos-install.txt</code></td>
-<td>boot partition</td>
-<td>Your options (above)</td>
-</tr>
-<tr>
-<td><code>rgos-install-log.txt</code></td>
-<td>boot partition</td>
-<td>Copy of the installer log</td>
-</tr>
-<tr>
-<td><code>rgos-roms-fs</code></td>
-<td>boot partition</td>
-<td>The file system chosen for ROMS (<code>fat32</code>, <code>exfat</code> or <code>ext4</code>); <code>rgos-roms</code> reads it if the installer is interrupted before the partition is formatted</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="notes">Notes</h2>
-<ul>
-<li>The boot partition keeps the size of the stock ROCKNIX image, and the payload has to fit on it next to <code>SYSTEM</code>. <code>build.sh</code> stops with an error when it does not.</li>
-<li>Offline updates (<code>./build.sh &lt;device&gt; update</code>) are built the normal way and replace only <code>SYSTEM</code> and the boot files, so they work on an installed card.</li>
-<li>Code: <code>rgos/installer.py</code> (logic), <code>rgos/rgos-installer</code> (welcome screen, ROMS format popup and progress screens; exit status 10 = restart, 20 = power off), <code>tools/mkpayload.py</code> (payload packer), hook in <code>rgos/rgos-session</code>.</li>
-</ul></article><div class="pn"><a href="getting-started.html"><small>Previous</small>Getting started</a><a class="r" href="devices.html"><small>Next</small>Supported devices</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+          <p>
+            It takes the same environment variables as a normal image (<a
+              href="building.html"
+              >BUILDING.md</a
+            >). Write the <code>.img</code> to the whole card like any other
+            image (<a href="getting-started.html">GETTING-STARTED.md</a>).
+          </p>
+          <h2 id="the-install-screen">The install screen</h2>
+          <p>
+            While it installs, the screen is a fake "kernel exploit" console:
+            green text scrolling on black (addresses, hex dumps, "race won",
+            "uid=0(root)" and so on), with a blinking prompt at the bottom. It
+            is only for show: nothing in it is real and none of it touches the
+            console. It runs for 10 to 15 seconds (picked at random each time)
+            at the very least. If the real install takes longer it keeps
+            scrolling until the install is finished, then prints a few closing
+            lines and restarts. If the install fails, the scrolling stops and
+            the reason appears in red under it with the same
+            <strong>A</strong> / <strong>B</strong> choices as before (see
+            below). The text is generated in <code>console_script()</code> in
+            <code>rgos/rgos-installer</code>.
+          </p>
+          <h2 id="what-the-installer-does">What the installer does</h2>
+          <p>
+            Everything below happens after you choose <strong>Install</strong>.
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>What happens</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Partitioning the SD card</td>
+                  <td>
+                    <code>rgos-roms</code> creates the
+                    <strong>ROMS</strong> partition in the free space after the
+                    system partitions and formats it with the file system you
+                    picked (exFAT by default; partition 3 on the H700 consoles,
+                    4 on the RG Rotate). The old partition table is backed up to
+                    the boot partition. A card whose layout is not recognised is
+                    left alone and the installer reports it.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Creating folders</td>
+                  <td>
+                    <code>roms/&lt;system&gt;/</code>,
+                    <code>saves/&lt;system&gt;/</code>,
+                    <code>states/&lt;system&gt;/</code>, <code>bios/</code>,
+                    <code>cores/</code>, <code>config/</code>,
+                    <code>music/</code>, <code>screenshots/</code>,
+                    <code>splash/</code>, <code>update/</code> and
+                    <code>artwork/</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Installing Emulator cores</td>
+                  <td>
+                    Every libretro core of the build (<code>cores</code>) is
+                    unpacked into <code>cores/</code> on ROMS, where the
+                    launcher and the Core Installer already look.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Installing PortMaster</td>
+                  <td>
+                    Unpacked into <code>roms/ports/PortMaster</code>. If that
+                    folder already exists it is left alone, so a PortMaster that
+                    updated itself is never rolled back.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Installing Extra files</td>
+                  <td>
+                    Only when the build had an <code>extras/</code> folder
+                    (below).
+                  </td>
+                </tr>
+                <tr>
+                  <td>Finishing up</td>
+                  <td>
+                    Writes <code>rgos-installed.json</code> on the boot
+                    partition, deletes the payload, restarts.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            RetroArch itself and the RG OS system are the
+            <code>SYSTEM</code> file the console just booted from; they are not
+            copied again. The payload is what lives <em>outside</em> it: the
+            cores, PortMaster and your extras.
+          </p>
+          <p>
+            Nothing on the ROMS partition is ever deleted. Each archive is
+            checked against its SHA-256 while it is unpacked.
+          </p>
+          <h2 id="your-own-files-in-the-installer">
+            Your own files in the installer
+          </h2>
+          <p>
+            Put files in an <code>extras/</code> folder next to
+            <code>build.sh</code> before building. Its contents are unpacked
+            into the <strong>root of the ROMS partition</strong>, for example
+            <code>extras/bios/gba_bios.bin</code> or
+            <code>extras/music/theme.mp3</code>. Only add files you may legally
+            redistribute.
+          </p>
+          <h2 id="options">Options</h2>
+          <p>
+            Create <code>rgos-install.txt</code> in the root of the boot
+            partition (the small FAT one) before the first boot. One
+            <code>key=value</code> per line:
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Effect</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>skip_install=1</code></td>
+                  <td>
+                    Never run the installer on this card; boot RG OS as it is
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>keep_payload=1</code></td>
+                  <td>
+                    Keep <code>/rgos-payload</code> after a successful install
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>skip=cores,portmaster</code></td>
+                  <td>
+                    Leave those components out (ids are the archive names in
+                    <code>/rgos-payload</code>)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="if-something-fails">If something fails</h2>
+          <p>
+            The screen stays up with the reason. <strong>A</strong> tries again,
+            <strong>B</strong> starts RG OS without finishing (the installer
+            runs again on the next boot). Components that already finished are
+            remembered in <code>rgos-install-state.json</code>, so a retry
+            continues where it stopped.
+          </p>
+          <p>
+            The log is <code>rgos-install-log.txt</code> on the boot partition
+            (live: <code>/var/log/rgos-installer.log</code>; partitioning
+            detail: <code>/var/log/rgos-roms.log</code>).
+          </p>
+          <p>
+            To reinstall later: with <code>keep_payload=1</code> set, delete
+            <code>rgos-installed.json</code> from the boot partition and boot.
+            Without it, flash the installer image again, or use the Core
+            Installer and PortMaster itself.
+          </p>
+          <p>
+            To stop the installer for good on a card that keeps failing, delete
+            the <code>rgos-payload</code> folder from the boot partition (or add
+            <code>skip_install=1</code>).
+          </p>
+          <h2 id="files">Files</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Where</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>rgos-payload/</code></td>
+                  <td>boot partition</td>
+                  <td>
+                    Archives plus <code>manifest.json</code>; removed after a
+                    successful install
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-installed.json</code></td>
+                  <td>boot partition</td>
+                  <td>
+                    Build id, device, time, installed components; its presence
+                    means "installed"
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-install-state.json</code></td>
+                  <td>boot partition</td>
+                  <td>
+                    Components finished so far (only while an install is
+                    unfinished)
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-install.txt</code></td>
+                  <td>boot partition</td>
+                  <td>Your options (above)</td>
+                </tr>
+                <tr>
+                  <td><code>rgos-install-log.txt</code></td>
+                  <td>boot partition</td>
+                  <td>Copy of the installer log</td>
+                </tr>
+                <tr>
+                  <td><code>rgos-roms-fs</code></td>
+                  <td>boot partition</td>
+                  <td>
+                    The file system chosen for ROMS (<code>fat32</code>,
+                    <code>exfat</code> or <code>ext4</code>);
+                    <code>rgos-roms</code> reads it if the installer is
+                    interrupted before the partition is formatted
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="notes">Notes</h2>
+          <ul>
+            <li>
+              The boot partition keeps the size of the stock ROCKNIX image, and
+              the payload has to fit on it next to <code>SYSTEM</code>.
+              <code>build.sh</code> stops with an error when it does not.
+            </li>
+            <li>
+              Offline updates (<code>./build.sh &lt;device&gt; update</code>)
+              are built the normal way and replace only <code>SYSTEM</code> and
+              the boot files, so they work on an installed card.
+            </li>
+            <li>
+              Code: <code>rgos/installer.py</code> (logic),
+              <code>rgos/rgos-installer</code> (welcome screen, ROMS format
+              popup and progress screens; exit status 10 = restart, 20 = power
+              off), <code>tools/mkpayload.py</code> (payload packer), hook in
+              <code>rgos/rgos-session</code>.
+            </li>
+          </ul>
+        </article>
+        <div class="pn">
+          <a href="getting-started.html"
+            ><small>Previous</small>Getting started</a
+          ><a class="r" href="devices.html"
+            ><small>Next</small>Supported devices</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

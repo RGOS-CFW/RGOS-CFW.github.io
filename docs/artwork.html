@@ -1,114 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Game artwork (SteamGridDB) · RG OS Docs</title>
-<meta name="description" content="Download cover art from SteamGridDB.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html" class="on" aria-current="page">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="game-artwork-steamgriddb">Game artwork (SteamGridDB)</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#setup">Setup</a><a href="#what-it-does">What it does</a><a href="#files">Files</a><a href="#troubleshooting">Troubleshooting</a></nav>
-<p>RG OS can download cover art for your games from <a href="https://www.steamgriddb.com">SteamGridDB</a>.
-Covers show in the details panel on the right of the game list.</p>
-<h2 id="setup">Setup</h2>
-<ol>
-<li>Make a free account on steamgriddb.com and copy your API key from
-   <em>Preferences &gt; API</em>.</li>
-<li>Connect the console to Wi-Fi (<em>Settings &gt; Wi-Fi</em>).</li>
-<li>Open <em>Settings &gt; Game artwork</em>.</li>
-<li>Choose <strong>SteamGridDB API key</strong> and type the key with the on-screen keyboard.
-   Typing 32 characters on a handheld is slow, so there is a shortcut: put a text file called
-   <code>steamgriddb-key.txt</code> (key on the first line) in the <code>rgos-data</code> folder of the ROMS card and it
-   is picked up automatically. (A file in the ROMS root from older versions still works.)</li>
-<li>Choose <strong>Download missing artwork</strong>. Progress is shown on screen; X stops it and a later run
-   carries on where it stopped.</li>
-</ol>
-<h2 id="what-it-does">What it does</h2>
-<ul>
-<li>Every ROM title is cleaned (region tags removed, "Zelda, The" turned into "The Zelda") and
-  searched on SteamGridDB. A result is only used when its name is a close match, so an unknown
-  homebrew game gets no cover rather than a wrong one.</li>
-<li>The highest-rated still portrait cover is downloaded (600x900 or similar, no NSFW, humor or
-  flashing images) and shrunk so cards load quickly.</li>
-<li>Games with no match are remembered in <code>artwork/.misses.json</code> and not asked about again for
-  30 days. <strong>Retry games with no match</strong> clears that list.</li>
-<li>The API key is only ever sent to <code>steamgriddb.com</code>. Image downloads are accepted only from
-  <code>*.steamgriddb.com</code> over HTTPS.</li>
-</ul>
-<h2 id="files">Files</h2>
-<p>Everything lives on the ROMS card, so you can look at it or edit it from a PC:</p>
-<pre><code>artwork/&lt;system&gt;/&lt;rom file name without extension&gt;.png   (or .jpg)
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Game artwork (SteamGridDB) · RG OS Docs</title>
+    <meta name="description" content="Download cover art from SteamGridDB." />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html" class="on" aria-current="page"
+          >Game artwork (SteamGridDB)</a
+        >
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="game-artwork-steamgriddb">Game artwork (SteamGridDB)</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#setup">Setup</a
+            ><a href="#what-it-does">What it does</a><a href="#files">Files</a
+            ><a href="#troubleshooting">Troubleshooting</a>
+          </nav>
+          <p>
+            RG OS can download cover art for your games from
+            <a href="https://www.steamgriddb.com">SteamGridDB</a>. Covers show
+            in the details panel on the right of the game list.
+          </p>
+          <h2 id="setup">Setup</h2>
+          <ol>
+            <li>
+              Make a free account on steamgriddb.com and copy your API key from
+              <em>Preferences &gt; API</em>.
+            </li>
+            <li>
+              Connect the console to Wi-Fi (<em>Settings &gt; Wi-Fi</em>).
+            </li>
+            <li>Open <em>Settings &gt; Game artwork</em>.</li>
+            <li>
+              Choose <strong>SteamGridDB API key</strong> and type the key with
+              the on-screen keyboard. Typing 32 characters on a handheld is
+              slow, so there is a shortcut: put a text file called
+              <code>steamgriddb-key.txt</code> (key on the first line) in the
+              <code>rgos-data</code> folder of the ROMS card and it is picked up
+              automatically. (A file in the ROMS root from older versions still
+              works.)
+            </li>
+            <li>
+              Choose <strong>Download missing artwork</strong>. Progress is
+              shown on screen; X stops it and a later run carries on where it
+              stopped.
+            </li>
+          </ol>
+          <h2 id="what-it-does">What it does</h2>
+          <ul>
+            <li>
+              Every ROM title is cleaned (region tags removed, "Zelda, The"
+              turned into "The Zelda") and searched on SteamGridDB. A result is
+              only used when its name is a close match, so an unknown homebrew
+              game gets no cover rather than a wrong one.
+            </li>
+            <li>
+              The highest-rated still portrait cover is downloaded (600x900 or
+              similar, no NSFW, humor or flashing images) and shrunk so cards
+              load quickly.
+            </li>
+            <li>
+              Games with no match are remembered in
+              <code>artwork/.misses.json</code> and not asked about again for 30
+              days. <strong>Retry games with no match</strong> clears that list.
+            </li>
+            <li>
+              The API key is only ever sent to <code>steamgriddb.com</code>.
+              Image downloads are accepted only from
+              <code>*.steamgriddb.com</code> over HTTPS.
+            </li>
+          </ul>
+          <h2 id="files">Files</h2>
+          <p>
+            Everything lives on the ROMS card, so you can look at it or edit it
+            from a PC:
+          </p>
+          <pre><code>artwork/&lt;system&gt;/&lt;rom file name without extension&gt;.png   (or .jpg)
 artwork/.misses.json
 artwork/overrides.json
 </code></pre>
-<ul>
-<li><strong>Your own pictures work.</strong> Drop an image named like the ROM into <code>artwork/&lt;system&gt;/</code> and it
-  is used. The scraper never overwrites a file that is already there.</li>
-<li>
-<p><strong>Wrong or missing match?</strong> <code>artwork/overrides.json</code> pins a game to a SteamGridDB game id
-  (the number in the game's page URL), for example:</p>
-<p>{"snes/Chrono Trigger (USA)": 5251}</p>
-</li>
-<li>
-<p><strong>Square covers instead of portrait:</strong> create <code>/etc/rgos/steamgriddb.json</code> containing
-  <code>{"shape": "square"}</code> (or <code>"any"</code>). The key saved from the menu is stored in the same file.</p>
-</li>
-<li><strong>Hide artwork</strong> without deleting it: <em>Settings &gt; Game artwork &gt; Show artwork on game cards</em>.</li>
-</ul>
-<h2 id="troubleshooting">Troubleshooting</h2>
-<ul>
-<li><em>"Secure connection failed (is the clock set correctly?)"</em>: the HTTPS certificate check needs
-  a roughly correct date and many handhelds have no battery-backed clock. Set the date, or wait
-  for the system clock to sync, and try again. Certificate checking is never turned off.</li>
-<li><em>"The API key was rejected"</em>: re-enter the key, or check it still exists in your SteamGridDB
-  preferences.</li>
-<li><em>"No internet connection"</em>: connect Wi-Fi in <em>Settings &gt; Wi-Fi</em>.</li>
-<li><em>"No internet connection (DNS lookup failed)"</em> while Wi-Fi shows connected: the image must be built with
-  the <code>/etc/resolv.conf -&gt; /run/rgos/resolv.conf</code> link (<code>build.sh</code> does this). The scraper also asks DNS
-  directly as a fallback. Details of every failed request are written to <code>/var/log/rgos-artwork.log</code>, which
-  is included in <code>rgos-logs.txt</code>.</li>
-</ul>
-<p>See also: <a href="networking.html">NETWORKING.md</a> for Wi-Fi, <a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>.</p></article><div class="pn"><a href="networking.html"><small>Previous</small>Wi-Fi, Bluetooth and SSH</a><a class="r" href="ports.html"><small>Next</small>Native Linux ports</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+          <ul>
+            <li>
+              <strong>Your own pictures work.</strong> Drop an image named like
+              the ROM into <code>artwork/&lt;system&gt;/</code> and it is used.
+              The scraper never overwrites a file that is already there.
+            </li>
+            <li>
+              <p>
+                <strong>Wrong or missing match?</strong>
+                <code>artwork/overrides.json</code> pins a game to a SteamGridDB
+                game id (the number in the game's page URL), for example:
+              </p>
+              <p>{"snes/Chrono Trigger (USA)": 5251}</p>
+            </li>
+            <li>
+              <p>
+                <strong>Square covers instead of portrait:</strong> create
+                <code>/etc/rgos/steamgriddb.json</code> containing
+                <code>{"shape": "square"}</code> (or <code>"any"</code>). The
+                key saved from the menu is stored in the same file.
+              </p>
+            </li>
+            <li>
+              <strong>Hide artwork</strong> without deleting it:
+              <em>Settings &gt; Game artwork &gt; Show artwork on game cards</em
+              >.
+            </li>
+          </ul>
+          <h2 id="troubleshooting">Troubleshooting</h2>
+          <ul>
+            <li>
+              <em>"Secure connection failed (is the clock set correctly?)"</em>:
+              the HTTPS certificate check needs a roughly correct date and many
+              handhelds have no battery-backed clock. Set the date, or wait for
+              the system clock to sync, and try again. Certificate checking is
+              never turned off.
+            </li>
+            <li>
+              <em>"The API key was rejected"</em>: re-enter the key, or check it
+              still exists in your SteamGridDB preferences.
+            </li>
+            <li>
+              <em>"No internet connection"</em>: connect Wi-Fi in
+              <em>Settings &gt; Wi-Fi</em>.
+            </li>
+            <li>
+              <em>"No internet connection (DNS lookup failed)"</em> while Wi-Fi
+              shows connected: the image must be built with the
+              <code>/etc/resolv.conf -&gt; /run/rgos/resolv.conf</code> link
+              (<code>build.sh</code> does this). The scraper also asks DNS
+              directly as a fallback. Details of every failed request are
+              written to <code>/var/log/rgos-artwork.log</code>, which is
+              included in <code>rgos-logs.txt</code>.
+            </li>
+          </ul>
+          <p>
+            See also: <a href="networking.html">NETWORKING.md</a> for Wi-Fi,
+            <a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="networking.html"
+            ><small>Previous</small>Wi-Fi, Bluetooth and SSH</a
+          ><a class="r" href="ports.html"
+            ><small>Next</small>Native Linux ports</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

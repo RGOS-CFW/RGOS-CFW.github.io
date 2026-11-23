@@ -1,124 +1,288 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Getting started · RG OS Docs</title>
-<meta name="description" content="Flash a card, boot for the first time and add games.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html" class="on" aria-current="page">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="getting-started">Getting started</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#what-you-need">What you need</a><a href="#1-pick-the-right-image">1. Pick the right image</a><a href="#2-flash-the-card">2. Flash the card</a><a href="#3-first-boot">3. First boot</a><a href="#4-add-games">4. Add games</a><a href="#5-optional-first-steps">5. Optional first steps</a><a href="#if-it-does-not-boot">If it does not boot</a></nav>
-<h2 id="what-you-need">What you need</h2>
-<ul>
-<li>A supported console: RG34XXSP, RG35XX H, RG35XX SP or RG Rotate (see <a href="devices.html">DEVICES.md</a>).</li>
-<li>A microSD card. 16 GB or more is sensible; the rest of the card becomes your ROMS partition.</li>
-<li>A flashing tool such as balenaEtcher, Raspberry Pi Imager or <code>dd</code>.</li>
-<li>An RG OS image for your device (<code>&lt;device&gt;-rgos.img</code>), either built yourself (<a href="building.html">BUILDING.md</a>, <a href="build-workflow.html">BUILD-WORKFLOW.md</a>) or provided by a release.</li>
-</ul>
-<h2 id="1-pick-the-right-image">1. Pick the right image</h2>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Device</th>
-<th>Image</th>
-<th>Things to check first</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>RG34XXSP</td>
-<td><code>rg34xxsp-rgos.img</code></td>
-<td>RAM type (DDR4 or DDR3), panel revision</td>
-</tr>
-<tr>
-<td>RG35XX H</td>
-<td><code>rg35xxh-rgos.img</code></td>
-<td>RAM type, panel revision</td>
-</tr>
-<tr>
-<td>RG35XX SP</td>
-<td><code>rg35xxsp-rgos.img</code></td>
-<td>RAM type, panel revision</td>
-</tr>
-<tr>
-<td>RG Rotate</td>
-<td><code>rg-rotate-rgos.img</code></td>
-<td>Flash the SPL once (<a href="rg-rotate-spl.html">RG-ROTATE-SPL.md</a>)</td>
-</tr>
-</tbody>
-</table></div>
-<p>The three H700 consoles ship their U-Boot on the card, built for one RAM type. A wrong choice gives a black screen. If you are unsure which RAM type your console has, start with DDR4 (the default) and use the table in <a href="troubleshooting.html">TROUBLESHOOTING.md</a> if the screen stays black.</p>
-<h2 id="2-flash-the-card">2. Flash the card</h2>
-<ol>
-<li>If the image is <code>.img.gz</code>, decompress it first.</li>
-<li>Flash the <code>.img</code> to the whole card (not to a partition). This erases everything on the card.</li>
-<li>Eject the card cleanly. An unclean eject is a common cause of a card that does not boot.</li>
-</ol>
-<h2 id="3-first-boot">3. First boot</h2>
-<ul>
-<li>
-<p>An <strong>installer image</strong> (<code>*-rgos-installer.img</code>) shows an RG OS Installer screen on the first boot with two square <strong>Install</strong> and <strong>Power off</strong> buttons (D-pad to choose, <strong>A</strong> to confirm). Install first asks which format to use for the ROMS partition (FAT32, exFAT or ext4; <strong>B</strong> goes back), then partitions the card, installs PortMaster and the cores, then restarts by itself; Power off switches the console off and leaves the card as it is. Do not switch the console off while an install is running (<a href="installer.html">INSTALLER.md</a>). The points below describe a normal image.</p>
-</li>
-<li>
-<p>Insert the card and power on. Fully power off first if the console was running another system.</p>
-</li>
-<li>On the first boot RG OS creates the <strong>ROMS</strong> partition in the free space after the system partitions and formats it as exFAT (partition 3 on the H700 consoles, partition 4 on the RG Rotate); the installer image lets you pick FAT32, exFAT or ext4 instead. This is done by <code>rgos-roms</code> and logged in <code>/var/log/rgos-roms.log</code>. It only touches a card whose layout it recognises, and it backs up the old partition table to the boot partition (<code>rgos-mbr-backup.bin</code> or <code>rgos-gpt-backup.bin</code>).</li>
-<li>PortMaster is copied to <code>roms/ports/PortMaster</code> on the first boot where that folder is missing.</li>
-<li>The startup splash plays once at power on (it can be changed in <em>Settings &gt; Startup splash</em>).</li>
-</ul>
-<h2 id="4-add-games">4. Add games</h2>
-<p>Put the card in a PC and copy ROMs into the folders under <code>roms/</code> on the ROMS partition, one folder per system. For example <code>roms/gba/</code>, <code>roms/snes/</code>, <code>roms/psx/</code>. The full table is in <a href="systems.html">SYSTEMS.md</a>; the overall layout is in <a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>.</p>
-<p>You can also copy files over the network once Wi-Fi is set up (<a href="networking.html">NETWORKING.md</a>).</p>
-<p>Back on the device, press <strong>X</strong> in the launcher to rescan. Systems with no games and no installed core are hidden.</p>
-<h2 id="5-optional-first-steps">5. Optional first steps</h2>
-<ul>
-<li><em>Settings &gt; Missing BIOS check</em> tells you which BIOS files your systems still need (<a href="bios.html">BIOS.md</a>).</li>
-<li><em>Settings &gt; Wi-Fi</em>, then <em>Settings &gt; Game artwork</em> for cover art (<a href="artwork.html">ARTWORK.md</a>).</li>
-<li><em>Settings &gt; Theme</em> and <em>Settings &gt; Launcher</em> to change the look (<a href="launchers-and-themes.html">LAUNCHERS-AND-THEMES.md</a>).</li>
-<li><em>Settings &gt; Swap A / B buttons</em> if confirm and back feel reversed.</li>
-</ul>
-<h2 id="if-it-does-not-boot">If it does not boot</h2>
-<p>Take the card to a PC and look for the evidence files on the boot partition; <a href="troubleshooting.html">TROUBLESHOOTING.md</a> explains each one.</p></article><div class="pn"><span></span><a class="r" href="installer.html"><small>Next</small>First-boot installer</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Getting started · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Flash a card, boot for the first time and add games."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html" class="on" aria-current="page"
+          >Getting started</a
+        >
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="getting-started">Getting started</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#what-you-need">What you need</a
+            ><a href="#1-pick-the-right-image">1. Pick the right image</a
+            ><a href="#2-flash-the-card">2. Flash the card</a
+            ><a href="#3-first-boot">3. First boot</a
+            ><a href="#4-add-games">4. Add games</a
+            ><a href="#5-optional-first-steps">5. Optional first steps</a
+            ><a href="#if-it-does-not-boot">If it does not boot</a>
+          </nav>
+          <h2 id="what-you-need">What you need</h2>
+          <ul>
+            <li>
+              A supported console: RG34XXSP, RG35XX H, RG35XX SP or RG Rotate
+              (see <a href="devices.html">DEVICES.md</a>).
+            </li>
+            <li>
+              A microSD card. 16 GB or more is sensible; the rest of the card
+              becomes your ROMS partition.
+            </li>
+            <li>
+              A flashing tool such as balenaEtcher, Raspberry Pi Imager or
+              <code>dd</code>.
+            </li>
+            <li>
+              An RG OS image for your device
+              (<code>&lt;device&gt;-rgos.img</code>), either built yourself (<a
+                href="building.html"
+                >BUILDING.md</a
+              >, <a href="build-workflow.html">BUILD-WORKFLOW.md</a>) or
+              provided by a release.
+            </li>
+          </ul>
+          <h2 id="1-pick-the-right-image">1. Pick the right image</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Device</th>
+                  <th>Image</th>
+                  <th>Things to check first</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>RG34XXSP</td>
+                  <td><code>rg34xxsp-rgos.img</code></td>
+                  <td>RAM type (DDR4 or DDR3), panel revision</td>
+                </tr>
+                <tr>
+                  <td>RG35XX H</td>
+                  <td><code>rg35xxh-rgos.img</code></td>
+                  <td>RAM type, panel revision</td>
+                </tr>
+                <tr>
+                  <td>RG35XX SP</td>
+                  <td><code>rg35xxsp-rgos.img</code></td>
+                  <td>RAM type, panel revision</td>
+                </tr>
+                <tr>
+                  <td>RG Rotate</td>
+                  <td><code>rg-rotate-rgos.img</code></td>
+                  <td>
+                    Flash the SPL once (<a href="rg-rotate-spl.html"
+                      >RG-ROTATE-SPL.md</a
+                    >)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The three H700 consoles ship their U-Boot on the card, built for one
+            RAM type. A wrong choice gives a black screen. If you are unsure
+            which RAM type your console has, start with DDR4 (the default) and
+            use the table in
+            <a href="troubleshooting.html">TROUBLESHOOTING.md</a> if the screen
+            stays black.
+          </p>
+          <h2 id="2-flash-the-card">2. Flash the card</h2>
+          <ol>
+            <li>If the image is <code>.img.gz</code>, decompress it first.</li>
+            <li>
+              Flash the <code>.img</code> to the whole card (not to a
+              partition). This erases everything on the card.
+            </li>
+            <li>
+              Eject the card cleanly. An unclean eject is a common cause of a
+              card that does not boot.
+            </li>
+          </ol>
+          <h2 id="3-first-boot">3. First boot</h2>
+          <ul>
+            <li>
+              <p>
+                An
+                <strong>installer image</strong>
+                (<code>*-rgos-installer.img</code>) shows an RG OS Installer
+                screen on the first boot with two square
+                <strong>Install</strong> and <strong>Power off</strong> buttons
+                (D-pad to choose, <strong>A</strong> to confirm). Install first
+                asks which format to use for the ROMS partition (FAT32, exFAT or
+                ext4; <strong>B</strong> goes back), then partitions the card,
+                installs PortMaster and the cores, then restarts by itself;
+                Power off switches the console off and leaves the card as it is.
+                Do not switch the console off while an install is running (<a
+                  href="installer.html"
+                  >INSTALLER.md</a
+                >). The points below describe a normal image.
+              </p>
+            </li>
+            <li>
+              <p>
+                Insert the card and power on. Fully power off first if the
+                console was running another system.
+              </p>
+            </li>
+            <li>
+              On the first boot RG OS creates the
+              <strong>ROMS</strong> partition in the free space after the system
+              partitions and formats it as exFAT (partition 3 on the H700
+              consoles, partition 4 on the RG Rotate); the installer image lets
+              you pick FAT32, exFAT or ext4 instead. This is done by
+              <code>rgos-roms</code> and logged in
+              <code>/var/log/rgos-roms.log</code>. It only touches a card whose
+              layout it recognises, and it backs up the old partition table to
+              the boot partition (<code>rgos-mbr-backup.bin</code> or
+              <code>rgos-gpt-backup.bin</code>).
+            </li>
+            <li>
+              PortMaster is copied to <code>roms/ports/PortMaster</code> on the
+              first boot where that folder is missing.
+            </li>
+            <li>
+              The startup splash plays once at power on (it can be changed in
+              <em>Settings &gt; Startup splash</em>).
+            </li>
+          </ul>
+          <h2 id="4-add-games">4. Add games</h2>
+          <p>
+            Put the card in a PC and copy ROMs into the folders under
+            <code>roms/</code> on the ROMS partition, one folder per system. For
+            example <code>roms/gba/</code>, <code>roms/snes/</code>,
+            <code>roms/psx/</code>. The full table is in
+            <a href="systems.html">SYSTEMS.md</a>; the overall layout is in
+            <a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>.
+          </p>
+          <p>
+            You can also copy files over the network once Wi-Fi is set up (<a
+              href="networking.html"
+              >NETWORKING.md</a
+            >).
+          </p>
+          <p>
+            Back on the device, press <strong>X</strong> in the launcher to
+            rescan. Systems with no games and no installed core are hidden.
+          </p>
+          <h2 id="5-optional-first-steps">5. Optional first steps</h2>
+          <ul>
+            <li>
+              <em>Settings &gt; Missing BIOS check</em> tells you which BIOS
+              files your systems still need (<a href="bios.html">BIOS.md</a>).
+            </li>
+            <li>
+              <em>Settings &gt; Wi-Fi</em>, then
+              <em>Settings &gt; Game artwork</em> for cover art (<a
+                href="artwork.html"
+                >ARTWORK.md</a
+              >).
+            </li>
+            <li>
+              <em>Settings &gt; Theme</em> and
+              <em>Settings &gt; Launcher</em> to change the look (<a
+                href="launchers-and-themes.html"
+                >LAUNCHERS-AND-THEMES.md</a
+              >).
+            </li>
+            <li>
+              <em>Settings &gt; Swap A / B buttons</em> if confirm and back feel
+              reversed.
+            </li>
+          </ul>
+          <h2 id="if-it-does-not-boot">If it does not boot</h2>
+          <p>
+            Take the card to a PC and look for the evidence files on the boot
+            partition;
+            <a href="troubleshooting.html">TROUBLESHOOTING.md</a> explains each
+            one.
+          </p>
+        </article>
+        <div class="pn">
+          <span></span
+          ><a class="r" href="installer.html"
+            ><small>Next</small>First-boot installer</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

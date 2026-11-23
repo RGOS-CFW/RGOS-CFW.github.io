@@ -1,61 +1,134 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>NES / Famicom (RetroArch + Nestopia core) · RG OS Docs</title>
-<meta name="description" content="NES-specific notes and RetroArch overrides.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html" class="on" aria-current="page">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="nes-famicom-retroarch-nestopia-core">NES / Famicom (RetroArch + Nestopia core)</h1>
-<p>On every supported device NES runs through RetroArch with the <strong>Nestopia</strong> libretro core, installed from the Debian <code>libretro-nestopia</code> package (<code>EMU_PKGS</code> in <code>build.sh</code>). <em>Settings &gt; Emulators</em> offers whichever other NES core is installed (fceumm, quicknes, mesen).</p>
-<ul>
-<li>ROMs: <code>&lt;ROMS&gt;/roms/nes/*.nes</code> (also <code>.unf</code>, <code>.unif</code>).</li>
-<li>Famicom Disk System: <code>.fds</code> games plus <code>disksys.rom</code> in <code>&lt;ROMS&gt;/bios/</code> (<a href="bios.html">BIOS.md</a>).</li>
-<li>Saves: <code>&lt;ROMS&gt;/saves/nes/</code>, states: <code>&lt;ROMS&gt;/states/nes/</code>.</li>
-<li>Your own RetroArch overrides: <code>&lt;ROMS&gt;/config/retroarch.cfg</code> (appended last, wins over everything).</li>
-<li>Hotkeys while playing: <a href="controls.html">CONTROLS.md</a>.</li>
-</ul></article><div class="pn"><a href="core-installer.html"><small>Previous</small>Core Installer</a><a class="r" href="gamecube.html"><small>Next</small>Nintendo GameCube (RG Rotate only)</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>NES / Famicom (RetroArch + Nestopia core) · RG OS Docs</title>
+    <meta
+      name="description"
+      content="NES-specific notes and RetroArch overrides."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html" class="on" aria-current="page"
+          >NES / Famicom (RetroArch + Nestopia core)</a
+        >
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="nes-famicom-retroarch-nestopia-core">
+            NES / Famicom (RetroArch + Nestopia core)
+          </h1>
+          <p>
+            On every supported device NES runs through RetroArch with the
+            <strong>Nestopia</strong> libretro core, installed from the Debian
+            <code>libretro-nestopia</code> package (<code>EMU_PKGS</code> in
+            <code>build.sh</code>). <em>Settings &gt; Emulators</em> offers
+            whichever other NES core is installed (fceumm, quicknes, mesen).
+          </p>
+          <ul>
+            <li>
+              ROMs: <code>&lt;ROMS&gt;/roms/nes/*.nes</code> (also
+              <code>.unf</code>, <code>.unif</code>).
+            </li>
+            <li>
+              Famicom Disk System: <code>.fds</code> games plus
+              <code>disksys.rom</code> in <code>&lt;ROMS&gt;/bios/</code> (<a
+                href="bios.html"
+                >BIOS.md</a
+              >).
+            </li>
+            <li>
+              Saves: <code>&lt;ROMS&gt;/saves/nes/</code>, states:
+              <code>&lt;ROMS&gt;/states/nes/</code>.
+            </li>
+            <li>
+              Your own RetroArch overrides:
+              <code>&lt;ROMS&gt;/config/retroarch.cfg</code> (appended last,
+              wins over everything).
+            </li>
+            <li>
+              Hotkeys while playing: <a href="controls.html">CONTROLS.md</a>.
+            </li>
+          </ul>
+        </article>
+        <div class="pn">
+          <a href="core-installer.html"><small>Previous</small>Core Installer</a
+          ><a class="r" href="gamecube.html"
+            ><small>Next</small>Nintendo GameCube (RG Rotate only)</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

@@ -1,109 +1,191 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Logs and diagnostic files · RG OS Docs</title>
-<meta name="description" content="Where logs live and how to read them.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html" class="on" aria-current="page">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="logs-and-diagnostic-files">Logs and diagnostic files</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#on-the-boot-partition-readable-on-a-pc">On the boot partition (readable on a PC)</a><a href="#on-the-device-varlog">On the device (/var/log/)</a><a href="#reporting-a-problem">Reporting a problem</a></nav>
-<h2 id="on-the-boot-partition-readable-on-a-pc">On the boot partition (readable on a PC)</h2>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>File</th>
-<th>Written</th>
-<th>Holds</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>rgos-initramfs.txt</code></td>
-<td>by the initramfs at boot</td>
-<td>Kernel command line, partition found, <code>/proc/partitions</code>, last step reached</td>
-</tr>
-<tr>
-<td><code>rgos-bootinfo.txt</code></td>
-<td>6 s after switch_root</td>
-<td>Early boot state</td>
-</tr>
-<tr>
-<td><code>rgos-logs.txt</code></td>
-<td>at 8, 28 and 58 s after boot</td>
-<td>Combined copy of the main logs below</td>
-</tr>
-<tr>
-<td><code>rgos-retroarch.txt</code></td>
-<td>after every RetroArch game</td>
-<td>Command, missing libraries, attempt logs, exit code or signal, kernel hints</td>
-</tr>
-<tr>
-<td><code>rgos-native.txt</code></td>
-<td>after every native port / PortMaster run</td>
-<td>Command, exit code, run time, missing tools, last 150 lines of <code>rgos-native.log</code></td>
-</tr>
-<tr>
-<td><code>rgos-image-info.txt</code></td>
-<td>at build</td>
-<td>Which build and RAM type the image was made for</td>
-</tr>
-<tr>
-<td><code>rgos-update.id</code></td>
-<td>after an update</td>
-<td>Installed build id</td>
-</tr>
-<tr>
-<td><code>rgos-mbr-backup.bin</code> / <code>rgos-gpt-backup.bin</code></td>
-<td>first boot</td>
-<td>Partition table before ROMS was created</td>
-</tr>
-</tbody>
-</table></div>
-<h2 id="on-the-device-varlog">On the device (<code>/var/log/</code>)</h2>
-<p><code>rgos-menu.log</code>, <code>rgos-input.log</code>, <code>rgos-launch.log</code>, <code>rgos-native.log</code>, <code>rgos-retroarch.log</code>, <code>rgos-roms.log</code>, <code>rgos-installer.log</code>, <code>rgos-artwork.log</code>, <code>rgos-wifi.log</code>, <code>rgos-gamemenu.log</code>, <code>rgos-update.log</code>. Many of these are bundled into <code>rgos-logs.txt</code>.</p>
-<h2 id="reporting-a-problem">Reporting a problem</h2>
-<p>Attach <code>rgos-logs.txt</code> (and <code>rgos-retroarch.txt</code> or <code>rgos-native.txt</code> if a game or port is involved), say which device and which image you built (RAM type and panel for the H700 consoles), and describe what you did. Join the Discord for help.</p></article><div class="pn"><a href="troubleshooting.html"><small>Previous</small>Troubleshooting</a><a class="r" href="faq.html"><small>Next</small>FAQ</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Logs and diagnostic files · RG OS Docs</title>
+    <meta name="description" content="Where logs live and how to read them." />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html" class="on" aria-current="page"
+          >Logs and diagnostic files</a
+        >
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="logs-and-diagnostic-files">Logs and diagnostic files</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b
+            ><a href="#on-the-boot-partition-readable-on-a-pc"
+              >On the boot partition (readable on a PC)</a
+            ><a href="#on-the-device-varlog">On the device (/var/log/)</a
+            ><a href="#reporting-a-problem">Reporting a problem</a>
+          </nav>
+          <h2 id="on-the-boot-partition-readable-on-a-pc">
+            On the boot partition (readable on a PC)
+          </h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Written</th>
+                  <th>Holds</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>rgos-initramfs.txt</code></td>
+                  <td>by the initramfs at boot</td>
+                  <td>
+                    Kernel command line, partition found,
+                    <code>/proc/partitions</code>, last step reached
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-bootinfo.txt</code></td>
+                  <td>6 s after switch_root</td>
+                  <td>Early boot state</td>
+                </tr>
+                <tr>
+                  <td><code>rgos-logs.txt</code></td>
+                  <td>at 8, 28 and 58 s after boot</td>
+                  <td>Combined copy of the main logs below</td>
+                </tr>
+                <tr>
+                  <td><code>rgos-retroarch.txt</code></td>
+                  <td>after every RetroArch game</td>
+                  <td>
+                    Command, missing libraries, attempt logs, exit code or
+                    signal, kernel hints
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-native.txt</code></td>
+                  <td>after every native port / PortMaster run</td>
+                  <td>
+                    Command, exit code, run time, missing tools, last 150 lines
+                    of <code>rgos-native.log</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-image-info.txt</code></td>
+                  <td>at build</td>
+                  <td>Which build and RAM type the image was made for</td>
+                </tr>
+                <tr>
+                  <td><code>rgos-update.id</code></td>
+                  <td>after an update</td>
+                  <td>Installed build id</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>rgos-mbr-backup.bin</code> /
+                    <code>rgos-gpt-backup.bin</code>
+                  </td>
+                  <td>first boot</td>
+                  <td>Partition table before ROMS was created</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="on-the-device-varlog">
+            On the device (<code>/var/log/</code>)
+          </h2>
+          <p>
+            <code>rgos-menu.log</code>, <code>rgos-input.log</code>,
+            <code>rgos-launch.log</code>, <code>rgos-native.log</code>,
+            <code>rgos-retroarch.log</code>, <code>rgos-roms.log</code>,
+            <code>rgos-installer.log</code>, <code>rgos-artwork.log</code>,
+            <code>rgos-wifi.log</code>, <code>rgos-gamemenu.log</code>,
+            <code>rgos-update.log</code>. Many of these are bundled into
+            <code>rgos-logs.txt</code>.
+          </p>
+          <h2 id="reporting-a-problem">Reporting a problem</h2>
+          <p>
+            Attach <code>rgos-logs.txt</code> (and
+            <code>rgos-retroarch.txt</code> or <code>rgos-native.txt</code> if a
+            game or port is involved), say which device and which image you
+            built (RAM type and panel for the H700 consoles), and describe what
+            you did. Join the Discord for help.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="troubleshooting.html"
+            ><small>Previous</small>Troubleshooting</a
+          ><a class="r" href="faq.html"><small>Next</small>FAQ</a>
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

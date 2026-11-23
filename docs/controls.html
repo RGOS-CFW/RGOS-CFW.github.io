@@ -1,148 +1,244 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Controls and hotkeys · RG OS Docs</title>
-<meta name="description" content="Launcher buttons, RetroArch hotkeys and native port controls.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html" class="on" aria-current="page">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="controls-and-hotkeys">Controls and hotkeys</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#in-the-launcher">In the launcher</a><a href="#while-a-retroarch-game-runs">While a RetroArch game runs</a><a href="#native-ports">Native ports</a><a href="#customising">Customising</a></nav>
-<h2 id="in-the-launcher">In the launcher</h2>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Button</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>D-pad</td>
-<td>move</td>
-</tr>
-<tr>
-<td>A</td>
-<td>open / run / select</td>
-</tr>
-<tr>
-<td>B</td>
-<td>back</td>
-</tr>
-<tr>
-<td>X</td>
-<td>rescan games (in game lists and the home screens)</td>
-</tr>
-<tr>
-<td>Y</td>
-<td>add or remove a favourite (in a game list)</td>
-</tr>
-<tr>
-<td>L / R</td>
-<td>page up / down in long lists</td>
-</tr>
-<tr>
-<td>Select + Start (hold)</td>
-<td>power off, from the launcher</td>
-</tr>
-</tbody>
-</table></div>
-<p>The hint line at the bottom of each screen shows the buttons that work there. If A and B are reversed, turn on <em>Settings &gt; Swap A / B buttons</em>. If other buttons are wrong, use <em>Settings &gt; Map buttons</em>.</p>
-<h2 id="while-a-retroarch-game-runs">While a RetroArch game runs</h2>
-<p><strong>Menu</strong> (the hub's Mode button) is RetroArch's hotkey-enable button. Hold it and press:</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Combo</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Menu + Start</td>
-<td>exit the game</td>
-</tr>
-<tr>
-<td>Menu + Select</td>
-<td><strong>DPAD to joystick</strong>: quick press turns it on (one buzz), hold 1 s turns it off (two buzzes); see <a href="in-game-menu.html">IN-GAME-MENU.md</a></td>
-</tr>
-<tr>
-<td>Menu + R</td>
-<td>save state</td>
-</tr>
-<tr>
-<td>Menu + L</td>
-<td>load state</td>
-</tr>
-<tr>
-<td>Menu + Right / Left</td>
-<td>next / previous state slot</td>
-</tr>
-<tr>
-<td>Menu + R2 (hold)</td>
-<td>fast-forward (not on the RG35XX SP)</td>
-</tr>
-<tr>
-<td>Menu + A</td>
-<td>pause</td>
-</tr>
-<tr>
-<td>Menu + X</td>
-<td>screenshot</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Tapping</strong> Menu on its own (quick, clean press) opens RG OS's in-game menu instead; see <a href="in-game-menu.html">IN-GAME-MENU.md</a>.</p>
-<h3 id="rg35xx-sp">RG35XX SP</h3>
-<p>The SP has no analog sticks, L2/R2 or L3/R3. Its RetroArch config uses <strong>Menu + Up</strong> to fast-forward and <strong>Menu + Down</strong> to rewind, and the rest of the combos above are unchanged.</p>
-<h2 id="native-ports">Native ports</h2>
-<p>Hold <strong>Select + Start</strong> for about 2 seconds to stop the running port and return to the menu. The port's controls are described in <a href="ports.html">PORTS.md</a>. Volume buttons work everywhere and show an on-screen bar.</p>
-<h2 id="customising">Customising</h2>
-<ul>
-<li>RetroArch overrides: <code>&lt;ROMS&gt;/config/retroarch.cfg</code> is appended last and wins over everything (<a href="nes.html">NES.md</a>).</li>
-<li>Port controller mapping: <code>rgos-gamecontrollerdb.txt</code> (<a href="ports.html">PORTS.md</a>).</li>
-<li>Analog sticks are enabled per device in <code>/etc/rgos/input-&lt;device&gt;.json</code>.</li>
-</ul></article><div class="pn"><a href="sd-card-layout.html"><small>Previous</small>SD card layout</a><a class="r" href="in-game-menu.html"><small>Next</small>In-game menu</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Controls and hotkeys · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Launcher buttons, RetroArch hotkeys and native port controls."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html" class="on" aria-current="page"
+          >Controls and hotkeys</a
+        >
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="controls-and-hotkeys">Controls and hotkeys</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#in-the-launcher">In the launcher</a
+            ><a href="#while-a-retroarch-game-runs"
+              >While a RetroArch game runs</a
+            ><a href="#native-ports">Native ports</a
+            ><a href="#customising">Customising</a>
+          </nav>
+          <h2 id="in-the-launcher">In the launcher</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Button</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>D-pad</td>
+                  <td>move</td>
+                </tr>
+                <tr>
+                  <td>A</td>
+                  <td>open / run / select</td>
+                </tr>
+                <tr>
+                  <td>B</td>
+                  <td>back</td>
+                </tr>
+                <tr>
+                  <td>X</td>
+                  <td>rescan games (in game lists and the home screens)</td>
+                </tr>
+                <tr>
+                  <td>Y</td>
+                  <td>add or remove a favourite (in a game list)</td>
+                </tr>
+                <tr>
+                  <td>L / R</td>
+                  <td>page up / down in long lists</td>
+                </tr>
+                <tr>
+                  <td>Select + Start (hold)</td>
+                  <td>power off, from the launcher</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The hint line at the bottom of each screen shows the buttons that
+            work there. If A and B are reversed, turn on
+            <em>Settings &gt; Swap A / B buttons</em>. If other buttons are
+            wrong, use <em>Settings &gt; Map buttons</em>.
+          </p>
+          <h2 id="while-a-retroarch-game-runs">While a RetroArch game runs</h2>
+          <p>
+            <strong>Menu</strong> (the hub's Mode button) is RetroArch's
+            hotkey-enable button. Hold it and press:
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Combo</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Menu + Start</td>
+                  <td>exit the game</td>
+                </tr>
+                <tr>
+                  <td>Menu + Select</td>
+                  <td>
+                    <strong>DPAD to joystick</strong>: quick press turns it on
+                    (one buzz), hold 1 s turns it off (two buzzes); see
+                    <a href="in-game-menu.html">IN-GAME-MENU.md</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Menu + R</td>
+                  <td>save state</td>
+                </tr>
+                <tr>
+                  <td>Menu + L</td>
+                  <td>load state</td>
+                </tr>
+                <tr>
+                  <td>Menu + Right / Left</td>
+                  <td>next / previous state slot</td>
+                </tr>
+                <tr>
+                  <td>Menu + R2 (hold)</td>
+                  <td>fast-forward (not on the RG35XX SP)</td>
+                </tr>
+                <tr>
+                  <td>Menu + A</td>
+                  <td>pause</td>
+                </tr>
+                <tr>
+                  <td>Menu + X</td>
+                  <td>screenshot</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <strong>Tapping</strong> Menu on its own (quick, clean press) opens
+            RG OS's in-game menu instead; see
+            <a href="in-game-menu.html">IN-GAME-MENU.md</a>.
+          </p>
+          <h3 id="rg35xx-sp">RG35XX SP</h3>
+          <p>
+            The SP has no analog sticks, L2/R2 or L3/R3. Its RetroArch config
+            uses <strong>Menu + Up</strong> to fast-forward and
+            <strong>Menu + Down</strong> to rewind, and the rest of the combos
+            above are unchanged.
+          </p>
+          <h2 id="native-ports">Native ports</h2>
+          <p>
+            Hold <strong>Select + Start</strong> for about 2 seconds to stop the
+            running port and return to the menu. The port's controls are
+            described in <a href="ports.html">PORTS.md</a>. Volume buttons work
+            everywhere and show an on-screen bar.
+          </p>
+          <h2 id="customising">Customising</h2>
+          <ul>
+            <li>
+              RetroArch overrides:
+              <code>&lt;ROMS&gt;/config/retroarch.cfg</code> is appended last
+              and wins over everything (<a href="nes.html">NES.md</a>).
+            </li>
+            <li>
+              Port controller mapping:
+              <code>rgos-gamecontrollerdb.txt</code> (<a href="ports.html"
+                >PORTS.md</a
+              >).
+            </li>
+            <li>
+              Analog sticks are enabled per device in
+              <code>/etc/rgos/input-&lt;device&gt;.json</code>.
+            </li>
+          </ul>
+        </article>
+        <div class="pn">
+          <a href="sd-card-layout.html"><small>Previous</small>SD card layout</a
+          ><a class="r" href="in-game-menu.html"
+            ><small>Next</small>In-game menu</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

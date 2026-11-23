@@ -1,130 +1,271 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Native Linux ports · RG OS Docs</title>
-<meta name="description" content="Native Linux ports and PortMaster.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html" class="on" aria-current="page">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="native-linux-ports">Native Linux ports</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#performance">Performance</a><a href="#controller-mapping">Controller mapping</a><a href="#which-controller-ports-see">Which controller ports see</a><a href="#quitting-a-port">Quitting a port</a></nav>
-<p>RG OS treats files discovered in <code>roms/ports/</code> as native Linux ports. They are
-launched directly by <code>rgos-launch</code>; they do not need a RetroArch core or any
-other emulator.</p>
-<ul>
-<li><code>.sh</code> and <code>.bash</code> launchers are run with Bash when their shebang requests
-  Bash, otherwise with <code>sh</code>. This works on exFAT ROMS cards where executable
-  permission bits may not be preserved.</li>
-<li>Any other file in <code>roms/ports/</code> that is an ARM64 (aarch64) or 32-bit ARM Linux <strong>executable</strong> shows up as a
-  port, whatever its name (<code>game</code>, <code>game.aarch64</code>, <code>Game.arm64</code>, <code>game.bin</code>): RG OS recognises it by its ELF
-  header. Shared libraries (<code>.so</code>), data files and x86 programs are not listed. Put the binary directly in
-  <code>roms/ports/</code> (game data can sit in a sub folder next to it).</li>
-<li>ROMS cards are FAT/exFAT and usually have no execute permission. RG OS tries to set it; if the card refuses, the
-  binary is started through its dynamic loader (<code>ld.so game</code>), which only needs read access, so no <code>chmod</code> is needed.</li>
-<li>The port's own libraries are found automatically: <code>lib/</code>, <code>libs/</code>, <code>lib64/</code>, <code>libs.aarch64/</code>, <code>lib.aarch64/</code>
-  (and <code>libs.armhf/</code>, <code>lib32/</code> for 32-bit programs) next to the binary, plus <code>PortMaster/libs</code>, go on
-  <code>LD_LIBRARY_PATH</code>. Before starting, missing libraries are listed by name on screen.</li>
-<li>32-bit ARM (armhf) programs need an armhf loader. The image is ARM64-only, so ship
-  <code>ld-linux-armhf.so.3</code> and the armhf libraries in <code>libs.armhf/</code> next to the port; RG OS then uses them.</li>
-<li>A wrong-CPU program (x86 / x86-64) or a file that is neither an executable nor a script gets a message that says so.</li>
-<li>Extension-less scripts with a <code>#!</code> line are run with their interpreter.</li>
-<li>The launcher's working directory is the directory containing the selected
-  port, so relative asset paths used by common port launchers continue to work.</li>
-<li>PortMaster comes preinstalled: the image carries a copy that is placed in
-  <code>ROMS/roms/ports/PortMaster</code> on the first boot where that folder is missing, and
-  PortMaster updates itself there. An existing install is never overwritten. Build
-  with <code>PORTMASTER=0</code> to leave it out, or <code>PORTMASTER_ZIP=&lt;file&gt;</code> to build offline.</li>
-<li>PortMaster remains a separate Tools entry. PortMaster-installed ports are
-  started through their installed launch scripts, allowing PortMaster to set
-  up its own runtime and dependencies; RG OS does not wrap those games in
-  RetroArch.</li>
-</ul>
-<p>Console ROM folders continue to use the emulator/core configured for their
-system. See <code>rgos-native.log</code> on the device for native-port output when a port
-fails to start.</p>
-<p>After every native port and every PortMaster run, <code>rgos-launch</code> also writes <code>rgos-native.txt</code> on the FAT boot
-partition: the command, exit code and run time, which helper tools are missing from the image, the port
-folder listing, kernel hints and the last 150 lines of <code>rgos-native.log</code>. Put the card in a PC and read it
-when a port closes by itself. (<code>rgos-logs.txt</code> is only written 8, 28 and 58 s after boot, so it never holds
-a port started later; a log that does not exist yet is shown as "not created yet".)</p>
-<h2 id="performance">Performance</h2>
-<p>While a native port runs, RG OS switches the CPU and GPU/DDR governors to <code>performance</code> and restores
-them when the port exits, and the port runs at a raised scheduling priority. To change the governor,
-put its name in <code>rgos-governor.txt</code> on the boot partition (<code>default</code> keeps the stock governor).</p>
-<h2 id="controller-mapping">Controller mapping</h2>
-<p>SDL ports only treat a joystick as a game controller when a controller database
-entry matches it, so <code>rgos-launch</code> gives every native port (and PortMaster) a
-mapping for the built-in "RG OS Gamepad". It is exported as
-<code>SDL_GAMECONTROLLERCONFIG</code>, and also written to <code>/run/rgos/gamecontrollerdb.txt</code>
-(<code>SDL_GAMECONTROLLERCONFIG_FILE</code>) for launchers that replace the variable.</p>
-<p>Layout (positional, like an Xbox pad): A bottom, B right, X left, Y top,
-L1/R1 shoulders, L2/R2 triggers, Select = back, Start, Menu = guide, L3/R3 stick
-clicks, d-pad. The sticks are included only when analog sticks are enabled in
-<code>/etc/rgos/input.json</code> or the per-device <code>/etc/rgos/input-&lt;device&gt;.json</code> (which wins, as for the input hub; the build sets it per device). The Settings &gt; Swap A / B option applies before SDL sees
-the pad, so ports follow it automatically.</p>
-<p>To change the mapping, add lines in SDL_GameControllerDB format to
-<code>rgos-gamecontrollerdb.txt</code>:</p>
-<ul>
-<li><code>ROMS/ports/rgos-gamecontrollerdb.txt</code> applies to every port.</li>
-<li><code>rgos-gamecontrollerdb.txt</code> next to a port applies to that port only and wins.</li>
-</ul>
-<p>A line with the same GUID replaces the built-in mapping; the GUID is the first
-field of the generated <code>/run/rgos/gamecontrollerdb.txt</code>. Lines starting with <code>#</code>
-are ignored. A mapping already exported in <code>SDL_GAMECONTROLLERCONFIG</code> wins over
-all of these.</p>
-<h2 id="which-controller-ports-see">Which controller ports see</h2>
-<p>The input hub grabs the console's raw gamepad and exposes only the virtual "RG OS Gamepad".
-Because the image runs no udev, the hub also removes the raw pad's <code>/dev/input/eventN</code> node while it
-is running (it keeps the device open itself), so SDL ports see exactly one controller, the working one.
-The node is put back when the hub stops, and at the next hub start if the hub was killed. Look for
-<code>hid /dev/input/eventN from SDL ports</code> in <code>rgos-input.log</code>.</p>
-<h2 id="quitting-a-port">Quitting a port</h2>
-<p>Hold <strong>Select + Start</strong> for about 2 seconds to stop the running native port and
-return to the menu. RG OS sends the port's whole process group SIGTERM, then
-SIGKILL after 3 seconds if it has not exited. The stop is logged in
-<code>rgos-native.log</code> and is not reported as an error. This also works inside
-PortMaster. Ports run in their own session so child processes stop with them.</p>
-<p>See also: <a href="controls.html">CONTROLS.md</a>, <a href="logs.html">LOGS.md</a>, <a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>.</p></article><div class="pn"><a href="artwork.html"><small>Previous</small>Game artwork (SteamGridDB)</a><a class="r" href="updates.html"><small>Next</small>Offline updates (.tar from the SD card)</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Native Linux ports · RG OS Docs</title>
+    <meta name="description" content="Native Linux ports and PortMaster." />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html" class="on" aria-current="page"
+          >Native Linux ports</a
+        >
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="native-linux-ports">Native Linux ports</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#performance">Performance</a
+            ><a href="#controller-mapping">Controller mapping</a
+            ><a href="#which-controller-ports-see">Which controller ports see</a
+            ><a href="#quitting-a-port">Quitting a port</a>
+          </nav>
+          <p>
+            RG OS treats files discovered in <code>roms/ports/</code> as native
+            Linux ports. They are launched directly by <code>rgos-launch</code>;
+            they do not need a RetroArch core or any other emulator.
+          </p>
+          <ul>
+            <li>
+              <code>.sh</code> and <code>.bash</code> launchers are run with
+              Bash when their shebang requests Bash, otherwise with
+              <code>sh</code>. This works on exFAT ROMS cards where executable
+              permission bits may not be preserved.
+            </li>
+            <li>
+              Any other file in <code>roms/ports/</code> that is an ARM64
+              (aarch64) or 32-bit ARM Linux <strong>executable</strong> shows up
+              as a port, whatever its name (<code>game</code>,
+              <code>game.aarch64</code>, <code>Game.arm64</code>,
+              <code>game.bin</code>): RG OS recognises it by its ELF header.
+              Shared libraries (<code>.so</code>), data files and x86 programs
+              are not listed. Put the binary directly in
+              <code>roms/ports/</code> (game data can sit in a sub folder next
+              to it).
+            </li>
+            <li>
+              ROMS cards are FAT/exFAT and usually have no execute permission.
+              RG OS tries to set it; if the card refuses, the binary is started
+              through its dynamic loader (<code>ld.so game</code>), which only
+              needs read access, so no <code>chmod</code> is needed.
+            </li>
+            <li>
+              The port's own libraries are found automatically:
+              <code>lib/</code>, <code>libs/</code>, <code>lib64/</code>,
+              <code>libs.aarch64/</code>, <code>lib.aarch64/</code> (and
+              <code>libs.armhf/</code>, <code>lib32/</code> for 32-bit programs)
+              next to the binary, plus <code>PortMaster/libs</code>, go on
+              <code>LD_LIBRARY_PATH</code>. Before starting, missing libraries
+              are listed by name on screen.
+            </li>
+            <li>
+              32-bit ARM (armhf) programs need an armhf loader. The image is
+              ARM64-only, so ship <code>ld-linux-armhf.so.3</code> and the armhf
+              libraries in <code>libs.armhf/</code> next to the port; RG OS then
+              uses them.
+            </li>
+            <li>
+              A wrong-CPU program (x86 / x86-64) or a file that is neither an
+              executable nor a script gets a message that says so.
+            </li>
+            <li>
+              Extension-less scripts with a <code>#!</code> line are run with
+              their interpreter.
+            </li>
+            <li>
+              The launcher's working directory is the directory containing the
+              selected port, so relative asset paths used by common port
+              launchers continue to work.
+            </li>
+            <li>
+              PortMaster comes preinstalled: the image carries a copy that is
+              placed in <code>ROMS/roms/ports/PortMaster</code> on the first
+              boot where that folder is missing, and PortMaster updates itself
+              there. An existing install is never overwritten. Build with
+              <code>PORTMASTER=0</code> to leave it out, or
+              <code>PORTMASTER_ZIP=&lt;file&gt;</code> to build offline.
+            </li>
+            <li>
+              PortMaster remains a separate Tools entry. PortMaster-installed
+              ports are started through their installed launch scripts, allowing
+              PortMaster to set up its own runtime and dependencies; RG OS does
+              not wrap those games in RetroArch.
+            </li>
+          </ul>
+          <p>
+            Console ROM folders continue to use the emulator/core configured for
+            their system. See <code>rgos-native.log</code> on the device for
+            native-port output when a port fails to start.
+          </p>
+          <p>
+            After every native port and every PortMaster run,
+            <code>rgos-launch</code> also writes <code>rgos-native.txt</code> on
+            the FAT boot partition: the command, exit code and run time, which
+            helper tools are missing from the image, the port folder listing,
+            kernel hints and the last 150 lines of <code>rgos-native.log</code>.
+            Put the card in a PC and read it when a port closes by itself.
+            (<code>rgos-logs.txt</code> is only written 8, 28 and 58 s after
+            boot, so it never holds a port started later; a log that does not
+            exist yet is shown as "not created yet".)
+          </p>
+          <h2 id="performance">Performance</h2>
+          <p>
+            While a native port runs, RG OS switches the CPU and GPU/DDR
+            governors to <code>performance</code> and restores them when the
+            port exits, and the port runs at a raised scheduling priority. To
+            change the governor, put its name in
+            <code>rgos-governor.txt</code> on the boot partition (<code
+              >default</code
+            >
+            keeps the stock governor).
+          </p>
+          <h2 id="controller-mapping">Controller mapping</h2>
+          <p>
+            SDL ports only treat a joystick as a game controller when a
+            controller database entry matches it, so
+            <code>rgos-launch</code> gives every native port (and PortMaster) a
+            mapping for the built-in "RG OS Gamepad". It is exported as
+            <code>SDL_GAMECONTROLLERCONFIG</code>, and also written to
+            <code>/run/rgos/gamecontrollerdb.txt</code>
+            (<code>SDL_GAMECONTROLLERCONFIG_FILE</code>) for launchers that
+            replace the variable.
+          </p>
+          <p>
+            Layout (positional, like an Xbox pad): A bottom, B right, X left, Y
+            top, L1/R1 shoulders, L2/R2 triggers, Select = back, Start, Menu =
+            guide, L3/R3 stick clicks, d-pad. The sticks are included only when
+            analog sticks are enabled in <code>/etc/rgos/input.json</code> or
+            the per-device
+            <code>/etc/rgos/input-&lt;device&gt;.json</code> (which wins, as for
+            the input hub; the build sets it per device). The Settings &gt; Swap
+            A / B option applies before SDL sees the pad, so ports follow it
+            automatically.
+          </p>
+          <p>
+            To change the mapping, add lines in SDL_GameControllerDB format to
+            <code>rgos-gamecontrollerdb.txt</code>:
+          </p>
+          <ul>
+            <li>
+              <code>ROMS/ports/rgos-gamecontrollerdb.txt</code> applies to every
+              port.
+            </li>
+            <li>
+              <code>rgos-gamecontrollerdb.txt</code> next to a port applies to
+              that port only and wins.
+            </li>
+          </ul>
+          <p>
+            A line with the same GUID replaces the built-in mapping; the GUID is
+            the first field of the generated
+            <code>/run/rgos/gamecontrollerdb.txt</code>. Lines starting with
+            <code>#</code> are ignored. A mapping already exported in
+            <code>SDL_GAMECONTROLLERCONFIG</code> wins over all of these.
+          </p>
+          <h2 id="which-controller-ports-see">Which controller ports see</h2>
+          <p>
+            The input hub grabs the console's raw gamepad and exposes only the
+            virtual "RG OS Gamepad". Because the image runs no udev, the hub
+            also removes the raw pad's <code>/dev/input/eventN</code> node while
+            it is running (it keeps the device open itself), so SDL ports see
+            exactly one controller, the working one. The node is put back when
+            the hub stops, and at the next hub start if the hub was killed. Look
+            for <code>hid /dev/input/eventN from SDL ports</code> in
+            <code>rgos-input.log</code>.
+          </p>
+          <h2 id="quitting-a-port">Quitting a port</h2>
+          <p>
+            Hold <strong>Select + Start</strong> for about 2 seconds to stop the
+            running native port and return to the menu. RG OS sends the port's
+            whole process group SIGTERM, then SIGKILL after 3 seconds if it has
+            not exited. The stop is logged in <code>rgos-native.log</code> and
+            is not reported as an error. This also works inside PortMaster.
+            Ports run in their own session so child processes stop with them.
+          </p>
+          <p>
+            See also: <a href="controls.html">CONTROLS.md</a>,
+            <a href="logs.html">LOGS.md</a>,
+            <a href="sd-card-layout.html">SD-CARD-LAYOUT.md</a>.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="artwork.html"
+            ><small>Previous</small>Game artwork (SteamGridDB)</a
+          ><a class="r" href="updates.html"
+            ><small>Next</small>Offline updates (.tar from the SD card)</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

@@ -1,133 +1,228 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BIOS files · RG OS Docs</title>
-<meta name="description" content="Which BIOS files each system wants and where they go.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html" class="on" aria-current="page">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="bios-files">BIOS files</h1>
-<p>RG OS does not ship BIOS files. Put the ones you need in <code>&lt;ROMS&gt;/bios/</code> (RetroArch's system directory). <em>Settings &gt; Missing BIOS check</em> scans your systems, shows what is missing and where each file goes, and tells you when a file's checksum differs from the expected one.</p>
-<p>Names are matched exactly, then without regard to upper/lower case (a case-only match is reported and still found by the check, but fix the name to be safe).</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>System</th>
-<th>File</th>
-<th>Needed</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Game Boy Advance</td>
-<td><code>gba_bios.bin</code></td>
-<td>only for the gpsp core</td>
-</tr>
-<tr>
-<td>Game Boy / Color</td>
-<td><code>gb_bios.bin</code>, <code>gbc_bios.bin</code></td>
-<td>optional boot ROMs</td>
-</tr>
-<tr>
-<td>NES</td>
-<td><code>disksys.rom</code></td>
-<td>only for <code>.fds</code> disk games</td>
-</tr>
-<tr>
-<td>Master System</td>
-<td><code>bios_E.sms</code>, <code>bios_U.sms</code>, <code>bios_J.sms</code></td>
-<td>optional</td>
-</tr>
-<tr>
-<td>Game Gear</td>
-<td><code>bios.gg</code></td>
-<td>optional</td>
-</tr>
-<tr>
-<td>Sega CD / Mega-CD</td>
-<td><code>bios_CD_U.bin</code>, <code>bios_CD_E.bin</code>, <code>bios_CD_J.bin</code></td>
-<td>required (one for your region)</td>
-</tr>
-<tr>
-<td>Saturn</td>
-<td><code>sega_101.bin</code>, <code>mpr-17933.bin</code></td>
-<td>required by Beetle Saturn (either one); optional <code>saturn_bios.bin</code> for YabaSanshiro / Yabause, which run without a BIOS but less compatibly</td>
-</tr>
-<tr>
-<td>Dreamcast</td>
-<td><code>dc/dc_boot.bin</code>, <code>dc/dc_flash.bin</code></td>
-<td>optional: Flycast has a built-in replacement BIOS, but the real one is more compatible (the standalone Flycast uses the same files)</td>
-</tr>
-<tr>
-<td>Atari 5200</td>
-<td><code>5200.rom</code></td>
-<td>required</td>
-</tr>
-<tr>
-<td>Atari 7800</td>
-<td><code>7800 BIOS (U).rom</code>, <code>7800 BIOS (E).rom</code></td>
-<td>optional</td>
-</tr>
-<tr>
-<td>Neo Geo</td>
-<td><code>neogeo.zip</code> (leave zipped)</td>
-<td>required</td>
-</tr>
-<tr>
-<td>PlayStation</td>
-<td><code>scph5501.bin</code> (USA), <code>scph5502.bin</code> (Europe), <code>scph5500.bin</code> (Japan)</td>
-<td>required for the mednafen and swanstation cores; pcsx_rearmed can run without</td>
-</tr>
-<tr>
-<td>GameCube</td>
-<td><code>dolphin-emu/Sys/GC/&lt;USA\|EUR\|JAP&gt;/IPL.bin</code></td>
-<td>optional (boot logo)</td>
-</tr>
-</tbody>
-</table></div>
-<p>"Required" is judged per core: a file needed by one core is only flagged when that core is the one selected for the system. If several files serve the same purpose (for example the three Sega CD regions), having one of them satisfies the check.</p>
-<p>You are responsible for obtaining BIOS files legally, for example by dumping them from hardware you own.</p></article><div class="pn"><a href="systems.html"><small>Previous</small>Supported systems</a><a class="r" href="core-installer.html"><small>Next</small>Core Installer</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>BIOS files · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Which BIOS files each system wants and where they go."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html" class="on" aria-current="page">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="bios-files">BIOS files</h1>
+          <p>
+            RG OS does not ship BIOS files. Put the ones you need in
+            <code>&lt;ROMS&gt;/bios/</code> (RetroArch's system directory).
+            <em>Settings &gt; Missing BIOS check</em> scans your systems, shows
+            what is missing and where each file goes, and tells you when a
+            file's checksum differs from the expected one.
+          </p>
+          <p>
+            Names are matched exactly, then without regard to upper/lower case
+            (a case-only match is reported and still found by the check, but fix
+            the name to be safe).
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>System</th>
+                  <th>File</th>
+                  <th>Needed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Game Boy Advance</td>
+                  <td><code>gba_bios.bin</code></td>
+                  <td>only for the gpsp core</td>
+                </tr>
+                <tr>
+                  <td>Game Boy / Color</td>
+                  <td><code>gb_bios.bin</code>, <code>gbc_bios.bin</code></td>
+                  <td>optional boot ROMs</td>
+                </tr>
+                <tr>
+                  <td>NES</td>
+                  <td><code>disksys.rom</code></td>
+                  <td>only for <code>.fds</code> disk games</td>
+                </tr>
+                <tr>
+                  <td>Master System</td>
+                  <td>
+                    <code>bios_E.sms</code>, <code>bios_U.sms</code>,
+                    <code>bios_J.sms</code>
+                  </td>
+                  <td>optional</td>
+                </tr>
+                <tr>
+                  <td>Game Gear</td>
+                  <td><code>bios.gg</code></td>
+                  <td>optional</td>
+                </tr>
+                <tr>
+                  <td>Sega CD / Mega-CD</td>
+                  <td>
+                    <code>bios_CD_U.bin</code>, <code>bios_CD_E.bin</code>,
+                    <code>bios_CD_J.bin</code>
+                  </td>
+                  <td>required (one for your region)</td>
+                </tr>
+                <tr>
+                  <td>Saturn</td>
+                  <td><code>sega_101.bin</code>, <code>mpr-17933.bin</code></td>
+                  <td>
+                    required by Beetle Saturn (either one); optional
+                    <code>saturn_bios.bin</code> for YabaSanshiro / Yabause,
+                    which run without a BIOS but less compatibly
+                  </td>
+                </tr>
+                <tr>
+                  <td>Dreamcast</td>
+                  <td>
+                    <code>dc/dc_boot.bin</code>, <code>dc/dc_flash.bin</code>
+                  </td>
+                  <td>
+                    optional: Flycast has a built-in replacement BIOS, but the
+                    real one is more compatible (the standalone Flycast uses the
+                    same files)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Atari 5200</td>
+                  <td><code>5200.rom</code></td>
+                  <td>required</td>
+                </tr>
+                <tr>
+                  <td>Atari 7800</td>
+                  <td>
+                    <code>7800 BIOS (U).rom</code>,
+                    <code>7800 BIOS (E).rom</code>
+                  </td>
+                  <td>optional</td>
+                </tr>
+                <tr>
+                  <td>Neo Geo</td>
+                  <td><code>neogeo.zip</code> (leave zipped)</td>
+                  <td>required</td>
+                </tr>
+                <tr>
+                  <td>PlayStation</td>
+                  <td>
+                    <code>scph5501.bin</code> (USA),
+                    <code>scph5502.bin</code> (Europe),
+                    <code>scph5500.bin</code> (Japan)
+                  </td>
+                  <td>
+                    required for the mednafen and swanstation cores;
+                    pcsx_rearmed can run without
+                  </td>
+                </tr>
+                <tr>
+                  <td>GameCube</td>
+                  <td>
+                    <code
+                      >dolphin-emu/Sys/GC/&lt;USA\|EUR\|JAP&gt;/IPL.bin</code
+                    >
+                  </td>
+                  <td>optional (boot logo)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            "Required" is judged per core: a file needed by one core is only
+            flagged when that core is the one selected for the system. If
+            several files serve the same purpose (for example the three Sega CD
+            regions), having one of them satisfies the check.
+          </p>
+          <p>
+            You are responsible for obtaining BIOS files legally, for example by
+            dumping them from hardware you own.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="systems.html"><small>Previous</small>Supported systems</a
+          ><a class="r" href="core-installer.html"
+            ><small>Next</small>Core Installer</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>

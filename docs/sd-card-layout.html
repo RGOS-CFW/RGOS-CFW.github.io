@@ -1,88 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SD card layout · RG OS Docs</title>
-<meta name="description" content="Where ROMs, saves, BIOS files, music and config live on the card.">
-<link rel="stylesheet" href="style.css">
-<script>try{var t=localStorage.getItem('rgos-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-</head>
-<body>
-<nav class="top"><button id="mb" aria-label="Open menu" aria-expanded="false">☰</button><a class="brand" href="../index.html"><b>RG <i>OS</i></b></a><span class="crumb"><a href="index.html">Docs</a></span><a class="lk" href="../index.html#download">Download</a><button id="th" aria-label="Toggle theme">◐</button></nav>
-<div id="bd"></div>
-<div class="wrap">
-<aside id="sb" aria-label="Documentation">
-<a class="home" href="index.html">Documentation home</a>
-<h4>Start here</h4>
-<a href="getting-started.html">Getting started</a>
-<a href="installer.html">First-boot installer</a>
-<a href="devices.html">Supported devices</a>
-<a href="sd-card-layout.html" class="on" aria-current="page">SD card layout</a>
-<h4>Using RG OS</h4>
-<a href="controls.html">Controls and hotkeys</a>
-<a href="in-game-menu.html">In-game menu</a>
-<a href="settings.html">Settings reference</a>
-<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>
-<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
-<a href="artwork.html">Game artwork (SteamGridDB)</a>
-<a href="ports.html">Native Linux ports</a>
-<a href="updates.html">Offline updates (.tar from the SD card)</a>
-<h4>Systems and games</h4>
-<a href="systems.html">Supported systems</a>
-<a href="bios.html">BIOS files</a>
-<a href="core-installer.html">Core Installer</a>
-<a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
-<a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
-<h4>Help</h4>
-<a href="troubleshooting.html">Troubleshooting</a>
-<a href="logs.html">Logs and diagnostic files</a>
-<a href="faq.html">FAQ</a>
-<a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
-<h4>Building RG OS</h4>
-<a href="building.html">Build options</a>
-<a href="build-workflow.html">Build RGOS in GitHub Actions</a>
-</aside>
-<main>
-<article><h1 id="sd-card-layout">SD card layout</h1><nav class="otp" aria-label="On this page"><b>On this page</b><a href="#partitions">Partitions</a><a href="#the-roms-partition">The ROMS partition</a><a href="#files-you-can-drop-on-the-boot-partition">Files you can drop on the boot partition</a></nav>
-<h2 id="partitions">Partitions</h2>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>Partition</th>
-<th>Label</th>
-<th>Filesystem</th>
-<th>Mounted at</th>
-<th>Contents</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>RGOS</code></td>
-<td>FAT</td>
-<td><code>/boot</code></td>
-<td>Kernel, <code>SYSTEM</code> (the Debian squashfs), <code>rgos-initrd.cpio</code>, <code>bootlogo.bmp</code>, device tree, <code>extlinux/</code>, evidence and log files</td>
-</tr>
-<tr>
-<td>2</td>
-<td>stock</td>
-<td>from the stock image</td>
-<td>not used for your files</td>
-<td>Part of the stock ROCKNIX layout; leave it alone</td>
-</tr>
-<tr>
-<td>3 (H700) or 4 (Rotate)</td>
-<td><code>ROMS</code></td>
-<td>exFAT</td>
-<td><code>/media/roms</code></td>
-<td>Your games and data</td>
-</tr>
-</tbody>
-</table></div>
-<p>Older cards may still carry the stock <code>ROCKNIX</code> label on partition 1.</p>
-<h2 id="the-roms-partition">The ROMS partition</h2>
-<pre><code>ROMS/
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>SD card layout · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Where ROMs, saves, BIOS files, music and config live on the card."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html" class="on" aria-current="page"
+          >SD card layout</a
+        >
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="sd-card-layout">SD card layout</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#partitions">Partitions</a
+            ><a href="#the-roms-partition">The ROMS partition</a
+            ><a href="#files-you-can-drop-on-the-boot-partition"
+              >Files you can drop on the boot partition</a
+            >
+          </nav>
+          <h2 id="partitions">Partitions</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Partition</th>
+                  <th>Label</th>
+                  <th>Filesystem</th>
+                  <th>Mounted at</th>
+                  <th>Contents</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><code>RGOS</code></td>
+                  <td>FAT</td>
+                  <td><code>/boot</code></td>
+                  <td>
+                    Kernel, <code>SYSTEM</code> (the Debian squashfs),
+                    <code>rgos-initrd.cpio</code>, <code>bootlogo.bmp</code>,
+                    device tree, <code>extlinux/</code>, evidence and log files
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>stock</td>
+                  <td>from the stock image</td>
+                  <td>not used for your files</td>
+                  <td>Part of the stock ROCKNIX layout; leave it alone</td>
+                </tr>
+                <tr>
+                  <td>3 (H700) or 4 (Rotate)</td>
+                  <td><code>ROMS</code></td>
+                  <td>exFAT</td>
+                  <td><code>/media/roms</code></td>
+                  <td>Your games and data</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Older cards may still carry the stock <code>ROCKNIX</code> label on
+            partition 1.
+          </p>
+          <h2 id="the-roms-partition">The ROMS partition</h2>
+          <pre><code>ROMS/
   roms/&lt;system&gt;/        game files, one folder per system (see SYSTEMS.md)
   roms/ports/           native ports and PortMaster
   bios/                 emulator BIOS files (see BIOS.md)
@@ -99,55 +138,126 @@
   rgos-data/            RG OS data, e.g. steamgriddb-key.txt
   favorites.txt         your favourites list
 </code></pre>
-<p>Folders such as <code>saves/</code>, <code>states/</code>, <code>bios/</code> and <code>screenshots/</code> are created when a game is first launched. You do not need to create them.</p>
-<h2 id="files-you-can-drop-on-the-boot-partition">Files you can drop on the boot partition</h2>
-<p>Put the card in a PC; the boot partition is the small FAT one.</p>
-<div class="tw"><table>
-<thead>
-<tr>
-<th>File</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>bootlogo.bmp</code></td>
-<td>The picture shown at power on, before the installer or RG OS starts. Uncompressed 24-bit BMP at the panel's native size (720x480 RG34XXSP, 640x480 RG35XX H / SP, 720x720 RG Rotate). Builds put the matching file from <code>bootlogo/</code> there; <code>python3 tools/render-bootlogo.py</code> re-renders them from <code>bootlogo/rgos-logo.png</code></td>
-</tr>
-<tr>
-<td><code>rgos-governor.txt</code></td>
-<td>CPU/GPU governor while a native port runs (<code>default</code> keeps the stock one). See <a href="ports.html">PORTS.md</a></td>
-</tr>
-<tr>
-<td><code>retroarch-gc-video.txt</code></td>
-<td>Force the GameCube video driver: <code>glcore</code>, <code>gl</code> or <code>vulkan</code>. See <a href="gamecube.html">GAMECUBE.md</a></td>
-</tr>
-<tr>
-<td><code>retroarch-dc-video.txt</code></td>
-<td>Force the Dreamcast (Flycast) video driver. Default is <code>gl</code>, which is the OpenGL ES driver in this RetroArch (there is no <code>glcore</code>)</td>
-</tr>
-<tr>
-<td><code>retroarch-n64-video.txt</code></td>
-<td>Force the Nintendo 64 (Mupen64Plus-Next) video driver. Default is <code>gl</code>, the OpenGL ES driver in this RetroArch</td>
-</tr>
-<tr>
-<td><code>rgos-install.txt</code></td>
-<td>Options for the first-boot installer (<code>skip_install=1</code>, <code>keep_payload=1</code>, <code>skip=</code>). See <a href="installer.html">INSTALLER.md</a></td>
-</tr>
-<tr>
-<td><code>ssh-password.txt</code></td>
-<td>Custom root password for SSH. See <a href="networking.html">NETWORKING.md</a></td>
-</tr>
-<tr>
-<td><code>authorized_keys</code> or <code>authorized_keys.txt</code></td>
-<td>SSH public keys for key login</td>
-</tr>
-</tbody>
-</table></div>
-<p>Files RG OS writes there for diagnosis are listed in <a href="logs.html">LOGS.md</a>.</p></article><div class="pn"><a href="devices.html"><small>Previous</small>Supported devices</a><a class="r" href="controls.html"><small>Next</small>Controls and hotkeys</a></div>
-</main>
-</div>
-<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="index.html">Docs</a><a href="../index.html#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
-<script src="docs.js"></script>
-</body>
+          <p>
+            Folders such as <code>saves/</code>, <code>states/</code>,
+            <code>bios/</code> and <code>screenshots/</code> are created when a
+            game is first launched. You do not need to create them.
+          </p>
+          <h2 id="files-you-can-drop-on-the-boot-partition">
+            Files you can drop on the boot partition
+          </h2>
+          <p>Put the card in a PC; the boot partition is the small FAT one.</p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>File</th>
+                  <th>Effect</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>bootlogo.bmp</code></td>
+                  <td>
+                    The picture shown at power on, before the installer or RG OS
+                    starts. Uncompressed 24-bit BMP at the panel's native size
+                    (720x480 RG34XXSP, 640x480 RG35XX H / SP, 720x720 RG
+                    Rotate). Builds put the matching file from
+                    <code>bootlogo/</code> there;
+                    <code>python3 tools/render-bootlogo.py</code> re-renders
+                    them from <code>bootlogo/rgos-logo.png</code>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-governor.txt</code></td>
+                  <td>
+                    CPU/GPU governor while a native port runs (<code
+                      >default</code
+                    >
+                    keeps the stock one). See <a href="ports.html">PORTS.md</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>retroarch-gc-video.txt</code></td>
+                  <td>
+                    Force the GameCube video driver: <code>glcore</code>,
+                    <code>gl</code> or <code>vulkan</code>. See
+                    <a href="gamecube.html">GAMECUBE.md</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>retroarch-dc-video.txt</code></td>
+                  <td>
+                    Force the Dreamcast (Flycast) video driver. Default is
+                    <code>gl</code>, which is the OpenGL ES driver in this
+                    RetroArch (there is no <code>glcore</code>)
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>retroarch-n64-video.txt</code></td>
+                  <td>
+                    Force the Nintendo 64 (Mupen64Plus-Next) video driver.
+                    Default is <code>gl</code>, the OpenGL ES driver in this
+                    RetroArch
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>rgos-install.txt</code></td>
+                  <td>
+                    Options for the first-boot installer
+                    (<code>skip_install=1</code>, <code>keep_payload=1</code>,
+                    <code>skip=</code>). See
+                    <a href="installer.html">INSTALLER.md</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>ssh-password.txt</code></td>
+                  <td>
+                    Custom root password for SSH. See
+                    <a href="networking.html">NETWORKING.md</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>authorized_keys</code> or
+                    <code>authorized_keys.txt</code>
+                  </td>
+                  <td>SSH public keys for key login</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Files RG OS writes there for diagnosis are listed in
+            <a href="logs.html">LOGS.md</a>.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="devices.html"><small>Previous</small>Supported devices</a
+          ><a class="r" href="controls.html"
+            ><small>Next</small>Controls and hotkeys</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
 </html>
