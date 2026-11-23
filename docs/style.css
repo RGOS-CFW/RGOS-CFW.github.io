@@ -733,3 +733,35 @@ a.card p {
     text-align: left;
   }
 }
+
+/* Auto-generated changelog extras */
+
+.commit-summary {
+  margin: 0 0 22px;
+  color: var(--mu, var(--tx));
+  font-size: 0.9rem;
+}
+
+.commits li .msg {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.commits li .sha {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding: 1px 7px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ac);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.commits li .sha:hover {
+  border-color: var(--ac);
+  background: color-mix(in srgb, var(--ac) 10%, transparent);
+}

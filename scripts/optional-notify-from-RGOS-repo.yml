@@ -1,0 +1,20 @@
+# OPTIONAL: put this file at .github/workflows/notify-website.yml in the
+# RGOS-CFW/RGOS repo so the website changelog updates right after every push
+# (instead of waiting up to 30 minutes for the schedule).
+#
+# Needs a secret WEBSITE_DISPATCH_TOKEN in the RGOS repo: a fine-grained
+# personal access token with "Contents: Read and write" on RGOS-CFW/rgos-cfw.github.io.
+name: Notify website
+on:
+  push:
+    branches: [main]
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer ${{ secrets.WEBSITE_DISPATCH_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/RGOS-CFW/rgos-cfw.github.io/dispatches \
+            -d '{"event_type":"rgos-commit"}'
