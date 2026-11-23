@@ -47,7 +47,12 @@ table{border-collapse:collapse;display:block;overflow-x:auto;max-width:100%}th,t
 code{background:color-mix(in srgb,var(--tx) 10%,transparent);padding:1px 6px;border-radius:4px;font:13.5px ui-monospace,Menlo,Consolas,monospace}
 blockquote{margin:16px 0;padding:10px 16px;border-left:4px solid var(--ac);background:var(--card);border-radius:0 8px 8px 0;color:var(--mut)}
 .rv{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
-footer{margin-top:60px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:center}
+.sf{border-top:1px solid var(--line);margin-top:0;padding:28px 20px calc(28px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--card) 60%,transparent);color:var(--mut);font-size:14px}
+.sfi{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:14px 30px;align-items:start}
+.sfb b{color:var(--tx);font-size:18px}.sfb b i{color:var(--ac);font-style:normal}.sfb p{margin:4px 0 0}
+.sfl{display:flex;flex-wrap:wrap;gap:6px 20px}.sfl a{color:var(--tx)}.sfl a:hover{color:var(--ac);text-decoration:none}
+.sfn{grid-column:1/-1;margin:0;padding-top:14px;border-top:1px solid var(--line);font-size:13px}
+@media (max-width:700px){.sfi{grid-template-columns:1fr}}
 .dev .card{text-align:center;display:flex;flex-direction:column;gap:6px}.dev svg{width:100%;height:auto;display:block;transition:transform .35s}.dev .card:hover svg{transform:scale(1.05) rotate(-1.5deg)}.dev .b{stroke:var(--ac);stroke-width:1.5}.dev .sc{fill:#0d0d0d}.dev .k{fill:#8a8a8a}.dev .h{fill:var(--line)}.dev .gl{fill:var(--ac);animation:gl 2.4s ease-in-out infinite}@keyframes gl{50%{opacity:.3}}.dev .card .btn{margin:6px auto 0}summary{cursor:pointer;margin:10px 0;color:var(--ac)}
 .im{height:150px;display:flex;align-items:center;justify-content:center;padding:4px 0 8px}.im img{width:auto;height:auto;max-width:70%;max-height:100%;object-fit:contain;transition:transform .35s}.im svg{max-height:100%}.dev .card:hover .im img{transform:scale(1.05) rotate(-1.5deg)}
 nav{gap:12px}nav b{margin-right:0}
@@ -93,8 +98,8 @@ body.open #dr>a{opacity:1;transform:none;transition-delay:calc(var(--i)*50ms + 1
 <h2 id="community" class="rv"><span>#</span>Community</h2>
 <p class="rv">Chat, get support and help the project grow.</p><a class="btn p" href="https://discord.gg/PmQeRvpGa">Join the Discord</a>
 <p class="rv">Thanks to MuOS for being the entire inspiration behind this CFW, to our testers, to Noxwell for the ROCKNIX kernel and Device Trees for the Anbernic RG Rotate, and to ROCKNIX for the kernel and Device Trees.</p>
-<footer>RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository.</footer>
 </main>
+<footer class="sf"><div class="sfi"><div class="sfb"><b>RG <i>OS</i></b><p>Open-source custom firmware for Anbernic handhelds.</p></div><div class="sfl"><a href="docs/index.html">Docs</a><a href="#download">Download</a><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a><a href="https://discord.gg/PmQeRvpGa">Discord</a></div><p class="sfn">RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the repository. RG OS does not provide games or BIOS files.</p></div></footer>
 <script>
 const D=[["Anbernic RG34XXSP","rg34xxsp","clam","#3b3b3b","Allwinner H700","ROCKNIX-H700 (DDR4)","MBR"],["Anbernic RG35XX H","rg35xxh","hori","#454545","Allwinner H700","ROCKNIX-H700 (DDR4)","MBR"],["Anbernic RG35XX SP","rg35xxsp","clam2","#4a4a4a","Allwinner H700","ROCKNIX-H700 (DDR4)","MBR"],["Anbernic RG Rotate","rg-rotate","rot","#3f3f3f","Unisoc T618","ROCKNIX-T618","GPT (uboot)"]];
 const dp=(x,y)=>`<rect class="k" x="${x-13}" y="${y-4}" width="26" height="8" rx="2"/><rect class="k" x="${x-4}" y="${y-13}" width="8" height="26" rx="2"/>`,bt=(x,y)=>[[0,-9],[9,0],[0,9],[-9,0]].map(o=>`<circle class="k" cx="${x+o[0]}" cy="${y+o[1]}" r="4.5"/>`).join("");
