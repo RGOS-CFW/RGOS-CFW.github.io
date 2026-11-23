@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Install guide · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Step-by-step guide to installing RG OS on a microSD card for the RG34XXSP, RG35XX H, RG35XX SP, RG Rotate and MiniLoong Pocket 1."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="install-guide.html" class="on" aria-current="page">Install guide</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html">RG Rotate</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="hdmi.html">Mini-HDMI output</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <a href="nes.html">NES / Famicom (RetroArch + Nestopia core)</a>
+        <a href="gamecube.html">Nintendo GameCube (RG Rotate only)</a>
+        <h4>Help</h4>
+        <a href="changelog.html">Changelog</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="install-guide">Install guide</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#what-you-need">What you need</a><a href="#step-1-pick-the-image">Pick the image</a><a href="#step-2-check-the-device-specifics">Device specifics</a><a href="#step-3-flash-the-card">Flash</a><a href="#step-4-first-boot">First boot</a><a href="#step-5-add-games">Add games</a><a href="#updating-later">Updating</a><a href="#if-it-does-not-boot">If it does not boot</a>
+          </nav>
+          <p class="lead">
+            A step-by-step guide to putting RG OS on a microSD card and booting
+            it for the first time. It is the same for every supported device
+            except for a few things to check first, which are called out in
+            step 2.
+          </p>
+          <h2 id="what-you-need">What you need</h2>
+          <ul>
+            <li>A supported console: RG34XXSP, RG35XX H, RG35XX SP, RG Rotate or MiniLoong Pocket 1.</li>
+            <li>A microSD card. 16 GB or more is sensible; the rest of the card becomes your ROMS partition.</li>
+            <li>A PC with a card reader and a flashing tool: balenaEtcher, Raspberry Pi Imager, or <code>dd</code> on Linux and macOS.</li>
+            <li>An RG OS image for your device, either from a release or built yourself (<a href="building.html">Build options</a>, <a href="build-workflow.html">Build RGOS in GitHub Actions</a>).</li>
+            <li>For the RG Rotate only: a USB-A to USB-C cable, for flashing the SPL.</li>
+          </ul>
+          <blockquote>
+            <strong>Back up the card first.</strong> Flashing erases
+            everything on it.
+          </blockquote>
+
+          <h2 id="step-1-pick-the-image">1. Pick the right image</h2>
+          <p>
+            Every device has a normal image and an installer image. Both end up
+            with the same RG OS; they differ in what happens on the first boot.
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr><th>Device</th><th>Normal image</th><th>Installer image</th><th>Check first</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="rg34xxsp.html">RG34XXSP</a></td>
+                  <td><code>rg34xxsp-rgos.img</code></td>
+                  <td><code>rg34xxsp-rgos-installer.img</code></td>
+                  <td>RAM type (DDR4 or DDR3) and panel revision</td>
+                </tr>
+                <tr>
+                  <td><a href="rg35xxh.html">RG35XX H</a></td>
+                  <td><code>rg35xxh-rgos.img</code></td>
+                  <td><code>rg35xxh-rgos-installer.img</code></td>
+                  <td>RAM type (DDR4 or DDR3) and panel revision</td>
+                </tr>
+                <tr>
+                  <td><a href="rg35xxsp.html">RG35XX SP</a></td>
+                  <td><code>rg35xxsp-rgos.img</code></td>
+                  <td><code>rg35xxsp-rgos-installer.img</code></td>
+                  <td>RAM type (DDR4 or DDR3) and panel revision</td>
+                </tr>
+                <tr>
+                  <td><a href="rg-rotate.html">RG Rotate</a></td>
+                  <td><code>rg-rotate-rgos.img</code></td>
+                  <td><code>rg-rotate-rgos-installer.img</code></td>
+                  <td>Flash the SPL once from a PC (<a href="rg-rotate-spl.html">guide</a>)</td>
+                </tr>
+                <tr>
+                  <td><a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a></td>
+                  <td><code>miniloong-rgos.img</code></td>
+                  <td><code>miniloong-rgos-installer.img</code></td>
+                  <td>Nothing; boots straight from the card</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ul>
+            <li>
+              <strong>Normal image</strong> (<code>&lt;device&gt;-rgos.img</code>):
+              boots into RG OS, creates the ROMS partition automatically as
+              exFAT, and copies PortMaster on first boot.
+            </li>
+            <li>
+              <strong>Installer image</strong>
+              (<code>&lt;device&gt;-rgos-installer.img</code>): shows an
+              <em>RG OS Installer</em> screen on first boot where you choose
+              the ROMS file system (FAT32, exFAT or ext4), then installs the
+              cores and PortMaster. See
+              <a href="installer.html">First-boot installer</a>.
+            </li>
+          </ul>
+          <p>
+            If you are unsure, use the normal image. If the file ends in
+            <code>.img.gz</code>, decompress it first.
+          </p>
+
+          <h2 id="step-2-check-the-device-specifics">2. Check your device first</h2>
+          <h3 id="h700-consoles">RG34XXSP, RG35XX H and RG35XX SP</h3>
+          <p>
+            The U-Boot on the card is built for one RAM type, and the device
+            tree is chosen for one panel revision. The default image is
+            <strong>DDR4</strong> with the <strong>standard</strong> panel. If
+            your console is DDR3, or has the newer panel
+            (<code>-v2-panel</code> on the RG34XXSP, <code>-rev6-panel</code>
+            on the RG35XX H and SP), the image has to be built for it, or the
+            screen stays black. Your device page explains how:
+            <a href="rg34xxsp.html">RG34XXSP</a>,
+            <a href="rg35xxh.html">RG35XX H</a>,
+            <a href="rg35xxsp.html">RG35XX SP</a>.
+          </p>
+          <h3 id="rg-rotate">RG Rotate</h3>
+          <p>
+            Flash the replacement SPL once, from a PC, before you boot the card
+            for the first time. The steps, and how to restore the stock SPL,
+            are in <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>.
+          </p>
+          <h3 id="miniloong-pocket-1">MiniLoong Pocket 1</h3>
+          <p>
+            Nothing to prepare. It boots straight from the card and leaves the
+            internal Android untouched. See
+            <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>.
+          </p>
+
+          <h2 id="step-3-flash-the-card">3. Flash the card</h2>
+          <ol>
+            <li>Put the card in your PC. Decompress the image if it is <code>.img.gz</code>.</li>
+            <li>
+              Write the <code>.img</code> to the <strong>whole card</strong>,
+              not to a partition.
+              <ul>
+                <li><strong>balenaEtcher / Raspberry Pi Imager:</strong> choose the image, choose the card, flash.</li>
+                <li>
+                  <strong>Linux / macOS with <code>dd</code>:</strong> find the
+                  card's device name first (<code>lsblk</code> on Linux,
+                  <code>diskutil list</code> on macOS); writing to the wrong
+                  disk destroys its data.
+                </li>
+              </ul>
+            </li>
+            <li>Eject the card cleanly. An unclean eject is a common cause of a card that does not boot.</li>
+          </ol>
+          <pre><code>sudo dd if=rg35xxh-rgos.img of=/dev/sdX bs=4M conv=fsync status=progress
+sync</code></pre>
+          <p>
+            Replace <code>rg35xxh-rgos.img</code> with your image and
+            <code>/dev/sdX</code> with the card (for example
+            <code>/dev/sdb</code>, never a partition such as
+            <code>/dev/sdb1</code>).
+          </p>
+
+          <h2 id="step-4-first-boot">4. First boot</h2>
+          <p>
+            Fully power the console off first if it was running another system,
+            insert the card and power on.
+          </p>
+          <h3 id="normal-image">Normal image</h3>
+          <ul>
+            <li>
+              <code>rgos-roms</code> creates the ROMS partition in the free
+              space (exFAT; partition 3 on the H700 consoles and the Pocket 1,
+              partition 4 on the RG Rotate). The old partition table is backed
+              up to the boot partition first, and a card whose layout it does
+              not recognise is left alone.
+            </li>
+            <li>PortMaster is copied to <code>roms/ports/PortMaster</code> if that folder is missing.</li>
+            <li>The startup splash plays once at power on.</li>
+          </ul>
+          <h3 id="installer-image">Installer image</h3>
+          <ol>
+            <li>The <strong>RG OS Installer</strong> screen appears with <strong>Install</strong> and <strong>Power off</strong>. Use the D-pad to choose and <strong>A</strong> to confirm.</li>
+            <li>Choose <strong>Install</strong>, then pick the ROMS file system: FAT32, exFAT (default, recommended) or ext4. <strong>B</strong> goes back without changing anything.</li>
+            <li>The installer partitions the card, installs the cores and PortMaster, then restarts into RG OS by itself.</li>
+          </ol>
+          <blockquote>
+            <strong>Do not switch the console off while an install is
+            running.</strong> If it fails, the screen stays up with the reason:
+            <strong>A</strong> retries, <strong>B</strong> starts RG OS without
+            finishing, and the installer runs again on the next boot.
+          </blockquote>
+
+          <h2 id="step-5-add-games">5. Add games</h2>
+          <ol>
+            <li>Put the card back in your PC. Copy ROMs into the folders under <code>roms/</code> on the ROMS partition, one folder per system: for example <code>roms/gba/</code>, <code>roms/snes/</code>, <code>roms/psx/</code>.</li>
+            <li>Back on the console, press <strong>X</strong> in the launcher to rescan. Systems with no games and no installed core are hidden.</li>
+          </ol>
+          <p>
+            The folder for each system is listed in
+            <a href="systems.html">Supported systems</a>, BIOS files in
+            <a href="bios.html">BIOS files</a>, and the rest of the card in
+            <a href="sd-card-layout.html">SD card layout</a>. Once Wi-Fi is set
+            up you can also copy files over the network
+            (<a href="networking.html">Wi-Fi, Bluetooth and SSH</a>). RG OS does
+            not provide games or BIOS files.
+          </p>
+
+          <h2 id="step-6-optional-first-steps">6. Optional first steps</h2>
+          <ul>
+            <li><strong>Settings &gt; Missing BIOS check</strong> lists the BIOS files your systems still need.</li>
+            <li><strong>Settings &gt; Wi-Fi</strong>, then <strong>Settings &gt; Game artwork</strong> for cover art (<a href="artwork.html">Game artwork</a>).</li>
+            <li><strong>Settings &gt; Theme</strong> and <strong>Settings &gt; Launcher</strong> to change the look (<a href="launchers-and-themes.html">Launchers, themes, splash and music</a>).</li>
+            <li><strong>Settings &gt; Swap A / B buttons</strong> if confirm and back feel reversed.</li>
+            <li>More cores: <strong>Tools &gt; Core Installer</strong> (<a href="core-installer.html">Core Installer</a>).</li>
+          </ul>
+
+          <h2 id="updating-later">Updating later</h2>
+          <p>
+            You do not need to reflash to update. Put an
+            <code>rgos-update-&lt;device&gt;-&lt;id&gt;.tar</code> in the
+            <code>update/</code> folder on the ROMS partition and boot; your
+            games, saves and settings are never touched. Changing the RAM type
+            or panel of an H700 console is the exception and needs a new image.
+            See <a href="updates.html">Offline updates</a>.
+          </p>
+
+          <h2 id="if-it-does-not-boot">If it does not boot</h2>
+          <p>
+            Put the card in a PC and look at the small FAT boot partition (the
+            one labelled <code>RGOS</code>). RG OS leaves evidence files there;
+            which ones exist tells you how far the boot got.
+          </p>
+          <div class="tw">
+            <table>
+              <thead><tr><th>Symptom</th><th>Most likely cause</th></tr></thead>
+              <tbody>
+                <tr><td>H700 console: black screen, no <code>rgos-initramfs.txt</code></td><td>Wrong RAM type. Rebuild with the other one (<a href="rg35xxh.html#ram-type-and-panel-revision">details</a>).</td></tr>
+                <tr><td>H700 console: black or garbled screen, <code>rgos-initramfs.txt</code> exists</td><td>Wrong panel revision. Rebuild with the alternate device tree.</td></tr>
+                <tr><td>RG Rotate boots Android</td><td>The SPL was not flashed, or partition 3 is not the <code>uboot</code> partition, or U-Boot could not load the initrd (<a href="rg-rotate.html#troubleshooting">details</a>).</td></tr>
+                <tr><td>MiniLoong Pocket 1: black screen</td><td>The <code>FDT</code> line in <code>extlinux/extlinux.conf</code> does not name <code>miniloong.dtb</code> (<a href="miniloong-pocket-1.html#troubleshooting">details</a>).</td></tr>
+                <tr><td>Any device: card does not boot at all</td><td>Card not ejected cleanly after flashing; flash it again.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Full explanations are in
+            <a href="troubleshooting.html">Troubleshooting</a>, and the files
+            to collect when asking for help are in
+            <a href="logs.html">Logs and diagnostic files</a>.
+          </p>
+        </article>
+        <div class="pn">
+          <a href="getting-started.html"
+            ><small>Previous</small>Getting started</a
+          ><a class="r" href="installer.html"
+            ><small>Next</small>First-boot installer</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
+</html>
