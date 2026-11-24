@@ -235,6 +235,31 @@
                   </td>
                 </tr>
                 <tr>
+                  <td><code>DC_REPO</code>, <code>DC_MAKE_ARGS</code>, <code>DC_BUILD</code></td>
+                  <td>Flycast upstream, <code>platform=unix FORCE_GLES=1</code>, automatic</td>
+                  <td>Flycast source (<code>none</code> skips it), make arguments, and <code>make</code> or <code>cmake</code> to force one build system</td>
+                </tr>
+                <tr>
+                  <td><code>DC_OPT</code></td>
+                  <td><code>-O3 -mtune=cortex-a55 -fno-plt -fomit-frame-pointer</code></td>
+                  <td>Compiler flags for every Flycast build (libretro and standalone)</td>
+                </tr>
+                <tr>
+                  <td><code>SATURN_BRANCH</code></td>
+                  <td><code>yabasanshiro</code></td>
+                  <td>Branch of the YabaSanshiro source</td>
+                </tr>
+                <tr>
+                  <td><code>MAME2003_REPO</code></td>
+                  <td>libretro/mame2003-plus-libretro</td>
+                  <td><code>none</code> skips MAME 2003-Plus</td>
+                </tr>
+                <tr>
+                  <td><code>MAME_REPO</code>, <code>MAME_MAKE_ARGS</code></td>
+                  <td>libretro/mame, <code>SUBTARGET=mame PTR64=1 NOWERROR=1</code></td>
+                  <td><code>build-cores.sh</code> only; full MAME is huge and is built only when named</td>
+                </tr>
+                <tr>
                   <td><code>PORTMASTER</code></td>
                   <td><code>1</code></td>
                   <td><code>0</code> leaves PortMaster out</td>
@@ -309,9 +334,7 @@ sudo ./build-cores.sh --clean          # wipe work/cores, cores-src and cores-lo
               its output is missing from <code>work/cores/</code>, or
             </li>
             <li>
-              its build settings changed: the repository URL, the make/cmake
-              arguments (for example <code>N64_MAKE_ARGS</code>), or
-              <code>DEBIAN_SUITE</code>.
+              its build settings changed: the repository URL, the make/cmake arguments (for example <code>N64_MAKE_ARGS</code>), the Flycast compiler flags (<code>DC_OPT</code>), or <code>DEBIAN_SUITE</code>.
             </li>
           </ul>
           <p>

@@ -680,6 +680,23 @@ dolphin_fastmem = "disabled"
             <code>FORCE_GLES=1</code>).
           </p>
           <p>
+            <strong>Performance tuning.</strong> The libretro Flycast core
+            starts with settings picked for these small GPUs: 640x480,
+            threaded rendering, fast alpha sorting, mipmapping and anisotropic
+            / PVR2 filtering off, GD-ROM fast loading, auto frame skip and DSP
+            off (a few games lose reverb-type effects), plus adaptive vsync, a
+            3-image swapchain and a larger audio buffer. If
+            <code>dc_boot.bin</code> is not in <code>bios/</code> (or
+            <code>bios/dc/</code>), Flycast's HLE BIOS is used. To change any of
+            it, put <code>reicast_...</code> lines in
+            <code>&lt;ROMS&gt;/config/flycast-options.cfg</code>; they win over
+            these defaults. If Flycast dies right after launch, RG OS retries
+            once with threaded rendering and auto frame skip turned off. The
+            core itself is compiled with
+            <code>-O3 -mtune=cortex-a55</code> (<code>DC_OPT</code>, see
+            <a href="building.html">Building</a>).
+          </p>
+          <p>
             <strong>Standalone Flycast.</strong> Besides the libretro core,
             Dreamcast can run the standalone Flycast emulator. It shows up as
             <strong>Flycast (standalone)</strong> in

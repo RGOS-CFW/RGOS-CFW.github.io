@@ -112,7 +112,7 @@
                   <td>Combined copy of the main logs below</td>
                 </tr>
                 <tr>
-                  <td><code>rgos-retroarch.txt</code></td>
+                  <td><code>logs/rgos-retroarch.txt</code></td>
                   <td>after every RetroArch game</td>
                   <td>
                     Command, missing libraries, attempt logs, exit code or
@@ -120,7 +120,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><code>rgos-native.txt</code></td>
+                  <td><code>logs/rgos-native.txt</code></td>
                   <td>after every native port / PortMaster run</td>
                   <td>
                     Command, exit code, run time, missing tools, last 150 lines
@@ -149,6 +149,21 @@
               </tbody>
             </table>
           </div>
+          <p>
+            The two per-game reports (<code>rgos-retroarch.txt</code>,
+            <code>rgos-native.txt</code>) are written to a <code>logs/</code>
+            folder on the boot partition, or to its root if that folder cannot
+            be created. The other files stay in the root.
+          </p>
+          <p>
+            <strong>A file you can create:</strong>
+            <code>rgos-governor.txt</code> on the boot partition holds one
+            word, the CPU governor to use while games run (for example
+            <code>performance</code> or <code>schedutil</code>).
+            <code>default</code> leaves the governor alone. Without the file,
+            RG OS uses <code>performance</code> for the demanding systems and
+            leaves the rest alone.
+          </p>
           <h2 id="on-the-device-varlog">
             On the device (<code>/var/log/</code>)
           </h2>

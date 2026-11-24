@@ -218,6 +218,15 @@
             device's hardware config. Holding the power button for 10 seconds
             still force-powers the console off.
           </p>
+          <h2 id="hdmi">HDMI (H700 handhelds)</h2>
+          <p>
+            Mini-HDMI output is available on the RG34XXSP, RG35XX H and RG35XX
+            SP. Connect the display before powering on. The default output cap
+            is 720p; change it over SSH with
+            <code>python3 /opt/rgos/hdmictl.py set 720p</code> (or
+            <code>480p</code>, <code>1080p</code>, <code>auto</code>), then
+            reboot. See <a href="hdmi.html">Mini-HDMI output</a> for details.
+          </p>
         </article>
         <div class="pn">
           <a href="in-game-menu.html"><small>Previous</small>In-game menu</a
