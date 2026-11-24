@@ -237,6 +237,17 @@
               <code>extlinux/extlinux.conf.stock</code> is a copy of the
               config before the RG OS initramfs was added.
             </li>
+            <li>
+              If the initramfs ran but the screen stays black once the menu
+              should start, the display driver may not have loaded. The
+              session script loads the GPU/DRM modules (<code>panfrost</code>,
+              <code>rockchip</code>, <code>dw-mipi</code> and
+              <code>display-connector</code> on this device). Check that
+              <code>/dev/dri</code> exists and that <code>lsmod</code> lists a
+              Rockchip display module; if the base image builds them into the
+              kernel there is nothing to load. Include the output when you
+              report the problem.
+            </li>
           </ol>
           <h2 id="rg-rotate-boots-android-instead-of-rg-os">
             RG Rotate boots Android instead of RG OS

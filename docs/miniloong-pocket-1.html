@@ -75,7 +75,7 @@
         <article>
           <h1 id="miniloong-pocket-1">MiniLoong Pocket 1</h1>
           <nav class="otp" aria-label="On this page">
-            <b>On this page</b><a href="#build">Build</a><a href="#how-it-boots">How it boots</a><a href="#flash-and-first-boot">Flash and first boot</a><a href="#controls-and-input">Controls</a><a href="#offline-updates">Updates</a><a href="#troubleshooting">Troubleshooting</a>
+            <b>On this page</b><a href="#build">Build</a><a href="#how-it-boots">How it boots</a><a href="#flash-and-first-boot">Flash and first boot</a><a href="#controls-and-input">Controls</a><a href="#display">Display and splash</a><a href="#offline-updates">Updates</a><a href="#troubleshooting">Troubleshooting</a>
           </nav>
           <p class="lead">
             RG OS runs on the MiniLoong Pocket 1, a Rockchip RK3566 handheld
@@ -159,11 +159,21 @@ sudo ./build.sh miniloong update     # offline update tar
             the left stick and L3. The RetroArch combos are otherwise
             unchanged. See <a href="controls.html">Controls and hotkeys</a>.
           </p>
-          <h2 id="display">Display</h2>
+          <h2 id="display">Display and splash</h2>
           <p>
             The menu and installer use the 720x540 layout (exact 4:3), scaled
             up to 960x720. RetroArch uses
             <code>config/retroarch-miniloong.cfg</code>.
+          </p>
+          <p>
+            The boot logo and the <a href="launchers-and-themes.html#startup-splash">startup splash</a>
+            are native 960x720. The splash is
+            <code>splash/splash-miniloong.mjpg</code> with
+            <code>splash-miniloong.json</code> (144 frames at 24 fps, sound
+            <code>splash.wav</code>); the build copies it to
+            <code>/etc/rgos/splash/</code>. To use your own, put a
+            <code>splash.mjpg</code> in <code>splash/</code> on the ROMS
+            partition.
           </p>
           <h2 id="differences-from-the-h700-consoles">
             Differences from the H700 consoles
@@ -182,7 +192,14 @@ sudo ./build.sh miniloong update     # offline update tar
             <a href="updates.html">Offline updates</a>.
           </p>
           <h2 id="status">Status</h2>
-          <p>Support is new.</p>
+          <p>
+            Support is new and has not yet been verified on real hardware: the
+            build was written without access to the base image. Check the first
+            build log for the <code>Detecting the partition table</code> and
+            <code>device tree:</code> lines. If the image is not MBR, the build
+            stops with a message instead of producing a card whose ROMS
+            partition would not be created.
+          </p>
           <h2 id="troubleshooting">Troubleshooting</h2>
           <p>
             There is no RAM type or panel revision to choose. If the screen
@@ -190,7 +207,9 @@ sudo ./build.sh miniloong update     # offline update tar
             FAT partition and check that the <code>FDT</code> line names
             <code>miniloong.dtb</code> (the spelling matters) and that the file
             exists on the card. If <code>rgos-initramfs.txt</code> was written,
-            boot got as far as the initramfs: read it. If nothing was written,
+            boot got as far as the initramfs: read it. If the menu never
+            appears but that file exists, see the display driver note in
+            <a href="troubleshooting.html#miniloong-pocket-1-black-screen">Troubleshooting</a>. If nothing was written,
             the kernel or device tree did not start. To fall back to the stock
             boot, <code>extlinux/extlinux.conf.stock</code> is a copy of the
             config before the RG OS initramfs was added. See
