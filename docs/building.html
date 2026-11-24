@@ -283,6 +283,48 @@
             <code>dolphin_libretro.so</code> is removed again for every device
             except <code>rg-rotate</code>.
           </p>
+          <h3 id="build-cores">Building the cores: build-cores.sh</h3>
+          <p>
+            <code>sudo ./build-cores.sh</code> compiles the pre-installed
+            emulator cores once, in an arm64 Debian builder, and keeps them in
+            <code>work/cores/</code>. <code>build.sh</code> then uses them
+            instead of compiling.
+          </p>
+          <pre><code>sudo ./build-cores.sh                  # every core
+sudo ./build-cores.sh flycast          # one core (several allowed: n64 psx)
+sudo ./build-cores.sh --force psx      # rebuild even if nothing changed
+sudo ./build-cores.sh --list           # list the core names
+sudo ./build-cores.sh --clean          # wipe work/cores, cores-src and cores-logs</code></pre>
+          <p>
+            <strong>Updates only.</strong> Before building a core, the script
+            checks upstream and skips the core when it is already up to date.
+            It compares the latest upstream commit (a hash of the source
+            tarball for <code>ngp</code>) and the build settings against a
+            stamp saved in <code>work/cores/.stamps/&lt;core&gt;</code> after
+            the last successful build. A core is rebuilt when:
+          </p>
+          <ul>
+            <li>upstream has a new commit,</li>
+            <li>
+              its output is missing from <code>work/cores/</code>, or
+            </li>
+            <li>
+              its build settings changed: the repository URL, the make/cmake
+              arguments (for example <code>N64_MAKE_ARGS</code>), or
+              <code>DEBIAN_SUITE</code>.
+            </li>
+          </ul>
+          <p>
+            Otherwise it prints <code>up to date, not rebuilding</code> and
+            moves on. <code>--force</code> (or <code>FORCE=1</code>) rebuilds
+            regardless. If upstream cannot be reached, an existing build is
+            kept with a warning. A failed build removes its stamp, so it is
+            retried on the next run. Only the main repository is checked, not
+            its submodules, so use <code>--force</code> when a change is only
+            in a submodule. Cores built before the stamps existed are rebuilt
+            once on the first run. The final line lists which cores were built
+            and which were skipped.
+          </p>
           <h2 id="bundled-content">Bundled content</h2>
           <ul>
             <li>
