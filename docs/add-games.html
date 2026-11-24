@@ -156,8 +156,8 @@
                 <tr><td>WonderSwan Color</td><td><code style="white-space: nowrap">wsc</code></td><td>mednafen_wswan</td><td><code>.wsc</code> <code>.ws</code> <code>.pc2</code></td><td>no</td></tr>
                 <tr><td>PlayStation</td><td><code style="white-space: nowrap">psx</code></td><td>pcsx_rearmed</td><td><code>.cue</code> <code>.chd</code> <code>.pbp</code> <code>.m3u</code> <code>.iso</code> <code>.img</code> <code>.ccd</code></td><td>depends on the core</td></tr>
                 <tr><td>GameCube (RG Rotate only)</td><td><code style="white-space: nowrap">gc</code></td><td>dolphin</td><td><code>.gcm</code> <code>.iso</code> <code>.gcz</code> <code>.rvz</code> <code>.ciso</code> <code>.m3u</code> <code>.dol</code> <code>.elf</code></td><td>optional (boot logo)</td></tr>
-                <tr><td>Arcade (FinalBurn Neo)</td><td><code style="white-space: nowrap">arcade</code></td><td>fbneo</td><td><code>.zip</code> <code>.7z</code></td><td>see BIOS files</td></tr>
-                <tr><td>Neo Geo</td><td><code style="white-space: nowrap">neogeo</code></td><td>fbneo</td><td><code>.zip</code> <code>.7z</code></td><td><strong>required</strong> (<code>neogeo.zip</code>)</td></tr>
+                <tr><td>Arcade</td><td><code style="white-space: nowrap">arcade</code></td><td>fbneo (alt: mame2003_plus, mame)</td><td><code>.zip</code> <code>.7z</code></td><td>see BIOS files</td></tr>
+                <tr><td>Neo Geo</td><td><code style="white-space: nowrap">neogeo</code></td><td>fbneo (alt: mame2003_plus, mame)</td><td><code>.zip</code> <code>.7z</code></td><td><strong>required</strong> (<code>neogeo.zip</code>)</td></tr>
                 <tr><td>PICO-8</td><td><code style="white-space: nowrap">pico8</code></td><td>fake08</td><td><code>.p8</code> <code>.p8.png</code></td><td>no</td></tr>
                 <tr><td>Ports</td><td><code style="white-space: nowrap">ports</code></td><td>native</td><td><code>.sh</code></td><td>no</td></tr>
               </tbody>
@@ -235,6 +235,14 @@
               (<code>.zip</code> or <code>.7z</code>), and put
               <code>neogeo.zip</code> in <code>bios/</code>, also zipped.
             </li>
+            <li>
+              <strong>Arcade:</strong> put ROM sets in
+              <code>roms/arcade/</code>, zipped. FinalBurn Neo, MAME 2003-Plus
+              and MAME all use the same folder; choose the core in
+              <em>Settings &gt; Emulators</em>. ROM sets must match the core's
+              version. See <a href="systems.html#arcade-and-neo-geo">Arcade and
+              Neo Geo</a>.
+            </li>
           </ul>
 
           <h2 id="things-that-trip-people-up">Things that trip people up</h2>
@@ -252,10 +260,13 @@
               on every other device. See <a href="systems.html#nintendo-gamecube">GameCube</a>.
             </li>
             <li>
-              <strong>Arcade and Neo Geo</strong> only appear once a FinalBurn
-              Neo core is present; RG OS does not ship one. You can add it with
-              <strong>Tools &gt; Core Installer</strong> or by putting an
-              aarch64 <code>fbneo_libretro.so</code> in <code>cores/</code>.
+              <strong>Arcade and Neo Geo</strong> only appear once an arcade
+              core is present. The image builds MAME 2003-Plus
+              (<code>mame2003_plus</code>) when it can, but not FinalBurn Neo,
+              which is the default core. Add <code>fbneo</code> or
+              <code>mame</code> with <strong>Tools &gt; Core Installer</strong>
+              or by putting an aarch64 <code>fbneo_libretro.so</code> /
+              <code>mame_libretro.so</code> in <code>cores/</code>.
             </li>
             <li>
               <strong>PICO-8</strong> carts are <code>.p8</code> or

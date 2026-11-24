@@ -287,15 +287,15 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Arcade (FinalBurn Neo)</td>
+                  <td>Arcade</td>
                   <td><code>arcade</code></td>
-                  <td>fbneo</td>
+                  <td>fbneo (alt: mame2003_plus, mame)</td>
                   <td><code>.zip</code> <code>.7z</code></td>
                 </tr>
                 <tr>
                   <td>Neo Geo</td>
                   <td><code>neogeo</code></td>
-                  <td>fbneo</td>
+                  <td>fbneo (alt: mame2003_plus, mame)</td>
                   <td><code>.zip</code> <code>.7z</code></td>
                 </tr>
                 <tr>
@@ -324,19 +324,59 @@
             the Neo Geo Pocket core the three Atari cores (stella2014 for the
             2600, atari800 for the 5200, prosystem for the 7800), Flycast,
             Mupen64Plus-Next and YabaSanshiro (Saturn) from source, the two
-            PICO-8 cores (fake-08 and retro8), plus Dolphin on the RG Rotate. A
-            failed source build is reported with a <code>!!</code> line and the
-            image is built without that core.
+            PICO-8 cores (fake-08 and retro8), MAME 2003-Plus
+            (<code>mame2003_plus</code>, the arcade core), plus Dolphin on the
+            RG Rotate. A failed source build is reported with a
+            <code>!!</code> line and the image is built without that core.
           </p>
           <p>
-            Systems that the build does not provide a core for (for example
-            Arcade/Neo Geo with FinalBurn Neo) only appear when you supply the
-            core yourself: put a prebuilt aarch64
+            Systems that the build does not provide a core for only appear when
+            you supply the core yourself: put a prebuilt aarch64
             <code>&lt;name&gt;_libretro.so</code> in <code>cores/</code> before
             building, or install a Debian package with
             <code>EXTRA_PKGS</code> (<a href="building.html">BUILDING.md</a>).
             The menu lists a system only when a compatible core is present.
+            FinalBurn Neo (<code>fbneo</code>) and current MAME
+            (<code>mame</code>) are not built into the image; see
+            <a href="#arcade-and-neo-geo">Arcade and Neo Geo</a> below.
           </p>
+          <h2 id="arcade-and-neo-geo">Arcade and Neo Geo (FinalBurn Neo, MAME)</h2>
+          <p>
+            Put ROM sets in <code>roms/arcade/</code> (and
+            <code>roms/neogeo/</code> for Neo Geo) on the ROMS card, which is
+            <code>/media/roms/roms/arcade/</code> on the console. There is no
+            separate folder per core: <code>arcade</code> and
+            <code>neogeo</code> can each run <code>fbneo</code>,
+            <code>mame2003_plus</code> or <code>mame</code>, and you pick the
+            core per system in <em>Settings &gt; Emulators</em>. The default is
+            <code>fbneo</code>. Keep ROM sets zipped (<code>.zip</code> or
+            <code>.7z</code>), and put <code>neogeo.zip</code> in
+            <code>bios/</code> for Neo Geo (<a href="bios.html">BIOS files</a>).
+          </p>
+          <ul>
+            <li>
+              <strong>mame2003_plus</strong> is built into the image (best
+              effort, from source). If that build fails, the image has no arcade
+              core until you add one.
+            </li>
+            <li>
+              <strong>fbneo</strong> is the default core but is not built into
+              the image. Install it with <em>Tools &gt; Core Installer</em>, or
+              put an aarch64 <code>fbneo_libretro.so</code> in
+              <code>cores/</code>.
+            </li>
+            <li>
+              <strong>mame</strong> (current MAME) is not built into the image
+              because it is too heavy to build there. Install it with the Core
+              Installer, or put a prebuilt aarch64
+              <code>mame_libretro.so</code> in <code>cores/</code>.
+            </li>
+            <li>
+              ROM sets are version specific. A set built for FinalBurn Neo does
+              not always run in MAME 2003-Plus or current MAME; if one core
+              fails to load a game, check that the set matches that core.
+            </li>
+          </ul>
           <h2 id="nes-famicom">NES / Famicom (RetroArch + Nestopia core)</h2>
           <p>
             On every supported device NES runs through RetroArch with the
