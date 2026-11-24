@@ -200,6 +200,24 @@
             <em>Power Off</em> in the home screen, or hold Select + Start from
             the launcher.
           </p>
+          <h3 id="suspend">Suspend and resume</h3>
+          <p>
+            A short press of the power button suspends the console, and the
+            next short press resumes it. Where the kernel supports it and the
+            power button can wake the device, RG OS uses real suspend. Otherwise
+            it falls back to a soft sleep: the screen, Wi-Fi, Bluetooth and LEDs
+            go off, the CPU drops to its lowest speed, the running game is
+            paused and buttons are ignored until you press power again. The
+            brightness, radios and game are restored on resume, and a press in
+            the first second after waking is ignored so the wake press does not
+            put the console straight back to sleep.
+          </p>
+          <p>
+            To force a mode, set <code>{"suspend": {"mode": "mem"}}</code> (or
+            <code>"soft"</code>; the default is <code>"auto"</code>) in the
+            device's hardware config. Holding the power button for 10 seconds
+            still force-powers the console off.
+          </p>
         </article>
         <div class="pn">
           <a href="in-game-menu.html"><small>Previous</small>In-game menu</a
