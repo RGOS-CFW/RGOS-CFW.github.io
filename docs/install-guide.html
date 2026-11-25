@@ -226,7 +226,7 @@ sync</code></pre>
               space (exFAT; partition 3 on the H700 consoles and the Pocket 1,
               partition 4 on the RG Rotate). The old partition table is backed
               up to the boot partition first, and a card whose layout it does
-              not recognise is left alone.
+              not recognise is left alone. On the first boot after a flash the ROMS partition is wiped and reformatted once (<code>/rgos-wipe-roms</code> marker; <code>RGOS_WIPE_ROMS=0</code> turns it off).
             </li>
             <li>PortMaster is copied to <code>roms/ports/PortMaster</code> if that folder is missing.</li>
             <li>The startup splash plays once at power on.</li>

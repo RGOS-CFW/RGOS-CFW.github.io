@@ -307,8 +307,13 @@
                 </tr>
                 <tr>
                   <td><code>BOOT_HEADROOM_MB</code></td>
-                  <td><code>64</code></td>
-                  <td>Free space left on the FAT boot partition of a shrunk image (whole MiB)</td>
+                  <td><code>auto</code></td>
+                  <td>Free space left on the FAT boot partition of a shrunk image: <code>auto</code> is the size of <code>SYSTEM</code> plus 64&nbsp;MiB so the next update fits next to the old <code>SYSTEM</code>; or a whole number of MiB</td>
+                </tr>
+                <tr>
+                  <td><code>RGOS_WIPE_ROMS</code></td>
+                  <td><code>1</code></td>
+                  <td><code>0</code> turns off the ROMS wipe on the first boot after a flash (<a href="getting-started.html">Getting started</a>)</td>
                 </tr>
                 <tr>
                   <td><code>PRUNE_ROCKNIX</code></td>
@@ -362,17 +367,20 @@
             later partitions are moved down. The ROMS partition is not part of
             the image: it is created on first boot in the free space, so a
             smaller image only means a smaller download and a faster write.
-            Update tars are staged next to the old <code>SYSTEM</code>, so if
-            you plan to install updates by tar set
-            <code>BOOT_HEADROOM_MB</code> to about the size of
-            <code>SYSTEM</code>; reflashing needs no headroom.
+            Update tars are staged next to the old <code>SYSTEM</code>, so the
+            default <code>BOOT_HEADROOM_MB=auto</code> leaves room for one
+            (the size of <code>SYSTEM</code> plus 64&nbsp;MiB). Set a number
+            to choose the headroom yourself; reflashing needs none.
           </p>
           <h2 id="prebuilt-cores">Prebuilt cores</h2>
           <p>
             Any aarch64 <code>*_libretro.so</code> placed in
             <code>cores/</code> is copied into the image.
-            <code>dolphin_libretro.so</code> is removed again for the MiniLoong
-            build (the only one without GameCube).
+            <code>dolphin_libretro.so</code>, Dolphin's <code>Sys</code> data and
+            its runtime libraries are removed again for the MiniLoong build
+            (the only one without GameCube). The RG Rotate and the three H700
+            consoles (<code>rg34xxsp</code>, <code>rg35xxh</code>,
+            <code>rg35xxsp</code>) keep them.
           </p>
           <h3 id="build-cores">Building the cores: build-cores.sh</h3>
           <p>

@@ -208,7 +208,7 @@
               <code>/var/log/rgos-roms.log</code>. It only touches a card whose
               layout it recognises, and it backs up the old partition table to
               the boot partition (<code>rgos-mbr-backup.bin</code> or
-              <code>rgos-gpt-backup.bin</code>).
+              <code>rgos-gpt-backup.bin</code>). Images carry a <code>/rgos-wipe-roms</code> marker: on the first boot after a flash <code>rgos-roms</code> deletes the marker first (and skips the wipe if it cannot) and then reformats the ROMS partition, so a freshly flashed card never keeps old data there. <code>RGOS_WIPE_ROMS=0</code> turns this off.
             </li>
             <li>
               PortMaster is copied to <code>roms/ports/PortMaster</code> on the

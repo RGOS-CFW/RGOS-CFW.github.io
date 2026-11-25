@@ -153,9 +153,18 @@ UPDATE_DTB=1 sudo -E ./build.sh rg34xxsp update            # also include dtb.im
               little free space: nothing is changed and the old system boots.
             </li>
             <li>
-              Replaced files are kept as <code>*.prev</code> on the boot
-              partition when there is room. To roll back by hand, put the card
-              in a PC and rename them back.
+              During the install the old copy of each replaced file is renamed
+              to <code>&lt;name&gt;.prev</code>, so any failure can restore it
+              (and an interrupted update can still boot from
+              <code>SYSTEM.prev</code>). Once the new files are in place, the
+              build id is written and everything is synced, the
+              <code>.prev</code> copies are deleted, so a successful update no
+              longer leaves an old <code>SYSTEM</code> on the boot partition.
+            </li>
+            <li>
+              A card too small to hold the old and the new
+              <code>SYSTEM</code> together still replaces <code>SYSTEM</code>
+              in place (the tar is verified first), as before.
             </li>
           </ul>
           <p>
@@ -184,12 +193,17 @@ UPDATE_DTB=1 sudo -E ./build.sh rg34xxsp update            # also include dtb.im
             </li>
             <li>
               <code>not enough free space</code>: the new files are staged
-              beside the old ones, so free about the size of the new
-              <code>SYSTEM</code>/initramfs on the FAT partition. Images are
-              now built with a small boot partition (64&nbsp;MB free by
-              default), so a card flashed from a standard image may not have
-              room for a tar update: reflash it, or use an image built with a
-              larger <code>BOOT_HEADROOM_MB</code>.
+              beside the old ones, so the FAT partition needs about the size of
+              the new <code>SYSTEM</code>/initramfs free. The error says how
+              many MiB are missing. Before giving up, the updater also frees
+              the old copies of files staged by an earlier update when that is
+              what makes the new one fit. Images are built with
+              <code>BOOT_HEADROOM_MB=auto</code> (the size of
+              <code>SYSTEM</code> plus 64&nbsp;MiB), so the next update fits
+              next to the old <code>SYSTEM</code>. A card flashed from an older
+              image with less headroom may still be too small: reflash it, or
+              use an image built with a larger
+              <code>BOOT_HEADROOM_MB</code>.
             </li>
             <li>
               <code>boot partition is not writable</code>: the FAT partition was

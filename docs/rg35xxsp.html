@@ -167,7 +167,7 @@ RG35XXSP_DTB=sun50i-h700-anbernic-rg35xx-sp-rev6-panel sudo -E ./build.sh rg35xx
               Insert the card and power on. On the first boot
               <code>rgos-roms</code> creates the ROMS partition (partition
               3, exFAT) in the free space on the card. The old
-              partition table is backed up to the boot partition first.
+              partition table is backed up to the boot partition first. Images carry a <code>/rgos-wipe-roms</code> marker: on the first boot after a flash <code>rgos-roms</code> deletes the marker first (and skips the wipe if it cannot) and then reformats the ROMS partition, so a freshly flashed card never keeps old data there. <code>RGOS_WIPE_ROMS=0</code> turns this off.
             </li>
             <li>
               Copy ROMs into <code>roms/&lt;system&gt;/</code> on the ROMS
