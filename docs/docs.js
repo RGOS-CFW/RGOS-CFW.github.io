@@ -25,10 +25,15 @@
         r.dataset.theme ||
         (matchMedia("(prefers-color-scheme:light)").matches ? "light" : "dark"),
       n = cur === "dark" ? "light" : "dark";
-    r.dataset.theme = n;
-    try {
-      localStorage.setItem("rgos-theme", n);
-    } catch (e) {}
+    var go = function () {
+      r.dataset.theme = n;
+      try {
+        localStorage.setItem("rgos-theme", n);
+      } catch (e) {}
+    };
+    if (d.startViewTransition && !matchMedia("(prefers-reduced-motion:reduce)").matches)
+      d.startViewTransition(go);
+    else go();
   };
   var on = d.querySelector("#sb a.on");
   if (on && on.scrollIntoView && innerWidth > 900)

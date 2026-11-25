@@ -509,9 +509,7 @@ a.card p {
   font-size: 14px;
   line-height: 1.55;
   overflow-wrap: anywhere;
-  transition:
-    background 0.18s,
-    padding-left 0.18s;
+  transition: background 0.18s;
 }
 
 .commits li:last-child {
@@ -528,11 +526,18 @@ a.card p {
   border-radius: 50%;
   background: var(--ac);
   opacity: 0.75;
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
 }
 
 .commits li:hover {
   background: color-mix(in srgb, var(--ac) 7%, transparent);
-  padding-left: 19px;
+}
+
+.commits li:hover::before {
+  transform: scale(1.7);
+  opacity: 1;
 }
 
 .commit-day + .commit-day {
@@ -721,10 +726,6 @@ a.card p {
     font-size: 13px;
   }
 
-  .commits li:hover {
-    padding-left: 15px;
-  }
-
   .pn {
     grid-template-columns: 1fr;
   }
@@ -764,4 +765,164 @@ a.card p {
 .commits li .sha:hover {
   border-color: var(--ac);
   background: color-mix(in srgb, var(--ac) 10%, transparent);
+}
+
+/* ---------- Motion upgrades ---------- */
+
+@keyframes up {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  nav.top {
+    view-transition-name: nav;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.22s;
+  }
+
+  /* Page content eases in; only the first screenful is staggered */
+  article > * {
+    animation: up 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  article > :nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  article > :nth-child(3) {
+    animation-delay: 0.1s;
+  }
+  article > :nth-child(4) {
+    animation-delay: 0.15s;
+  }
+  article > :nth-child(5) {
+    animation-delay: 0.2s;
+  }
+  article > :nth-child(n + 6) {
+    animation-delay: 0.25s;
+  }
+  .pn a {
+    animation: none;
+  }
+}
+
+/* Smoother interactions */
+a {
+  transition: color 0.18s;
+}
+
+nav.top button {
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.15s;
+}
+
+nav.top button:active,
+.btn:active {
+  transform: scale(0.96);
+}
+
+aside#sb a {
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+aside#sb a:hover {
+  transform: translateX(3px);
+}
+
+aside#sb a.on {
+  box-shadow: inset 3px 0 0 var(--ac);
+}
+
+tr:hover td,
+th,
+td {
+  transition: background 0.18s;
+}
+
+.pn a {
+  transition:
+    transform 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.pn a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--ac) 22%, transparent);
+}
+
+.btn:active,
+.pn a:active,
+a.card:active {
+  transform: scale(0.98);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--ac);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Scroll-driven extras (progressive enhancement) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    nav.top::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--ac), #7a0010);
+      transform-origin: 0 50%;
+      animation: grow linear both;
+      animation-timeline: scroll(root);
+    }
+
+    .commit-day {
+      animation: up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+
+    article h2 {
+      animation: up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 30%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
