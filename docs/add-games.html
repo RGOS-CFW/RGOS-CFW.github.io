@@ -155,7 +155,7 @@
                 <tr><td>WonderSwan</td><td><code style="white-space: nowrap">ws</code></td><td>mednafen_wswan</td><td><code>.ws</code> <code>.wsc</code> <code>.pc2</code></td><td>no</td></tr>
                 <tr><td>WonderSwan Color</td><td><code style="white-space: nowrap">wsc</code></td><td>mednafen_wswan</td><td><code>.wsc</code> <code>.ws</code> <code>.pc2</code></td><td>no</td></tr>
                 <tr><td>PlayStation</td><td><code style="white-space: nowrap">psx</code></td><td>pcsx_rearmed</td><td><code>.cue</code> <code>.chd</code> <code>.pbp</code> <code>.m3u</code> <code>.iso</code> <code>.img</code> <code>.ccd</code></td><td>depends on the core</td></tr>
-                <tr><td>GameCube (RG Rotate only)</td><td><code style="white-space: nowrap">gc</code></td><td>dolphin</td><td><code>.gcm</code> <code>.iso</code> <code>.gcz</code> <code>.rvz</code> <code>.ciso</code> <code>.m3u</code> <code>.dol</code> <code>.elf</code></td><td>optional (boot logo)</td></tr>
+                <tr><td>GameCube (not MiniLoong)</td><td><code style="white-space: nowrap">gc</code></td><td>dolphin</td><td><code>.gcm</code> <code>.iso</code> <code>.gcz</code> <code>.rvz</code> <code>.ciso</code> <code>.m3u</code> <code>.dol</code> <code>.elf</code></td><td>optional (boot logo)</td></tr>
                 <tr><td>Arcade</td><td><code style="white-space: nowrap">arcade</code></td><td>fbneo (alt: mame2003_plus, mame)</td><td><code>.zip</code> <code>.7z</code></td><td>see BIOS files</td></tr>
                 <tr><td>Neo Geo</td><td><code style="white-space: nowrap">neogeo</code></td><td>fbneo (alt: mame2003_plus, mame)</td><td><code>.zip</code> <code>.7z</code></td><td><strong>required</strong> (<code>neogeo.zip</code>)</td></tr>
                 <tr><td>PICO-8</td><td><code style="white-space: nowrap">pico8</code></td><td>fake08</td><td><code>.p8</code> <code>.p8.png</code></td><td>no</td></tr>
@@ -256,8 +256,9 @@
               Wii is not supported; keep Wii dumps out of <code>roms/gc</code>.
             </li>
             <li>
-              <strong>GameCube is RG Rotate only.</strong> The system is hidden
-              on every other device. See <a href="systems.html#nintendo-gamecube">GameCube</a>.
+              <strong>GameCube runs on the RG Rotate and the H700 consoles.</strong>
+              The system is hidden on the MiniLoong Pocket 1. The H700 consoles are
+              much weaker, so only light games run well. See <a href="systems.html#nintendo-gamecube">GameCube</a>.
             </li>
             <li>
               <strong>Arcade and Neo Geo</strong> only appear once an arcade
@@ -309,7 +310,7 @@
                 <tr><td>Is the game on the ROMS partition, inside <code>roms/</code>?</td><td>The small <code>RGOS</code> boot partition is not scanned for games.</td></tr>
                 <tr><td>Does the name start with a <code>.</code>?</td><td>Those files are ignored.</td></tr>
                 <tr><td>Is a core installed for the system?</td><td>Systems without a compatible core are hidden. Check <strong>Settings &gt; Emulators</strong> or <strong>Tools &gt; Core Installer</strong>.</td></tr>
-                <tr><td>Is it a GameCube game on a console other than the RG Rotate?</td><td>GameCube is hidden on every other device.</td></tr>
+                <tr><td>Is it a GameCube game on the MiniLoong Pocket 1?</td><td>GameCube is hidden there: that device has no GameCube core.</td></tr>
               </tbody>
             </table>
           </div>

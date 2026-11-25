@@ -195,6 +195,17 @@ RG35XXH_DTB=sun50i-h700-anbernic-rg35xx-h-rev6-panel sudo -E ./build.sh rg35xxh
             <a href="launchers-and-themes.html">Launchers, themes, splash and
             music</a>.
           </p>
+          <h2 id="gamecube">GameCube</h2>
+          <p>
+            GameCube (Dolphin libretro, GameCube only, no Wii) runs on this
+            console, but it is much weaker than the RG Rotate (four Cortex-A53
+            cores, Mali-G31 MP2), so only light games reach full speed. Put games
+            in <code>roms/gc/</code>. RG OS gives this console cheaper Dolphin
+            options than the RG Rotate (plain asynchronous shader compilation
+            instead of ubershaders, a larger audio buffer). Setup, tuning and
+            what to do when a game closes right after launching are in
+            <a href="systems.html#nintendo-gamecube">Nintendo GameCube</a>.
+          </p>
           <h2 id="hdmi">Mini-HDMI output</h2>
           <p>
             Mini-HDMI is supported on this console. It is selected at boot:

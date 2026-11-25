@@ -166,6 +166,16 @@ UPDATE_DTB=1 sudo -E ./build.sh rg34xxsp update            # also include dtb.im
           <h2 id="if-an-update-fails">If an update fails</h2>
           <ul>
             <li>
+              The console stops at <em>RG OS: waiting for the boot partition</em>
+              after an update: the old <code>SYSTEM</code> was removed to make
+              room and the new one was never finished. With the current
+              initramfs it boots from <code>SYSTEM.prev</code> or
+              <code>SYSTEM.new</code> when one exists; otherwise copy
+              <code>SYSTEM</code> from the tar's <code>boot/</code> folder onto
+              the FAT partition from a PC. See
+              <a href="troubleshooting.html#stuck-waiting-for-the-boot-partition">Troubleshooting</a>.
+            </li>
+            <li>
               The reason is the last line of
               <code>update/rgos-update.log</code> (next to the tar) and is also
               shown on the console. The tar is renamed <code>*.failed</code>;

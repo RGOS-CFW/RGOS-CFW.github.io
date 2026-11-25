@@ -80,7 +80,8 @@
           <p class="lead">
             The Anbernic RG Rotate is a Unisoc T618 handheld with a 720x720
             screen. It is the only device that needs a replacement SPL flashed
-            once from a PC, and the only one that ships the GameCube core.
+            once from a PC, and the best one for GameCube (the H700 consoles
+            run it too, but much slower).
           </p>
           <p>
             <img
@@ -123,8 +124,8 @@ GC_REPO=none sudo -E ./build.sh rg-rotate   # skip the GameCube core (faster bui
 RGOS_INITRD=0 sudo -E ./build.sh rg-rotate   # use ROCKNIX's own init instead of the RG OS initramfs
 </code></pre>
           <p>
-            The GameCube core (Dolphin libretro) is compiled only for this
-            device and the build is slow under qemu emulation. In GitHub
+            The GameCube core (Dolphin libretro) is compiled for this
+            device and for the H700 consoles; the build is slow under qemu emulation. In GitHub
             Actions use the <code>build_gc</code> checkbox. There is no RAM
             type or panel revision to choose. See
             <a href="building.html">Build options</a>.
@@ -168,11 +169,11 @@ RGOS_INITRD=0 sudo -E ./build.sh rg-rotate   # use ROCKNIX's own init instead of
           <h2 id="gamecube">GameCube</h2>
           <p>
             GameCube (Dolphin libretro, GameCube only, no Wii) runs on this
-            device only; the system is hidden on every other device. Put games
+            device and, more slowly, on the H700 consoles; the system is hidden on the MiniLoong. Put games
             in <code>roms/gc/</code>. Every launch gets a tuned set of Dolphin
             options for the Mali-G52. Setup, performance tuning and what to do
             when a game closes right after launching are in
-            <a href="systems.html#nintendo-gamecube">Nintendo GameCube (RG Rotate only)</a>.
+            <a href="systems.html#nintendo-gamecube">Nintendo GameCube</a>.
           </p>
           <h2 id="hdmi-is-not-available">HDMI</h2>
           <p>
@@ -228,7 +229,7 @@ RGOS_INITRD=0 sudo -E ./build.sh rg-rotate   # use ROCKNIX's own init instead of
           <ul>
             <li><a href="devices.html">Supported devices</a>: side-by-side comparison</li>
             <li><a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a></li>
-            <li><a href="systems.html#nintendo-gamecube">Nintendo GameCube (RG Rotate only)</a></li>
+            <li><a href="systems.html#nintendo-gamecube">Nintendo GameCube</a></li>
           </ul>
         </article>
         <div class="pn">

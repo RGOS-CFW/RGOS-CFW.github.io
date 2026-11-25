@@ -341,6 +341,43 @@
               exists, otherwise rebuild with a fresh image.
             </li>
           </ul>
+          <h2 id="stuck-waiting-for-the-boot-partition">
+            Boot stops at "RG OS: waiting for the boot partition"
+          </h2>
+          <p>
+            The early boot script looks for a FAT partition that holds a file
+            named <code>SYSTEM</code> and keeps retrying until it finds one. It
+            is stuck when no partition has it, most often after an interrupted
+            offline update (on a small boot partition the update deletes the old
+            <code>SYSTEM</code> before the new one is written), or when the
+            kernel does not show the partition at all.
+          </p>
+          <ul>
+            <li>
+              After about 15 seconds the screen lists the block devices, which
+              of <code>vfat</code> / <code>exfat</code> the kernel supports, and
+              the files in the root of every partition it could mount. Repeat
+              every 30 seconds.
+            </li>
+            <li>
+              If only <code>SYSTEM.prev</code> or <code>SYSTEM.new</code> is on
+              the boot partition, RG OS now boots from it by itself and prints
+              <code>SYSTEM is missing, booting from ...</code>. Prefer
+              <code>.prev</code> (the old, known-good image): a
+              <code>.new</code> left by a power cut may be incomplete. Rename
+              the file to <code>SYSTEM</code> from a PC to make it permanent.
+            </li>
+            <li>
+              If none of them exist, copy <code>SYSTEM</code> from the update
+              tar's <code>boot/</code> folder onto the FAT partition, or
+              re-flash the image.
+            </li>
+            <li>
+              This needs the new <code>rgos-initrd.cpio</code>: a card whose
+              initramfs is the old one keeps waiting silently. Copy the file from
+              a fresh build to the boot partition.
+            </li>
+          </ul>
           <h2
             id="portmaster-shows-libopenalso1-cannot-open-shared-object-file-and-returns-to-the-menu"
           >
@@ -430,6 +467,20 @@
             downloaded by Core Installer. Check
             <code>rgos-native.txt</code> and
             <code>/var/log/rgos-native.log</code> after trying to launch it.
+          </p>
+          <h3>Build says "standalone flycast needs libraries that are not in the image" (libzip.so.5)</h3>
+          <p>
+            The build removes every <code>*-dev</code> package after compiling
+            the cores, which also removed the <code>libzip5</code> runtime
+            library standalone Flycast links. The step meant to keep it looked
+            the package up under a path that Debian trixie records differently;
+            that is fixed in <code>build.sh</code>, so the message should no
+            longer appear. If it still does, the following line says whether the
+            repair worked ("all libraries are present now") or not, and the apt
+            output is in <code>work/&lt;device&gt;/flycast-libs-apt.log</code>
+            (usually no network inside the image build). Work around it with
+            <code>EXTRA_PKGS=libzip5</code>. <code>libzip.so.5</code> exists only
+            in Debian trixie and newer; bookworm ships <code>libzip.so.4</code>.
           </p>
           <h3>Wi-Fi says connected but names do not resolve</h3>
           <p>

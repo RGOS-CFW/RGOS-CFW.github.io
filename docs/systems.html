@@ -92,8 +92,8 @@
           </nav>
           <p>
             Put games in <code>&lt;ROMS&gt;/roms/&lt;folder&gt;/</code>. Systems
-            whose core is not installed are hidden, and so is GameCube on every
-            device except the RG Rotate. A system with no games still shows up
+            whose core is not installed are hidden, and so is GameCube on the
+            MiniLoong Pocket 1, which has no GameCube core. A system with no games still shows up
             if its core is installed.
           </p>
           <div class="tw">
@@ -277,7 +277,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>GameCube (Rotate only)</td>
+                  <td>GameCube (not MiniLoong)</td>
                   <td><code>gc</code></td>
                   <td>dolphin</td>
                   <td>
@@ -326,7 +326,7 @@
             Mupen64Plus-Next and YabaSanshiro (Saturn) from source, the two
             PICO-8 cores (fake-08 and retro8), MAME 2003-Plus
             (<code>mame2003_plus</code>, the arcade core), plus Dolphin on the
-            RG Rotate. A failed source build is reported with a
+            RG Rotate and the H700 consoles. A failed source build is reported with a
             <code>!!</code> line and the image is built without that core.
           </p>
           <p>
@@ -450,17 +450,20 @@
             optional user overrides belong in
             <code>config/n64-options.cfg</code> on the ROMS card.
           </p>
-          <h2 id="nintendo-gamecube">Nintendo GameCube (RG Rotate only)</h2>
+          <h2 id="nintendo-gamecube">Nintendo GameCube (RG Rotate and H700 consoles)</h2>
           <p>
             GameCube runs through RetroArch with the
             <strong>Dolphin libretro</strong> core
             (<code>dolphin_libretro.so</code>). It is built from source
             (<code>GC_REPO</code>, default
             <code>https://github.com/libretro/dolphin.git</code>)
-            <strong>only when building <code>rg-rotate</code></strong
-            >. The <code>rg34xxsp</code> and <code>rg35xxh</code> builds never
-            compile or ship it, and <code>menu.py</code> hides the system on any
-            other device.
+            <strong>when building <code>rg-rotate</code>,
+              <code>rg34xxsp</code>, <code>rg35xxh</code> or
+              <code>rg35xxsp</code></strong
+            >. The <code>miniloong</code> build never compiles or ships it, and
+            <code>menu.py</code> hides the system there. The H700 consoles (four
+            Cortex-A53 cores, Mali-G31 MP2) are far weaker than the RG Rotate:
+            expect light games to run well and heavy ones to run slowly.
           </p>
           <p>
             <strong>GameCube only, no Wii.</strong> The Dolphin core can
@@ -496,12 +499,13 @@
           </ul>
           <h3 id="gamecube-build-options">Build options</h3>
           <pre><code>sudo ./build.sh rg-rotate          # includes the GameCube core
+sudo ./build.sh rg35xxsp           # so do rg34xxsp and rg35xxh
 GC_REPO=none sudo -E ./build.sh rg-rotate   # skip it (faster build)
 </code></pre>
           <p>
             A prebuilt aarch64 <code>dolphin_libretro.so</code> in
             <code>cores/</code> is used instead of building (and is deleted
-            again for every device except <code>rg-rotate</code>). In GitHub
+            again for the MiniLoong build). In GitHub
             Actions use the <em>build_gc</em> checkbox.
           </p>
           <p>
@@ -525,7 +529,8 @@ GC_REPO=none sudo -E ./build.sh rg-rotate   # skip it (faster build)
             Every GameCube launch gets a tuned set of Dolphin core options,
             written to <code>/run/rgos/dolphin-options.cfg</code> and handed to
             RetroArch (<code>core_options_path</code>). They target the RG
-            Rotate's Mali-G52 GPU, which is the usual bottleneck:
+            Rotate's Mali-G52 GPU, which is the usual bottleneck (the H700
+            consoles get a lighter variant, see below):
           </p>
           <ul>
             <li>
@@ -553,6 +558,32 @@ GC_REPO=none sudo -E ./build.sh rg-rotate   # skip it (faster build)
               The CPU and GPU governors are already set to
               <code>performance</code> for GameCube (see
               <code>/boot/rgos-governor.txt</code>).
+            </li>
+            <li>
+              <strong>Accuracy features off.</strong> MMU emulation,
+              anisotropic filtering, custom textures, widescreen and the Dolphin
+              on-screen display are disabled; almost no GameCube game needs them
+              and they cost CPU or GPU time.
+            </li>
+            <li>
+              <strong>RetroArch extras off.</strong> Rewind, run-ahead, shaders,
+              bilinear smoothing, frame delay and the threaded video driver are
+              turned off for GameCube. A line in
+              <code>&lt;ROMS&gt;/config/retroarch.cfg</code> still overrides any
+              of them.
+            </li>
+            <li>
+              <strong>Persistent shader cache.</strong> Compiled shaders of every
+              hardware-rendered system (GameCube, Dreamcast, N64, Saturn) are
+              kept in <code>&lt;ROMS&gt;/config/mesa-cache</code> (up to 256 MB)
+              instead of RAM, so a game does not recompile them after every boot.
+              If the card is not writable it falls back to <code>/tmp</code>.
+            </li>
+            <li>
+              <strong>H700 consoles.</strong> On the RG34XXSP, RG35XX H and
+              RG35XX SP shaders compile with plain <code>a-sync</code> instead of
+              ubershaders (too heavy for the Mali-G31) and the audio buffer is
+              128 ms. Override either in <code>dolphin-options.cfg</code>.
             </li>
             <li>
               <strong>Safe retry.</strong> If a game dies within 30 s, the retry
@@ -729,6 +760,24 @@ dolphin_fastmem = "disabled"
             it as a libretro core. Standalone diagnostics are written to
             <code>rgos-native.txt</code> and
             <code>/var/log/rgos-native.log</code>.
+          </p>
+          <p>
+            <strong>Standalone performance tuning.</strong> The first time the
+            standalone emulator starts, RG OS writes the same low-cost settings
+            the libretro core uses into
+            <code>config/flycast/emu.cfg</code>: 640x480, threaded rendering,
+            fast alpha sorting, no mipmaps, no anisotropic filtering, no texture
+            upscaling, auto frame skip for late frames, DSP off, dynarec and
+            idle-skip on. They are applied once per tuning version, so changes
+            you make later in Flycast's own menu are kept. Lines in
+            <code>&lt;ROMS&gt;/config/flycast-standalone.cfg</code>
+            (<code>key = value</code>, same names as in
+            <code>emu.cfg</code>) are applied on every launch and win. The
+            standalone launch also enables threaded Mesa GL dispatch
+            (<code>mesa_glthread</code>) and uses the persistent shader cache in
+            <code>&lt;ROMS&gt;/config/mesa-cache</code>. Flycast ignores keys it
+            does not know, so check a name against the <code>emu.cfg</code> that
+            Flycast writes after you change that setting in its menu.
           </p>
           <p>
             Put discs in <code>roms/dreamcast/</code>, one folder per game is

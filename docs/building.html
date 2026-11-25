@@ -232,7 +232,7 @@
                   <td><code>GC_REPO</code></td>
                   <td>libretro/dolphin</td>
                   <td>
-                    RG Rotate only; <code>none</code> skips GameCube (<a
+                    RG Rotate and H700 builds; <code>none</code> skips GameCube (<a
                       href="systems.html#nintendo-gamecube"
                       >GAMECUBE.md</a
                     >)
@@ -371,8 +371,8 @@
           <p>
             Any aarch64 <code>*_libretro.so</code> placed in
             <code>cores/</code> is copied into the image.
-            <code>dolphin_libretro.so</code> is removed again for every device
-            except <code>rg-rotate</code>.
+            <code>dolphin_libretro.so</code> is removed again for the MiniLoong
+            build (the only one without GameCube).
           </p>
           <h3 id="build-cores">Building the cores: build-cores.sh</h3>
           <p>
