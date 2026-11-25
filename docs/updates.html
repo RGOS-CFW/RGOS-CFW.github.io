@@ -175,7 +175,13 @@ UPDATE_DTB=1 sudo -E ./build.sh rg34xxsp update            # also include dtb.im
             <li>
               <code>not enough free space</code>: the new files are staged
               beside the old ones, so free about the size of the new
-              <code>SYSTEM</code>/initramfs on the FAT partition.
+              <code>SYSTEM</code>/initramfs on the FAT partition. Images are
+              built with a small boot partition (64&nbsp;MiB free by default),
+              so a tar update usually hits this. Either flash the new image, or
+              build the image once with
+              <code>BOOT_HEADROOM_MB=&lt;size of SYSTEM in MiB&gt;</code> so
+              later tar updates fit (<a href="building.html#image-size">Image
+              size</a>).
             </li>
             <li>
               <code>boot partition is not writable</code>: the FAT partition was

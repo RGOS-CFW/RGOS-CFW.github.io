@@ -126,6 +126,15 @@
             Older cards may still carry the stock <code>ROCKNIX</code> label on
             partition 1.
           </p>
+          <p>
+            The image is not the stock 2.2&nbsp;GB any more: partition 1 is
+            sized to its content plus a little free space, and the partitions
+            behind it follow directly. Everything after partition 2 of the
+            card is made into ROMS on the first boot, so a bigger card only
+            means a bigger ROMS partition. Because the boot partition has little
+            free space, keep large files off it
+            (<a href="building.html#image-size">Image size</a>).
+          </p>
           <h2 id="the-roms-partition">The ROMS partition</h2>
           <pre><code>ROMS/
   roms/&lt;system&gt;/        game files, one folder per system (see SYSTEMS.md)

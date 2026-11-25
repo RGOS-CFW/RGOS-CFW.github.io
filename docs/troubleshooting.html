@@ -253,6 +253,14 @@
             RG Rotate boots Android instead of RG OS
           </h2>
           <p>
+            If the card was made from a compacted image (the default; the
+            image is much smaller than the stock 2.2&nbsp;GB), the build moved
+            the <code>uboot</code> partition closer to the start. Rebuild with
+            <code>COMPACT_IMAGE=0</code> to keep the stock layout and see
+            whether that boots; if it does, please report it
+            (<a href="building.html#image-size">Image size</a>).
+          </p>
+          <p>
             Android does not always mean the SPL failed to find U-Boot. The boot
             chain falls through to the internal Android whenever the card's
             U-Boot cannot start Linux, for example when extlinux fails because

@@ -74,6 +74,7 @@
           <nav class="otp" aria-label="On this page">
             <b>On this page</b><a href="#host-requirements">Host requirements</a
             ><a href="#environment-variables">Environment variables</a
+            ><a href="#image-size">Image size</a
             ><a href="#prebuilt-cores">Prebuilt cores</a
             ><a href="#bundled-content">Bundled content</a>
           </nav>
@@ -113,6 +114,7 @@
             <code>mksquashfs</code>/<code>unsquashfs</code>, <code>wget</code>,
             <code>gunzip</code>, <code>md5sum</code>, <code>python3</code>,
             <code>readelf</code>, <code>sfdisk</code>, <code>truncate</code>,
+            <code>mkfs.vfat</code> and <code>blkid</code> (image shrinking),
             plus <code>sgdisk</code> for the RG Rotate and
             <code>qemu-aarch64-static</code> when the host is not arm64. On
             Debian/Ubuntu:
@@ -282,6 +284,47 @@
                   </td>
                 </tr>
                 <tr>
+                  <td><code>COMPACT_IMAGE</code></td>
+                  <td><code>1</code></td>
+                  <td>
+                    <code>0</code> keeps the stock ROCKNIX partition layout and
+                    its ~2.2&nbsp;GB size (<a href="#image-size">Image size</a>)
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>BOOT_HEADROOM_MB</code></td>
+                  <td><code>64</code></td>
+                  <td>
+                    Free space left on the FAT boot partition, in MiB. Use about
+                    the size of <code>SYSTEM</code> if you install offline
+                    update tars
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>PRUNE_ROCKNIX</code></td>
+                  <td><code>1</code></td>
+                  <td>
+                    <code>0</code> keeps every stock ROCKNIX file instead of
+                    dropping the ones RG OS does not use
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>FIRMWARE_KEEP</code></td>
+                  <td>empty</td>
+                  <td>
+                    Space-separated names (for example <code>qcom</code>) of
+                    stock firmware that is removed by default but should stay
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>PRUNE_BOOT_EXTRA</code></td>
+                  <td>empty</td>
+                  <td>
+                    Extra files in the root of the boot partition to delete.
+                    Files the device boots from are never removed
+                  </td>
+                </tr>
+                <tr>
                   <td><code>UPDATE_ID</code></td>
                   <td>timestamp</td>
                   <td>Build id of an update tar</td>
@@ -301,6 +344,64 @@
             Pass variables through sudo with <code>sudo -E</code>, for example
             <code>H700_RAM=DDR3 sudo -E ./build.sh rg35xxh</code>.
           </p>
+          <h2 id="image-size">Image size</h2>
+          <p>
+            The stock ROCKNIX image has a fixed layout of about 2.2&nbsp;GB, with
+            a FAT boot partition far bigger than RG OS needs. An
+            <code>image</code> or <code>installer</code> build now shrinks that:
+          </p>
+          <ul>
+            <li>
+              Unused stock ROCKNIX files are not carried over: device trees
+              other than the one <code>extlinux.conf</code> loads, leftover
+              <code>*.tar</code> / <code>*.prev</code> / <code>*.new</code>
+              files, and firmware for hardware these handhelds cannot have (PC
+              and server GPUs, Intel and Qualcomm radios, datacenter network
+              cards). Wi-Fi, Bluetooth, GPU and regulatory firmware for the
+              supported devices stays. With <code>FDTDIR</code> in
+              <code>extlinux.conf</code> every device tree stays, because
+              U-Boot picks one itself.
+            </li>
+            <li>
+              <code>tools/compact-image.py</code> then builds a new FAT32 boot
+              partition just big enough for its content plus
+              <code>BOOT_HEADROOM_MB</code>, with the same <code>RGOS</code>
+              label and volume ID. Everything before partition 1 (U-Boot, SPL,
+              partition table area) is copied unchanged, the partitions after
+              it move down directly behind it, the partition table is written
+              again (disk ID, GUIDs, names and flags kept) and the file ends
+              after the last partition.
+            </li>
+            <li>
+              The ROMS partition is not in the image. RG OS creates it on the
+              first boot in the free space after partition 2, so a smaller image
+              only means a smaller file to download and write.
+            </li>
+          </ul>
+          <p>
+            The tool needs <code>sfdisk</code>, <code>mkfs.vfat</code>
+            (<code>dosfstools</code>), <code>blkid</code> and root. It checks the
+            result (partition table, label, <code>SYSTEM</code> present,
+            <code>fsck.vfat</code> when installed) before it replaces the image,
+            and it leaves the image alone when the result would not be smaller.
+            Update tars are not affected.
+          </p>
+          <blockquote>
+            <strong>Offline updates need free space.</strong> An update tar
+            stages the new <code>SYSTEM</code> next to the old one, so the boot
+            partition needs about that much free space. With the default
+            <code>BOOT_HEADROOM_MB=64</code> a tar update fails with
+            <code>not enough free space</code>; build with
+            <code>BOOT_HEADROOM_MB</code> set to about the size of
+            <code>SYSTEM</code>, or update by flashing the new image
+            (<a href="updates.html#if-an-update-fails">Offline updates</a>).
+          </blockquote>
+          <blockquote>
+            <strong>RG Rotate.</strong> Its GPT has a <code>uboot</code>
+            partition after partition 2, and the tool moves it down. If a Rotate
+            card made with a compacted image does not boot, build it with
+            <code>COMPACT_IMAGE=0</code> and report it.
+          </blockquote>
           <h2 id="prebuilt-cores">Prebuilt cores</h2>
           <p>
             Any aarch64 <code>*_libretro.so</code> placed in
