@@ -77,6 +77,7 @@
           <nav class="otp" aria-label="On this page">
             <b>On this page</b><a href="#partitions">Partitions</a
             ><a href="#the-roms-partition">The ROMS partition</a
+            ><a href="#a-second-sd-card">A second SD card</a
             ><a href="#files-you-can-drop-on-the-boot-partition"
               >Files you can drop on the boot partition</a
             >
@@ -148,6 +149,44 @@
             Folders such as <code>saves/</code>, <code>states/</code>,
             <code>bios/</code> and <code>screenshots/</code> are created when a
             game is first launched. You do not need to create them.
+          </p>
+          <h2 id="a-second-sd-card">A second SD card</h2>
+          <p>
+            On devices with a second card slot, RG OS mounts a card in the
+            second slot by itself, on boot and when you insert or swap it
+            (a background watcher checks every couple of seconds), and unmounts
+            it when it is removed. The card must be formatted exFAT, FAT32
+            (vfat), ext4 or NTFS and be at least 8&nbsp;MB. A partition labelled
+            <code>ROMS</code> is preferred, otherwise the largest usable one is
+            used; partitions labelled <code>RGBOOT</code>, <code>RGOS</code> or
+            <code>ROCKNIX</code> are skipped.
+          </p>
+          <ul>
+            <li>
+              It is mounted at <code>/media/roms2</code>. Games on it appear in
+              the launcher next to the ones on the main card.
+            </li>
+            <li>
+              RG OS creates a <code>roms/&lt;system&gt;</code> folder for every
+              system on it (including GameCube), also on a card that already
+              has a half-filled <code>roms/</code> folder.
+            </li>
+            <li>
+              If it cannot be mounted read-write it is mounted read-only; the
+              folders are then not created and Settings &gt; Information shows
+              <em>(read-only)</em>.
+            </li>
+            <li>
+              It shows up in the File Manager and in Settings &gt; Information
+              as <em>SD card 2</em> with its free and total space.
+            </li>
+          </ul>
+          <p>
+            The behaviour comes from <code>/etc/rgos/sdcard.json</code>
+            (<code>enabled</code>, <code>mountpoint</code>, <code>fs</code>,
+            <code>min_mb</code>, <code>create_folders</code>,
+            <code>readonly</code>); the shipped file enables it. Details are
+            logged to <code>/var/log/rgos-sdcard.log</code>.
           </p>
           <h2 id="files-you-can-drop-on-the-boot-partition">
             Files you can drop on the boot partition

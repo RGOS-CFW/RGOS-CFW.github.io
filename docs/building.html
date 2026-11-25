@@ -74,6 +74,7 @@
           <nav class="otp" aria-label="On this page">
             <b>On this page</b><a href="#host-requirements">Host requirements</a
             ><a href="#environment-variables">Environment variables</a
+            ><a href="#image-size">Image size</a
             ><a href="#prebuilt-cores">Prebuilt cores</a
             ><a href="#bundled-content">Bundled content</a>
           </nav>
@@ -113,7 +114,10 @@
             <code>mksquashfs</code>/<code>unsquashfs</code>, <code>wget</code>,
             <code>gunzip</code>, <code>md5sum</code>, <code>python3</code>,
             <code>readelf</code>, <code>sfdisk</code>, <code>truncate</code>,
-            plus <code>sgdisk</code> for the RG Rotate and
+            plus <code>sgdisk</code> for the RG Rotate,
+            <code>mkfs.vfat</code> and <code>blkid</code> for image and
+            installer builds (shrinking the image; part of
+            <code>dosfstools</code> / <code>util-linux</code>) and
             <code>qemu-aarch64-static</code> when the host is not arm64. On
             Debian/Ubuntu:
             <code
@@ -245,9 +249,29 @@
                   <td>Compiler flags for every Flycast build (libretro and standalone)</td>
                 </tr>
                 <tr>
+                  <td><code>DC_STANDALONE</code></td>
+                  <td><code>1</code></td>
+                  <td><code>0</code> skips the standalone Flycast (OpenGL ES build, installed as <code>/usr/local/bin/flycast</code>); only the libretro Flycast is then offered for Dreamcast</td>
+                </tr>
+                <tr>
+                  <td><code>DC_SA_CMAKE_ARGS</code></td>
+                  <td>empty</td>
+                  <td>Extra CMake arguments for the standalone Flycast</td>
+                </tr>
+                <tr>
+                  <td><code>DC_REQUIRED</code>, <code>DC_SA_REQUIRED</code></td>
+                  <td>unset</td>
+                  <td><code>1</code> stops the build when the libretro / standalone Flycast fails to build, instead of producing an image without it</td>
+                </tr>
+                <tr>
                   <td><code>SATURN_BRANCH</code></td>
                   <td><code>yabasanshiro</code></td>
                   <td>Branch of the YabaSanshiro source</td>
+                </tr>
+                <tr>
+                  <td><code>SATURN_REPO</code>, <code>SATURN_MAKE_DIR</code>, <code>SATURN_MAKE_ARGS</code>, <code>SATURN_REQUIRED</code></td>
+                  <td>libretro/yabause, <code>yabause/src/libretro</code>, <code>platform=unix</code></td>
+                  <td>Source, Makefile folder and make arguments of the Saturn core; <code>SATURN_REPO=none</code> skips it, <code>SATURN_REQUIRED=1</code> stops the build if it fails</td>
                 </tr>
                 <tr>
                   <td><code>MAME2003_REPO</code></td>
@@ -270,6 +294,31 @@
                   </td>
                   <td>latest release / none</td>
                   <td>Where to get PortMaster; a local zip builds offline</td>
+                </tr>
+                <tr>
+                  <td><code>N64_REPO</code>, <code>N64_MAKE_ARGS</code>, <code>N64_REQUIRED</code></td>
+                  <td>libretro/mupen64plus-libretro-nx</td>
+                  <td>Nintendo 64 core source and make arguments (aarch64 gets the ARM64 dynarec automatically); <code>none</code> skips it, <code>N64_REQUIRED=1</code> stops the build if it fails</td>
+                </tr>
+                <tr>
+                  <td><code>COMPACT_IMAGE</code></td>
+                  <td><code>1</code></td>
+                  <td><code>0</code> keeps the stock ~2.2&nbsp;GB ROCKNIX layout; otherwise image and installer builds are shrunk to what RG&nbsp;OS needs</td>
+                </tr>
+                <tr>
+                  <td><code>BOOT_HEADROOM_MB</code></td>
+                  <td><code>64</code></td>
+                  <td>Free space left on the FAT boot partition of a shrunk image (whole MiB)</td>
+                </tr>
+                <tr>
+                  <td><code>PRUNE_ROCKNIX</code></td>
+                  <td><code>1</code></td>
+                  <td><code>0</code> keeps the unused stock ROCKNIX files (other device trees, desktop/server firmware)</td>
+                </tr>
+                <tr>
+                  <td><code>FIRMWARE_KEEP</code>, <code>PRUNE_BOOT_EXTRA</code></td>
+                  <td>empty</td>
+                  <td>Firmware names to keep that are removed by default (e.g. <code>"amdgpu"</code>); extra root files of the boot partition to delete</td>
                 </tr>
                 <tr>
                   <td><code>RGOS_INITRD</code></td>
@@ -300,6 +349,23 @@
           <p>
             Pass variables through sudo with <code>sudo -E</code>, for example
             <code>H700_RAM=DDR3 sudo -E ./build.sh rg35xxh</code>.
+          </p>
+          <h2 id="image-size">Image size</h2>
+          <p>
+            The stock ROCKNIX image is a fixed ~2.2&nbsp;GB however little is
+            on it. Image and installer builds now shrink the result: unused
+            stock files are dropped (<code>PRUNE_ROCKNIX</code>) and the card
+            is laid out again with a FAT boot partition just big enough for
+            its content plus <code>BOOT_HEADROOM_MB</code>
+            (<code>COMPACT_IMAGE</code>). Whatever sits before partition 1
+            (U-Boot, SPL, partition table area) is copied unchanged and the
+            later partitions are moved down. The ROMS partition is not part of
+            the image: it is created on first boot in the free space, so a
+            smaller image only means a smaller download and a faster write.
+            Update tars are staged next to the old <code>SYSTEM</code>, so if
+            you plan to install updates by tar set
+            <code>BOOT_HEADROOM_MB</code> to about the size of
+            <code>SYSTEM</code>; reflashing needs no headroom.
           </p>
           <h2 id="prebuilt-cores">Prebuilt cores</h2>
           <p>
