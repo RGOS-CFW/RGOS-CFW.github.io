@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Music player · RG OS Docs</title>
+    <meta
+      name="description"
+      content="Tools &gt; Music: the PSP-style music player, supported formats, controls, tags and cover art."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      try {
+        var t = localStorage.getItem("rgos-theme");
+        if (t) document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <nav class="top">
+      <button id="mb" aria-label="Open menu" aria-expanded="false">☰</button
+      ><a class="brand" href="../index.html"
+        ><b>RG <i>OS</i></b></a
+      ><span class="crumb"><a href="index.html">Docs</a></span
+      ><a class="lk" href="../index.html#download">Download</a
+      ><button id="th" aria-label="Toggle theme">◐</button>
+    </nav>
+    <div id="bd"></div>
+    <div class="wrap">
+      <aside id="sb" aria-label="Documentation">
+        <a class="home" href="index.html">Documentation home</a>
+        <h4>Start here</h4>
+        <a href="getting-started.html">Getting started</a>
+        <a href="install-guide.html">Install guide</a>
+        <a href="installer.html">First-boot installer</a>
+        <a href="add-games.html">Add games</a>
+        <a href="devices.html">Supported devices</a>
+        <a href="sd-card-layout.html">SD card layout</a>
+        <h4>Devices</h4>
+        <a href="rg34xxsp.html">RG34XXSP</a>
+        <a href="rg35xxh.html">RG35XX H</a>
+        <a href="rg35xxsp.html">RG35XX SP</a>
+        <a href="rg-rotate.html">RG Rotate</a>
+        <a href="miniloong-pocket-1.html">MiniLoong Pocket 1</a>
+        <h4>Using RG OS</h4>
+        <a href="controls.html">Controls and hotkeys</a>
+        <a href="in-game-menu.html">In-game menu</a>
+        <a href="settings.html">Settings reference</a>
+        <a href="hdmi.html">Mini-HDMI output</a>
+        <a href="launchers-and-themes.html"
+          >Launchers, themes, splash and music</a
+        >
+        <a href="music-player.html" class="on" aria-current="page">Music player</a>
+        <a href="networking.html">Wi-Fi, Bluetooth and SSH</a>
+        <a href="artwork.html">Game artwork (SteamGridDB)</a>
+        <a href="ports.html">Native Linux ports</a>
+        <a href="updates.html">Offline updates (.tar from the SD card)</a>
+        <h4>Systems and games</h4>
+        <a href="systems.html">Supported systems</a>
+        <a href="bios.html">BIOS files</a>
+        <a href="core-installer.html">Core Installer</a>
+        <h4>Help</h4>
+        <a href="changelog.html">Changelog</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+        <a href="logs.html">Logs and diagnostic files</a>
+        <a href="faq.html">FAQ</a>
+        <a href="rg-rotate-spl.html">RG Rotate: flashing the SPL</a>
+        <h4>Building RG OS</h4>
+        <a href="building.html">Build options</a>
+        <a href="build-workflow.html">Build RGOS in GitHub Actions</a>
+      </aside>
+      <main>
+        <article>
+          <h1 id="music-player">Music player</h1>
+          <nav class="otp" aria-label="On this page">
+            <b>On this page</b><a href="#adding-songs">Adding songs</a
+            ><a href="#song-list">Song list</a
+            ><a href="#now-playing">Now Playing</a
+            ><a href="#shuffle-and-repeat">Shuffle and repeat</a
+            ><a href="#tags-and-cover-art">Tags and cover art</a
+            ><a href="#background-music">Background music</a
+            ><a href="#problems">Problems</a>
+          </nav>
+          <p class="lead">
+            <em>Tools &gt; Music</em> is a PSP-style player for the songs on
+            your card. It shows titles, artists, lengths and cover art, and the
+            music keeps playing while you browse the launcher.
+          </p>
+          <h2 id="adding-songs">Adding songs</h2>
+          <p>
+            Copy your songs to <code>music/</code> on the ROMS partition
+            (<code>/media/roms/music/</code> on the device). Sub folders are
+            searched, hidden files and folders are skipped, and songs are listed
+            in natural order (<code>track2</code> before <code>track10</code>),
+            sorted by path. The list holds up to 4000 songs.
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Format</th>
+                  <th>Title, artist, album</th>
+                  <th>Length</th>
+                  <th>Cover art</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>MP3</td>
+                  <td>ID3v2 (2.2, 2.3, 2.4), or ID3v1</td>
+                  <td>From the Xing / VBRI header, or from bitrate and file size</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>FLAC</td>
+                  <td>Vorbis comments</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td>OGG / OGA (Vorbis, Opus)</td>
+                  <td>Vorbis comments</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>WAV</td>
+                  <td>No (file name is used)</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>MOD, XM, IT, S3M</td>
+                  <td>No (file name is used)</td>
+                  <td>No (shown as <code>--:--</code>)</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The player only reads the ROMS <code>music/</code> folder. Songs
+            bundled into the image (the repository's <code>music/</code> folder)
+            play as
+            <a href="launchers-and-themes.html#launcher-music">launcher music</a>
+            but do not appear in the player list.
+          </p>
+          <h2 id="song-list">Song list</h2>
+          <p>
+            The list opens first. Tags and lengths are read in the background,
+            so a long list appears at once and fills in as it goes; a song
+            without a title tag shows its file name.
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Button</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Up / Down</td>
+                  <td>select a song (wraps around)</td>
+                </tr>
+                <tr>
+                  <td>L / R (or Left / Right)</td>
+                  <td>page up / down</td>
+                </tr>
+                <tr>
+                  <td>A</td>
+                  <td>play the song and open Now Playing (on the song that is already playing it just opens Now Playing)</td>
+                </tr>
+                <tr>
+                  <td>Start</td>
+                  <td>play / pause</td>
+                </tr>
+                <tr>
+                  <td>Y</td>
+                  <td>shuffle on / off</td>
+                </tr>
+                <tr>
+                  <td>X</td>
+                  <td>repeat: all, one, off</td>
+                </tr>
+                <tr>
+                  <td>Select</td>
+                  <td>rescan the folder (shows how many songs it found)</td>
+                </tr>
+                <tr>
+                  <td>B</td>
+                  <td>back to Tools</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="now-playing">Now Playing</h2>
+          <p>
+            Cover art, title, artist, album, a progress bar with the elapsed
+            and total time, and the shuffle and repeat state.
+          </p>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Button</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>A or Start</td>
+                  <td>play / pause</td>
+                </tr>
+                <tr>
+                  <td>Left / Right</td>
+                  <td>seek 10 seconds back / forward (the jump happens when you stop pressing, so holding the button is fine)</td>
+                </tr>
+                <tr>
+                  <td>L</td>
+                  <td>previous song; restarts the current one if it has played for more than 3 seconds</td>
+                </tr>
+                <tr>
+                  <td>R</td>
+                  <td>next song</td>
+                </tr>
+                <tr>
+                  <td>Y / X</td>
+                  <td>shuffle / repeat</td>
+                </tr>
+                <tr>
+                  <td>B or Select</td>
+                  <td>back to the song list</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 id="shuffle-and-repeat">Shuffle and repeat</h2>
+          <ul>
+            <li>
+              <strong>Shuffle</strong> is off by default. When it is on, the
+              song you picked plays first, then the rest in random order, and
+              no song repeats until the whole list has played. A new round is
+              shuffled again.
+            </li>
+            <li>
+              <strong>Repeat</strong> cycles <em>all</em> (the default),
+              <em>one</em> and <em>off</em>. <em>All</em> starts over at the end
+              of the list, <em>one</em> replays the current song, and
+              <em>off</em> stops at the end.
+            </li>
+            <li>
+              Both are shown briefly at the bottom of the screen when you
+              change them.
+            </li>
+          </ul>
+          <h2 id="tags-and-cover-art">Tags and cover art</h2>
+          <p>
+            Tags and pictures are read straight from the file, nothing is
+            downloaded. Embedded pictures (PNG or JPEG) are cropped to a square.
+            To get cover art, embed it in the song with a tag editor; a separate
+            <code>cover.jpg</code> next to the files is not used.
+          </p>
+          <h2 id="background-music">Background music</h2>
+          <ul>
+            <li>
+              Songs keep playing when you leave the player (B back to Tools) and
+              move on to the next one, also while the screen is off.
+            </li>
+            <li>
+              While the player is open or a song is playing, the launcher's
+              shuffled
+              <a href="launchers-and-themes.html#launcher-music">background music</a>
+              stays quiet. It returns after you stop the music.
+            </li>
+            <li>Music stops when a game starts.</li>
+            <li>
+              Loudness follows the device's hardware volume buttons; the player
+              itself always plays at full mixer volume.
+            </li>
+            <li>
+              The player always uses the PSP-style look, whichever
+              <a href="launchers-and-themes.html#launchers">launcher</a> is
+              selected.
+            </li>
+          </ul>
+          <h2 id="problems">Problems</h2>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>Symptom</th>
+                  <th>Cause and fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>The list is empty</td>
+                  <td>Nothing playable in <code>music/</code> on the ROMS partition. Copy songs there and press <strong>Select</strong> to rescan.</td>
+                </tr>
+                <tr>
+                  <td>"Can't play &lt;song&gt;" or "None of the songs can be played"</td>
+                  <td>The file is damaged or uses a codec SDL_mixer cannot decode. Unplayable songs are skipped.</td>
+                </tr>
+                <tr>
+                  <td>"This file cannot be searched"</td>
+                  <td>That format does not support seeking (some tracker modules). Play it through, or skip it with R.</td>
+                </tr>
+                <tr>
+                  <td>No cover art</td>
+                  <td>The song has no embedded picture, or it is an OGG or WAV file.</td>
+                </tr>
+                <tr>
+                  <td>Length shows <code>--:--</code></td>
+                  <td>The length could not be worked out from the file header (tracker modules, damaged files). The song still plays.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <div class="pn">
+          <a href="launchers-and-themes.html"
+            ><small>Previous</small>Launchers, themes, splash and music</a
+          ><a class="r" href="networking.html"
+            ><small>Next</small>Wi-Fi, Bluetooth and SSH</a
+          >
+        </div>
+      </main>
+    </div>
+    <footer class="sf">
+      <div class="sfi">
+        <div class="sfb">
+          <b>RG <i>OS</i></b>
+          <p>Open-source custom firmware for Anbernic handhelds.</p>
+        </div>
+        <div class="sfl">
+          <a href="index.html">Docs</a
+          ><a href="../index.html#download">Download</a
+          ><a href="https://github.com/RGOS-CFW/RGOS">GitHub</a
+          ><a href="https://discord.gg/PmQeRvpGa">Discord</a>
+        </div>
+        <p class="sfn">
+          RG OS is open source; see LICENSE and THIRD-PARTY-NOTICES in the
+          repository. RG OS does not provide games or BIOS files.
+        </p>
+      </div>
+    </footer>
+    <script src="docs.js"></script>
+  </body>
+</html>
