@@ -106,7 +106,7 @@
               Choose the <code>device</code> (<code>rg34xxsp</code>,
               <code>rg35xxh</code>, <code>rg35xxsp</code>,
               <code>rg-rotate</code>, <code>miniloong</code> or <code>all</code>) and
-              <code>img</code> or <code>update-tar</code>. - <code>img</code>:
+              <code>img</code>, <code>installer</code> or <code>update-tar</code>. - <code>img</code>:
               artifact
               <code>rgos-&lt;device&gt;-&lt;id&gt;-img</code> containing
               <code>&lt;device&gt;-rgos.img.gz</code> (gunzip it, then flash).
@@ -117,6 +117,11 @@
               RG Rotate = partition 3 is <code>uboot</code> (GPT); RG34XXSP =
               MBR image with <code>dtb.img</code> present; MiniLoong Pocket 1 = MBR
               image whose <code>extlinux.conf</code> loads <code>miniloong.dtb</code>. -
+              <code>installer</code>: artifact
+              <code>rgos-&lt;device&gt;-&lt;id&gt;-installer</code> containing
+              <code>&lt;device&gt;-rgos-installer.img.gz</code>, the
+              <a href="installer.html">first-boot installer</a> image (the run
+              checks that <code>rgos-installer</code> is in its system). -
               <code>update-tar</code>:
               <code>rgos-update-&lt;device&gt;-&lt;id&gt;.tar</code> (manifest
               device is the one you chose: <code>rg-rotate</code>,
@@ -141,7 +146,9 @@
               <em>build_gc</em> (skips the GameCube core (RG Rotate and H700 builds), see
               <code>docs/GAMECUBE.md</code>) or override
               <em>rocknix_url</em> (not with <code>device=all</code>: each
-              device has its own stock image).
+              device has its own stock image). <em>extra_pkgs</em> takes extra
+              Debian packages (space separated) to install in the image, for a
+              library a port reports as missing.
             </li>
             <li>
               When the run succeeds, open its summary and download the artifact
